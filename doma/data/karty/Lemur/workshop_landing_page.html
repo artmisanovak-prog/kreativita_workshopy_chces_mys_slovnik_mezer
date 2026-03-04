@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🦎 Lemur — kreativní workshop</title>
+  <style>
+    html { filter: grayscale(1); }
+    body {
+      font-family: 'Georgia', 'Times New Roman', serif;
+      background: #fff;
+      color: #000;
+      line-height: 1.8;
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 40px 24px;
+    }
+
+    /* ── NAVIGACE ── */
+    .nav {
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      font-size: 11px;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+      color: #999;
+      margin-bottom: 48px;
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+    .nav a { color: #999; text-decoration: none; }
+    .nav a:hover { color: #000; }
+    .nav-sep { color: #ddd; }
+
+    /* ── HLAVIČKA ── */
+    .card-eyebrow {
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      font-size: 10px;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      color: #aaa;
+      margin-bottom: 16px;
+    }
+    h1 {
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      font-weight: 400;
+      line-height: 1.15;
+      margin-bottom: 12px;
+    }
+    .card-sentence {
+      font-size: 1.1rem;
+      font-style: italic;
+      color: #555;
+      border-left: 2px solid #000;
+      padding-left: 18px;
+      margin: 24px 0 40px;
+    }
+
+    /* ── ROZDÍL OD TÝMOVÉHO ── */
+    .rozdil {
+      background: #f7f7f7;
+      border: 1px solid #e0e0e0;
+      padding: 24px 28px;
+      margin-bottom: 48px;
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      font-size: .88rem;
+    }
+    .rozdil-label {
+      font-size: .72rem;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: #999;
+      margin-bottom: 12px;
+      display: block;
+    }
+    .rozdil table { width: 100%; border-collapse: collapse; }
+    .rozdil td {
+      padding: 8px 12px 8px 0;
+      vertical-align: top;
+      border-bottom: 1px solid #e8e8e8;
+      font-size: .85rem;
+    }
+    .rozdil td:first-child {
+      width: 40%;
+      color: #999;
+      font-size: .78rem;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    .rozdil tr:last-child td { border-bottom: none; }
+
+    /* ── SEKCE ── */
+    .sekce {
+      margin: 48px 0;
+      padding-top: 48px;
+      border-top: 1px solid #e0e0e0;
+    }
+    .sekce-label {
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      font-size: 10px;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      color: #aaa;
+      margin-bottom: 16px;
+    }
+    h2 {
+      font-size: 1.5rem;
+      font-weight: 400;
+      margin-bottom: 24px;
+    }
+    h3 {
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+    }
+    p { margin-bottom: 14px; }
+
+    /* ── POHÁDKA ── */
+    .pohadka-wrap {
+      max-height: 360px;
+      overflow-y: auto;
+      border: 1px solid #000;
+      padding: 0 28px;
+      margin: 24px 0;
+      background: #fafafa;
+    }
+    .pohadka { font-style: italic; }
+    .pohadka p { padding: .4em 0; }
+
+    /* ── OTÁZKY ── */
+    .otazky { margin: 24px 0; }
+    .otazka {
+      border-bottom: 1px solid #e0e0e0;
+      padding: 20px 0;
+    }
+    .otazka:first-child { border-top: 1px solid #e0e0e0; }
+    .q-label {
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      font-size: .72rem;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: #aaa;
+      margin-bottom: 8px;
+    }
+    .q-text { font-size: 1.05rem; margin-bottom: 8px; }
+    .q-note { font-size: .85rem; color: #777; font-style: italic; margin: 0; }
+
+    /* ── WORKSHOP KROKY ── */
+    .krok {
+      display: grid;
+      grid-template-columns: 60px 1fr;
+      gap: 24px;
+      padding: 28px 0;
+      border-bottom: 1px solid #e0e0e0;
+      align-items: start;
+    }
+    .krok:first-child { border-top: 1px solid #e0e0e0; }
+    .krok-num {
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      font-size: 2.4rem;
+      font-weight: 300;
+      color: #ddd;
+      line-height: 1;
+      padding-top: 4px;
+    }
+    .krok-cas {
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      font-size: .72rem;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: #aaa;
+      margin-bottom: 8px;
+    }
+    .krok h3 { margin-bottom: 6px; }
+    .krok p { font-size: .92rem; color: #444; }
+    .krok-instrukce {
+      margin-top: 14px;
+      padding: 16px 20px;
+      background: #f7f7f7;
+      font-size: .88rem;
+      color: #555;
+      border-left: 2px solid #ccc;
+    }
+    .krok-instrukce p { margin-bottom: 8px; }
+    .krok-instrukce p:last-child { margin-bottom: 0; }
+    .krok-instrukce em { font-style: italic; color: #777; }
+
+    /* ── ÚHLY PRO KREATIVCE ── */
+    .uhly-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1px;
+      background: #e0e0e0;
+      border: 1px solid #e0e0e0;
+      margin: 16px 0;
+    }
+    .uhel-item {
+      background: #fff;
+      padding: 20px;
+    }
+    .uhel-nazev {
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      font-size: .8rem;
+      font-weight: 700;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+    .uhel-vrstva {
+      font-size: .72rem;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: #aaa;
+      margin-bottom: 8px;
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+    }
+    .uhel-krea { font-size: .88rem; color: #444; }
+    @media (max-width: 580px) { .uhly-grid { grid-template-columns: 1fr; } }
+
+    /* ── VÝSLEDEK / MANIFEST ── */
+    .manifest {
+      border: 1px solid #000;
+      padding: 32px;
+      margin: 24px 0;
+      text-align: center;
+    }
+    .manifest h3 { font-size: 1.2rem; margin-bottom: 16px; }
+    .manifest-radky { margin: 20px 0; }
+    .manifest-radek {
+      border-bottom: 1px solid #e0e0e0;
+      padding: 14px 0;
+      font-size: .95rem;
+      color: #777;
+      font-style: italic;
+    }
+    .manifest-radek:last-child { border-bottom: none; }
+
+    /* ── VARIANTY POUŽITÍ ── */
+    .varianty {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1px;
+      background: #e0e0e0;
+      border: 1px solid #e0e0e0;
+      margin: 16px 0;
+    }
+    .varianta {
+      background: #fff;
+      padding: 24px;
+    }
+    .varianta-label {
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      font-size: .72rem;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+      color: #aaa;
+      margin-bottom: 8px;
+    }
+    .varianta h3 { font-size: .95rem; margin-bottom: 8px; }
+    .varianta p { font-size: .85rem; color: #555; margin: 0; }
+    @media (max-width: 580px) { .varianty { grid-template-columns: 1fr; } }
+
+    /* ── CITÁT ── */
+    .citat {
+      border-left: 2px solid #000;
+      padding-left: 24px;
+      margin: 32px 0;
+      font-size: 1.1rem;
+      font-style: italic;
+      color: #555;
+    }
+
+    /* ── FOOTER ── */
+    .footer {
+      margin-top: 56px;
+      padding-top: 24px;
+      border-top: 1px solid #e0e0e0;
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      font-size: .82rem;
+      color: #aaa;
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .footer a { color: #aaa; text-decoration: underline; }
+
+    @media print {
+      .nav { display: none; }
+      .pohadka-wrap { max-height: none; overflow: visible; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="nav">
+  <a href="../../../">Slovník mezer</a>
+  <span class="nav-sep">—</span>
+  <a href="../">Lemur</a>
+  <span class="nav-sep">—</span>
+  <span>Kreativní workshop</span>
+</div>
+
+<p class="card-eyebrow">Karta Lemur · Kreativní workshop · 90 minut</p>
+<h1>Přestat se snažit<br>jako metoda.</h1>
+
+<p class="card-sentence">
+  „Nejlepší je nechat to být. Vše ostatní je moc nápadné."
+</p>
+
+<!-- ── ROZDÍL OD TÝMOVÉHO WORKSHOPU ── -->
+<div class="rozdil">
+  <span class="rozdil-label">Stejná karta, jiný vstup</span>
+  <table>
+    <tr>
+      <td>Týmový workshop</td>
+      <td>Lemur jako <strong>porucha</strong> — tým potlačuje autenticitu, aby zapadl. Cíl: pojmenovat a změnit vzorec.</td>
+    </tr>
+    <tr>
+      <td>Kreativní workshop</td>
+      <td>Lemur jako <strong>technika</strong> — čím víc se snažíme tvořit, tím míň tvoříme. Cíl: najít, kde se přestát snažit.</td>
+    </tr>
+    <tr>
+      <td>Kdo u stolu</td>
+      <td>Jednotlivý tvůrce, kreativní skupina, umělec v blokádě, kdokoliv kdo pracuje s vlastním výrazem.</td>
+    </tr>
+    <tr>
+      <td>Co není cílem</td>
+      <td>Diagnóza. Terapie. Hodnocení. Nástroj mapuje — nerozhoduje.</td>
+    </tr>
+  </table>
+</div>
+
+<!-- ── POHÁDKA ── -->
+<div class="sekce">
+  <p class="sekce-label">Pohádka</p>
+  <h2>O lemurovi, který nebyl nápadný</h2>
+  <p style="color:#777; font-size:.9rem;">Přečtěte si pohádku před tím, než odpovíte na otázky. Čtěte pomalu — neanalyzujte, jen poslouchejte.</p>
+
+  <div class="pohadka-wrap">
+    <div class="pohadka">
+      <p>Lemur se narodil v koutku.<br>
+      V koutku místnosti, v koutku světa, v koutku oka.<br>
+      Tam, kde se věci obvykle nechávají být.<br>
+      Tam, kde se neptá.<br>
+      Tam, kde se neukazuje.</p>
+
+      <p>A tak si řekl:<br>
+      „Budu nenápadný."<br>
+      „Budu tak nenápadný, že mě ani moje vlastní stín nepozná."<br>
+      „Budu tak tichý, že i ticho bude hlasité vedle mě."</p>
+
+      <p>Jenže měl oči jak lampy.<br>
+      Ocas vztyčený jak vykřičník.<br>
+      A srst jako výkladní skříň, co se snaží být tapetou.</p>
+
+      <p>Vedle něj seděla postava.<br>
+      Klidná. Tichá. Bez barvy. Bez pohybu. Bez potřeby být.</p>
+
+      <p>Řekla:<br>
+      „Nejlepší je nechat to být. Vše ostatní je moc nápadné."<br>
+      A lemur se snažil.</p>
+
+      <p>Zhasl oči.<br>
+      Zlomil si ocas (jen obrazně).<br>
+      Přikryl se dekou z nezájmu.</p>
+
+      <p>Ale oči mu svítily i pod dekou.<br>
+      Ocas mu trčel i bez svolení.<br>
+      A srst mu zářila jako reklama na klid, co bliká.</p>
+
+      <p>„Nejsem nápadný," šeptal.<br>
+      „Jsem jen… výrazně nenápadný."<br>
+      „Jsem jen… ticho, co má barvy."<br>
+      „Jsem jen… pozadí, co se nedá přehlédnout."</p>
+
+      <p>Postava vedle něj neřekla nic.<br>
+      Jen se dívala.<br>
+      A to bylo horší než slova.</p>
+
+      <p>Lemur se pokusil být stínem.<br>
+      Ale jeho stín měl vlastní názor.<br>
+      Lemur se pokusil být flekem na zdi.<br>
+      Ale flek ho odmítl, protože byl moc výrazný.</p>
+
+      <p>Nakonec si sedl.<br>
+      Přestal se snažit.<br>
+      Oči mu svítily. Ocas mu trčel. Srst mu zářila.</p>
+
+      <p>A postava vedle něj řekla:<br>
+      „Teď jsi konečně neviditelný."<br>
+      „Jak to?" zeptal se lemur.<br>
+      „Protože už se nesnažíš."</p>
+
+      <p>A tak se lemur stal mistrem nenápadnosti.<br>
+      Ne tím, že zmizel.<br>
+      Ale tím, že přestal křičet, že nechce být vidět.</p>
+
+      <p>Od té doby sedí v koutku.<br>
+      Oči mu svítí. Ocas mu trčí. Srst mu září.</p>
+
+      <p>A každý, kdo ho uvidí, řekne:<br>
+      „To je ten nenápadný lemur."<br>
+      A pak se tváří, že ho nevidí.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ── TŘI OTÁZKY ── -->
+<div class="sekce">
+  <p class="sekce-label">Tři otázky — odpovídáte sami, písemně</p>
+  <h2>Kde se přestáváte snažit?</h2>
+  <p style="color:#777; font-size:.9rem; margin-bottom: 24px;">
+    Odpovídejte bez opravování. Co napíšete jako první, to nechte být.
+    Nejde o správnou odpověď — jde o první odpověď.
+  </p>
+
+  <div class="otazky">
+    <div class="otazka">
+      <p class="q-label">Q1 — Výraz</p>
+      <p class="q-text">Lemur nechtěl být vidět — ale oči mu svítily, ocas mu trčel, srst mu zářila i pod dekou. Co je vaše „záře pod dekou" — věc, která ve vaší tvorbě vychází přirozeně, aniž byste ji plánovali?</p>
+      <p class="q-note">Nepište co byste chtěli dělat. Pište co se děje samo, i když tomu bráníte.</p>
+    </div>
+    <div class="otazka">
+      <p class="q-label">Q2 — Snaha</p>
+      <p class="q-text">Kde ve své tvorbě „zlomujete ocas" — kde se snažíte být jiní, než jste? Kde je vaše úsilí vidět tak silně, že zakrývá výsledek?</p>
+      <p class="q-note">Může to být styl, médium, téma, způsob práce. Kde cítíte, že se přetváříte?</p>
+    </div>
+    <div class="otazka">
+      <p class="q-label">Q3 — Přestání</p>
+      <p class="q-text">„Teď jsi konečně neviditelný. Protože už se nesnažíš." Co by se stalo s vaší tvorbou, kdybyste přestali zkoušet být tím, čím si myslíte, že byste měli být?</p>
+      <p class="q-note">Jde o nejdůležitější otázku. Nemusí mít odpověď. Nechte ji otevřenou.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ── WORKSHOP ── -->
+<div class="sekce">
+  <p class="sekce-label">Workshop · 90 minut · pro jednotlivce i skupinu</p>
+  <h2>Struktura</h2>
+
+  <!-- ČÁST 1 -->
+  <h3 style="font-family:'Helvetica Neue',Arial,sans-serif; letter-spacing:.1em; text-transform:uppercase; font-size:.78rem; color:#aaa; margin: 32px 0 16px;">Část 1 — Mapa snahy · 30 minut</h3>
+
+  <div class="krok">
+    <div class="krok-num">01</div>
+    <div>
+      <p class="krok-cas">5 minut</p>
+      <h3>Čtení pohádky</h3>
+      <p>Přečtěte pohádku nahlas — sami sobě nebo skupině. Pomalu. Bez komentáře.</p>
+      <div class="krok-instrukce">
+        <p>Facilitátor nebo čtenář čte bez dramatizace. Pauzy jsou záměrné. Po dočtení ticho alespoň 30 sekund.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="krok">
+    <div class="krok-num">02</div>
+    <div>
+      <p class="krok-cas">15 minut</p>
+      <h3>Individuální psaní — odpovědi na tři otázky</h3>
+      <p>Každý píše sám, v tichosti. Není cílem napsat správně. Cílem je napsat první věc, která přijde.</p>
+      <div class="krok-instrukce">
+        <p><em>Instrukce pro psaní:</em> Nepřepisujte. Co napíšete jako první, nechte být. Pokud nevíte, napište „nevím" — a pak pokračujte dál tou větou.</p>
+        <p>Papír nebo digitálně — cokoliv, kam nepíšete „čistě".</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="krok">
+    <div class="krok-num">03</div>
+    <div>
+      <p class="krok-cas">10 minut</p>
+      <h3>Sdílení — jen co chcete</h3>
+      <p>Ve skupině: každý sdílí jednu větu z Q1 — „záři pod dekou." Bez vysvětlování, bez komentářů ostatních.</p>
+      <div class="krok-instrukce">
+        <p>Pravidlo tohoto kola: <em>Nikdo nekomentuje, co druhý řekl.</em> Jen kývne. Nebo mlčí. Každý mluví sám za sebe.</p>
+        <p>Solo varianta: Přečtěte si odpovědi nahlas sami pro sebe. Jinak to zní než v hlavě.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ČÁST 2 -->
+  <h3 style="font-family:'Helvetica Neue',Arial,sans-serif; letter-spacing:.1em; text-transform:uppercase; font-size:.78rem; color:#aaa; margin: 40px 0 16px;">Část 2 — Experiment s nesnažením · 40 minut</h3>
+
+  <div class="krok">
+    <div class="krok-num">04</div>
+    <div>
+      <p class="krok-cas">20 minut</p>
+      <h3>Cvičení „Deka z nezájmu"</h3>
+      <p>Pracujete ve svém médiu — ale s jedním pravidlem: děláte to tak, jak by to dělal lemur. Bez snahy. Bez opravování. Bez hodnocení.</p>
+      <div class="krok-instrukce">
+        <p><em>Pro písmo:</em> Napište dvě stránky o čemkoliv — bez mazání, bez zastavení, bez čtení zpět.</p>
+        <p><em>Pro vizuální tvorbu:</em> Nakreslete nebo sestavte cokoli za 20 minut — nesmíte nic přemalovat ani začít znovu.</p>
+        <p><em>Pro hudbu nebo pohyb:</em> Improvizujte 20 minut — bez zastavení, bez opakování záměrně „dobrých" momentů.</p>
+        <p><em>Pro kohokoliv:</em> Pracujte jako byste to nikomu neukazovali. Jako by to nebylo „tvorba." Jako by to byl jen lemur, co sedí v koutku.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="krok">
+    <div class="krok-num">05</div>
+    <div>
+      <p class="krok-cas">20 minut</p>
+      <h3>Cvičení „Záře pod dekou"</h3>
+      <p>Prohlédněte si co vzniklo. Ne jako kritik — jako myš. Hledáte jednu věc: co je tam, co jste neplánovali?</p>
+      <div class="krok-instrukce">
+        <p>Napište nebo zakroužkujte: <em>Co se ukázalo bez pozvání?</em></p>
+        <p>To je vaše „záře pod dekou." Ne to nejlepší co tam je — ale to nejpřirozenější.</p>
+        <p>Ve skupině: každý ukáže jednu věc — ne celý výsledek, jen tu jednu věc co neplánoval.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ČÁST 3 -->
+  <h3 style="font-family:'Helvetica Neue',Arial,sans-serif; letter-spacing:.1em; text-transform:uppercase; font-size:.78rem; color:#aaa; margin: 40px 0 16px;">Část 3 — Přestání jako praxe · 20 minut</h3>
+
+  <div class="krok">
+    <div class="krok-num">06</div>
+    <div>
+      <p class="krok-cas">10 minut</p>
+      <h3>Pojmenování jedné věci</h3>
+      <p>Na základě dnešního workshopu: co je jedna věc, u které přestanete zkoušet být jiní?</p>
+      <div class="krok-instrukce">
+        <p>Není to cíl ani závazek. Je to jen pojmenování. „Přestávám se snažit být…"</p>
+        <p>Ve skupině: každý řekne jednu větu. Začíná slovy: <em>„Přestávám se snažit být…"</em></p>
+      </div>
+    </div>
+  </div>
+
+  <div class="krok">
+    <div class="krok-num">07</div>
+    <div>
+      <p class="krok-cas">10 minut</p>
+      <h3>Manifest nenápadnosti</h3>
+      <p>Každý napíše tři věty pro sebe — ne jako cíl, ale jako povolení.</p>
+      <div class="krok-instrukce">
+        <p>Věta 1: <em>„Moje záře pod dekou je…"</em></p>
+        <p>Věta 2: <em>„Přestávám se snažit být…"</em></p>
+        <p>Věta 3: <em>„Dnes jsem udělal/a jednu věc bez snahy — a bylo to…"</em></p>
+        <p>Tento manifest nemusí nikdo číst. Je pro vás.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── MANIFEST PRO TISK ── -->
+<div class="sekce">
+  <p class="sekce-label">Výstup · k vytištění</p>
+  <div class="manifest">
+    <h3>Manifest nenápadnosti</h3>
+    <p style="font-size:.85rem; color:#aaa; margin-bottom: 24px; font-style:italic;">Vyplňte sami. Nechte to u sebe.</p>
+    <div class="manifest-radky">
+      <div class="manifest-radek">Moje záře pod dekou je: ___________________________________</div>
+      <div class="manifest-radek">Přestávám se snažit být: ___________________________________</div>
+      <div class="manifest-radek">Dnes jsem udělal/a bez snahy: ___________________________________</div>
+      <div class="manifest-radek">Za měsíc se podívám na: ___________________________________</div>
+    </div>
+    <p style="font-size:.75rem; color:#ccc; margin-top: 20px;">Karta Lemur · Chceš myš? — Slovník mezer · chcesmys@gmail.com</p>
+  </div>
+</div>
+
+<!-- ── ÚHLY POHLEDU PRO KREATIVCE ── -->
+<div class="sekce">
+  <p class="sekce-label">11 úhlů pohledu — kreativní čtení</p>
+  <h2>Stejné úhly. Jiná otázka.</h2>
+  <p style="color:#777; font-size:.9rem; margin-bottom: 20px;">
+    Každý úhel otevírá jinou dimenzi pohádky pro kreativní práci.
+    Facilitátor nebo účastník si vybírá podle toho, kde se právě nachází.
+  </p>
+
+  <div class="uhly-grid">
+    <div class="uhel-item">
+      <p class="uhel-nazev">Absurdní</p>
+      <p class="uhel-vrstva">Zákon</p>
+      <p class="uhel-krea">Aktivní pasivita — co se stane, když přestanou platit pravidla o tom, jak se tvoří? Jaké je absurdní pravidlo vaší tvorby, které dodržujete bez důvodu?</p>
+    </div>
+    <div class="uhel-item">
+      <p class="uhel-nazev">Jazykový</p>
+      <p class="uhel-vrstva">Jev</p>
+      <p class="uhel-krea">Věta, která ruší všechny ostatní — „nejlepší je nechat to být." Jaká je věta, která ruší vaši tvorbu? Co si říkáte těsně předtím, než přestanete?</p>
+    </div>
+    <div class="uhel-item">
+      <p class="uhel-nazev">Ironický</p>
+      <p class="uhel-vrstva">Čas</p>
+      <p class="uhel-krea">Nečinnost jako strategie — kdy vám práce na projektu nevědomě pomohla tím, že jste ho nechali ležet? Co vzniklo z přestání, co by nevzniklo z pokračování?</p>
+    </div>
+    <div class="uhel-item">
+      <p class="uhel-nazev">Filozofický</p>
+      <p class="uhel-vrstva">Jazyk</p>
+      <p class="uhel-krea">Význam ticha mezi možnostmi — co nevytvoříte je součástí toho, co vytváříte. Jaká je mezera ve vaší tvorbě, která je důležitější než obsah?</p>
+    </div>
+    <div class="uhel-item">
+      <p class="uhel-nazev">Psychologický</p>
+      <p class="uhel-vrstva">Prostředí</p>
+      <p class="uhel-krea">Úleva z nevolby — kdy jste cítili úlevu, že jste se nemuseli rozhodnout? Která kreativní rozhodnutí přicházejí sama, bez toho abyste je dělali vědomě?</p>
+    </div>
+    <div class="uhel-item">
+      <p class="uhel-nazev">Surrealistický</p>
+      <p class="uhel-vrstva">Akce</p>
+      <p class="uhel-krea">Zmražený okamžik — kde ve vaší tvorbě čas přestal? Kde je místo, odkud se tvorba nepohnula — a co by se stalo, kdybyste to místo nechali zmrzlé záměrně?</p>
+    </div>
+    <div class="uhel-item">
+      <p class="uhel-nazev">Kulturní</p>
+      <p class="uhel-vrstva">Porucha řeči</p>
+      <p class="uhel-krea">Kontrast k výkonu — vaše tvorba existuje v kultuře, která oceňuje produktivitu. Kde se váš přirozený rytmus tvorby sráží s tímto očekáváním?</p>
+    </div>
+    <div class="uhel-item">
+      <p class="uhel-nazev">Naivní</p>
+      <p class="uhel-vrstva">Role</p>
+      <p class="uhel-krea">Nenápadnost křičící — co ve vaší tvorbě je „výrazně nenápadné"? Co se snažíte ztlumit, ale přesto to dominuje výsledku?</p>
+    </div>
+    <div class="uhel-item">
+      <p class="uhel-nazev">Intro</p>
+      <p class="uhel-vrstva">Stav</p>
+      <p class="uhel-krea">Nemusím reagovat — jaké podněty, trendy nebo očekávání ve vaší tvorbě ignorujete záměrně? Co je vaše „nereagovám" a co vám to dává?</p>
+    </div>
+    <div class="uhel-item">
+      <p class="uhel-nazev">Groteskní</p>
+      <p class="uhel-vrstva">Entita</p>
+      <p class="uhel-krea">Viditelná nenápadnost — kde je vaše tvorba nejzřetelněji „vaše" právě v momentech, kdy se snažíte být co nejméně osobní? Kde vás neviditelnost prozrazuje?</p>
+    </div>
+    <div class="uhel-item">
+      <p class="uhel-nazev">Archetypální</p>
+      <p class="uhel-vrstva">Symbol</p>
+      <p class="uhel-krea">Pozorovatel prahu — lemur sedí na prahu mezi viděním a neviděním. Kde ve své tvorbě stojíte na prahu? Co je za ním a proč tam ještě nejste?</p>
+    </div>
+  </div>
+</div>
+
+<!-- ── VARIANTY POUŽITÍ ── -->
+<div class="sekce">
+  <p class="sekce-label">Varianty použití</p>
+  <h2>Kdo a jak.</h2>
+  <div class="varianty">
+    <div class="varianta">
+      <p class="varianta-label">Individuální tvůrce</p>
+      <h3>Kreativní blokáda</h3>
+      <p>Pracujete sami. Pohádka, tři otázky, 20 minut bez opravování. Manifest pro sebe. Výsledek: pojmenování toho, co vás blokuje — a co se ukáže samo, když přestanete bránit.</p>
+    </div>
+    <div class="varianta">
+      <p class="varianta-label">Kreativní skupina</p>
+      <h3>Začátek projektu nebo bloku</h3>
+      <p>Skupina 3–8 lidí. Pohádka, individuální psaní, sdílení Q1. Cvičení deka z nezájmu — každý v svém médiu. Výsledek: skupinová „záře pod dekou" — co se ukázalo bez plánování.</p>
+    </div>
+    <div class="varianta">
+      <p class="varianta-label">Vzdělávání</p>
+      <h3>Kurz kreativity nebo psaní</h3>
+      <p>Na začátku kurzu nebo semestru. Pohádka jako vstup do tématu autentického výrazu. Otázky jako první diagnostika: co si studenti zakazují? Výsledek: mapa toho, kde přetvářejí.</p>
+    </div>
+    <div class="varianta">
+      <p class="varianta-label">Koučink</p>
+      <h3>Práce s klientem v blokádě</h3>
+      <p>Klient přečte pohádku sám před sezením. Na sezení přinese odpovědi na tři otázky. Kouč pracuje s Q2 — kde se klient snaží být jiný. Výsledek: konkrétní vzorec k pojmenování.</p>
+    </div>
+    <div class="varianta">
+      <p class="varianta-label">Residency nebo retreat</p>
+      <h3>Intenzivní práce na projektu</h3>
+      <p>Na začátku residency. Každý účastník projde workshopem a napíše manifest. Manifest zůstane viditelný po celou dobu — jako referenční bod ke kterému se vrací.</p>
+    </div>
+    <div class="varianta">
+      <p class="varianta-label">Solo · 30 minut</p>
+      <h3>Zkrácená verze</h3>
+      <p>Pohádka (5 min) → tři otázky (10 min) → 15 minut tvorby bez opravování → jedna věta manifest. Bez skupiny, bez facilitátora. Kdykoliv, kdekoliv.</p>
+    </div>
+  </div>
+</div>
+
+<div class="citat">
+  „Teď jsi konečně neviditelný."<br>
+  „Protože už se nesnažíš."
+</div>
+
+<p style="color:#777; font-size:.9rem;">
+  Toto je kreativní verze workshopu ke kartě Lemur. Stejná pohádka — jiný vstup, jiné otázky, jiný člověk u stolu.
+  Pokud hledáte týmovou verzi karty Lemur, najdete ji v diagnostickém kitu.
+</p>
+
+<div class="footer">
+  <span>Karta Lemur · Chceš myš? — Slovník mezer · © 2026 Michaela Nováková</span>
+  <span><a href="mailto:chcesmys@gmail.com">chcesmys@gmail.com</a></span>
+</div>
+
+</body>
+</html>
