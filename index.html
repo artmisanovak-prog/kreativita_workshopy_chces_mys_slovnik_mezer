@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kreativní workshopy — Chceš myš?</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:     #ffffff;
+      --fg:     #111111;
+      --muted:  #555555;
+      --light:  #f5f5f5;
+      --border: #e0e0e0;
+      --serif:  Georgia, 'Times New Roman', serif;
+      --sans:   'Helvetica Neue', Arial, sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--fg);
+      font-family: var(--sans);
+      font-size: 16px;
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+    }
+    .container { max-width: 1000px; margin: 0 auto; padding: 0 24px; }
+
+    /* ── NAV ── */
+    nav {
+      border-bottom: 1px solid var(--border);
+      padding: 16px 0;
+      position: sticky; top: 0;
+      background: var(--bg); z-index: 100;
+    }
+    nav .container {
+      display: flex; align-items: center;
+      justify-content: space-between; flex-wrap: wrap; gap: 12px;
+    }
+    .nav-logo {
+      font-size: 11px; letter-spacing: .18em;
+      text-transform: uppercase; font-weight: 700;
+      text-decoration: none; color: var(--fg);
+    }
+    .nav-sub { font-size: 11px; color: var(--muted); letter-spacing: .08em; margin-left: 4px; }
+    .nav-links { display: flex; gap: 20px; list-style: none; flex-wrap: wrap; }
+    .nav-links a {
+      font-size: 11px; letter-spacing: .1em; text-transform: uppercase;
+      text-decoration: none; color: var(--muted); transition: color .2s;
+    }
+    .nav-links a:hover { color: var(--fg); }
+    .nav-cta {
+      font-size: 11px; letter-spacing: .1em; text-transform: uppercase;
+      text-decoration: none; border: 1px solid var(--fg); color: var(--fg);
+      padding: 7px 16px; transition: background .2s, color .2s;
+    }
+    .nav-cta:hover { background: var(--fg); color: var(--bg); }
+
+    /* ── BUTTONS ── */
+    .btn {
+      display: inline-block; padding: 13px 28px;
+      font-size: 12px; letter-spacing: .1em; text-transform: uppercase;
+      text-decoration: none; border: 1px solid var(--fg); color: var(--fg);
+      background: transparent; cursor: pointer;
+      transition: background .2s, color .2s;
+    }
+    .btn:hover { background: var(--fg); color: var(--bg); }
+    .btn-fill { background: var(--fg); color: var(--bg); }
+    .btn-fill:hover { background: #333; border-color: #333; }
+    .btn-sm { padding: 9px 20px; font-size: 11px; }
+
+    /* ── SEKCE ── */
+    section { padding: 72px 0; border-bottom: 1px solid var(--border); }
+    section:last-of-type { border-bottom: none; }
+    .section-label {
+      font-size: 10px; letter-spacing: .2em; text-transform: uppercase;
+      color: var(--muted); margin-bottom: 14px;
+    }
+    h2 {
+      font-family: var(--serif);
+      font-size: clamp(1.7rem, 3.5vw, 2.6rem);
+      font-weight: 400; line-height: 1.2; margin-bottom: 32px;
+    }
+    h3 { font-size: 1rem; font-weight: 700; letter-spacing: .03em; margin-bottom: 8px; }
+    p { margin-bottom: 16px; }
+    p:last-child { margin-bottom: 0; }
+
+    /* ── HERO ── */
+    .hero { padding: 88px 0 72px; }
+    .hero-eyebrow {
+      font-size: 10px; letter-spacing: .2em; text-transform: uppercase;
+      color: var(--muted); margin-bottom: 24px;
+    }
+    .hero h1 {
+      font-family: var(--serif);
+      font-size: clamp(2.4rem, 5vw, 4rem);
+      font-weight: 400; line-height: 1.1;
+      letter-spacing: -.01em; margin-bottom: 28px;
+    }
+    .hero h1 em { font-style: italic; }
+    .hero-sub {
+      font-size: 1.1rem; color: var(--muted);
+      max-width: 600px; margin-bottom: 16px; line-height: 1.75;
+    }
+    .hero-note {
+      font-size: .85rem; color: var(--muted); margin-bottom: 40px;
+      border-left: 2px solid var(--border); padding-left: 16px; max-width: 540px;
+    }
+    .hero-cta-group { display: flex; gap: 14px; flex-wrap: wrap; align-items: center; }
+
+    /* ── PROOF BAR ── */
+    .proof-bar {
+      background: var(--light); border-bottom: 1px solid var(--border); padding: 20px 0;
+    }
+    .proof-bar .container { display: flex; gap: 40px; flex-wrap: wrap; align-items: center; }
+    .proof-item { font-size: .85rem; color: var(--muted); }
+    .proof-item strong { color: var(--fg); display: block; font-size: 1.05rem; }
+
+    /* ── JAK TO FUNGUJE JINAK ── */
+    .rozdil-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 1px;
+      background: var(--border); border: 1px solid var(--border); margin-top: 8px;
+    }
+    .rozdil-item { background: var(--bg); padding: 32px; }
+    .rozdil-item .r-label {
+      font-size: .72rem; letter-spacing: .15em; text-transform: uppercase;
+      color: var(--muted); margin-bottom: 12px; display: block;
+    }
+    .rozdil-item h3 { font-size: 1rem; margin-bottom: 12px; }
+    .rozdil-item p { font-size: .88rem; color: var(--muted); }
+    @media (max-width: 600px) { .rozdil-grid { grid-template-columns: 1fr; } }
+
+    /* ── DIAGNOSTICKÝ MOD ── */
+    .diag-box {
+      border: 1px solid var(--fg); padding: 40px; margin-top: 8px;
+    }
+    .diag-box h3 { font-family: var(--serif); font-size: 1.4rem; font-weight: 400; margin-bottom: 16px; }
+    .diag-steps { margin-top: 24px; }
+    .diag-step {
+      display: grid; grid-template-columns: 48px 1fr; gap: 20px;
+      padding: 20px 0; border-bottom: 1px solid var(--border); align-items: start;
+    }
+    .diag-step:last-child { border-bottom: none; }
+    .diag-step-num {
+      font-family: var(--serif); font-size: 2rem; font-weight: 400;
+      color: var(--border); line-height: 1;
+    }
+    .diag-step h4 { font-size: .9rem; margin-bottom: 6px; }
+    .diag-step p { font-size: .85rem; color: var(--muted); margin: 0; }
+    .diag-note {
+      margin-top: 28px; padding: 20px; background: var(--light);
+      font-size: .88rem; color: var(--muted); border-left: 3px solid var(--fg);
+    }
+    .diag-note strong { color: var(--fg); }
+
+    /* ── KARTY WORKSHOPŮ ── */
+    .workshopy-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1px; background: var(--border); border: 1px solid var(--border); margin-top: 8px;
+    }
+    .workshop-card {
+      background: var(--bg); padding: 32px;
+      display: flex; flex-direction: column;
+      text-decoration: none; color: var(--fg);
+      transition: background .15s;
+    }
+    .workshop-card:hover { background: var(--light); }
+    .wc-zvire {
+      font-size: 1.8rem; margin-bottom: 16px; line-height: 1;
+    }
+    .wc-label {
+      font-size: .72rem; letter-spacing: .15em; text-transform: uppercase;
+      color: var(--muted); margin-bottom: 8px;
+    }
+    .wc-nazev { font-family: var(--serif); font-size: 1.3rem; font-weight: 400; margin-bottom: 8px; }
+    .wc-veta {
+      font-size: .82rem; color: var(--muted); font-style: italic;
+      margin-bottom: 16px; line-height: 1.6;
+    }
+    .wc-tema {
+      font-size: .8rem; margin-bottom: 20px; color: var(--muted);
+    }
+    .wc-tema strong { color: var(--fg); display: block; margin-bottom: 4px; font-size: .72rem; letter-spacing: .1em; text-transform: uppercase; }
+    .wc-link {
+      font-size: .78rem; letter-spacing: .1em; text-transform: uppercase;
+      color: var(--muted); text-decoration: underline; margin-top: auto;
+    }
+    .wc-tag {
+      display: inline-block; font-size: .68rem; letter-spacing: .1em;
+      text-transform: uppercase; border: 1px solid var(--border);
+      color: var(--muted); padding: 2px 8px; margin-bottom: 12px;
+    }
+    .wc-brzy {
+      background: var(--light); color: var(--muted);
+    }
+    .wc-brzy .wc-link { opacity: .4; pointer-events: none; }
+
+    /* ── CO DOSTANETE ── */
+    .co-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px;
+      background: var(--border); border: 1px solid var(--border); margin-top: 8px;
+    }
+    .co-item { background: var(--bg); padding: 28px; }
+    .co-num {
+      font-family: var(--serif); font-size: 2.2rem; color: var(--border);
+      line-height: 1; margin-bottom: 14px; display: block;
+    }
+    .co-item h3 { font-size: .9rem; margin-bottom: 8px; }
+    .co-item p { font-size: .83rem; color: var(--muted); margin: 0; }
+    @media (max-width: 640px) { .co-grid { grid-template-columns: 1fr; } }
+
+    /* ── PRO KOHO ── */
+    .prokoho-list { border-top: 1px solid var(--border); }
+    .prokoho-item {
+      padding: 22px 0; border-bottom: 1px solid var(--border);
+      display: grid; grid-template-columns: 220px 1fr; gap: 32px; font-size: .92rem;
+    }
+    .prokoho-item .role { font-weight: 700; font-size: .88rem; }
+    .prokoho-item .popis { color: var(--muted); }
+    @media (max-width: 580px) { .prokoho-item { grid-template-columns: 1fr; gap: 8px; } }
+
+    /* ── CITÁT ── */
+    .citat-sekce { padding: 64px 0; background: var(--fg); color: var(--bg); }
+    .citat-sekce blockquote {
+      font-family: var(--serif); font-size: clamp(1.3rem, 3vw, 2rem);
+      font-weight: 400; font-style: italic; line-height: 1.5;
+      max-width: 700px;
+    }
+    .citat-sekce cite {
+      display: block; margin-top: 20px;
+      font-size: .82rem; letter-spacing: .12em; text-transform: uppercase;
+      color: rgba(255,255,255,.5); font-style: normal;
+    }
+
+    /* ── CENA ── */
+    .cena-grid {
+      display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1px;
+      background: var(--border); border: 1px solid var(--border); margin-top: 8px;
+    }
+    .cena-item { background: var(--bg); padding: 32px; }
+    .cena-label {
+      font-size: .72rem; letter-spacing: .15em; text-transform: uppercase;
+      color: var(--muted); margin-bottom: 14px;
+    }
+    .cena-num {
+      font-family: var(--serif); font-size: 2.4rem; font-weight: 400;
+      line-height: 1; margin-bottom: 6px;
+    }
+    .cena-note { font-size: .82rem; color: var(--muted); margin-bottom: 20px; }
+    .cena-item ul { list-style: none; margin-bottom: 24px; }
+    .cena-item li {
+      padding: 8px 0; border-bottom: 1px solid var(--border);
+      font-size: .86rem; display: flex; gap: 10px;
+    }
+    .cena-item li::before { content: '→'; color: var(--muted); flex-shrink: 0; }
+    @media (max-width: 700px) { .cena-grid { grid-template-columns: 1fr; } }
+
+    /* ── KONTAKT ── */
+    .kontakt-box {
+      background: var(--fg); color: var(--bg); padding: 48px; margin-top: 8px;
+    }
+    .kontakt-box h3 {
+      font-family: var(--serif); font-size: 1.8rem; font-weight: 400; margin-bottom: 12px;
+    }
+    .kontakt-box p { color: rgba(255,255,255,.7); margin-bottom: 28px; max-width: 520px; }
+    .kontakt-box .btn { border-color: rgba(255,255,255,.4); color: var(--bg); }
+    .kontakt-box .btn:hover { background: rgba(255,255,255,.15); }
+    .kontakt-box .btn-light { background: var(--bg); color: var(--fg); border-color: var(--bg); }
+    .kontakt-box .btn-light:hover { background: #eee; border-color: #eee; }
+
+    /* ── FOOTER ── */
+    footer { border-top: 1px solid var(--border); padding: 40px 0; }
+    .footer-inner { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 24px; }
+    .footer-left p, .footer-right p { font-size: .82rem; color: var(--muted); margin-bottom: 4px; }
+    .footer-right { text-align: right; }
+    footer a { color: var(--muted); }
+  </style>
+</head>
+<body>
+
+<!-- ═══ NAV ═══ -->
+<nav>
+  <div class="container">
+    <a class="nav-logo" href="/">
+      Chceš myš?<span class="nav-sub">— kreativní workshopy</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#jak-funguje">Jak funguje</a></li>
+      <li><a href="#workshopy">Workshopy</a></li>
+      <li><a href="#pro-koho">Pro koho</a></li>
+      <li><a href="#cena">Cena</a></li>
+    </ul>
+    <a class="nav-cta" href="#workshopy">Vybrat workshop</a>
+  </div>
+</nav>
+
+<!-- ═══ HERO ═══ -->
+<section class="hero">
+  <div class="container">
+    <p class="hero-eyebrow">Chceš myš? — kreativní workshopy</p>
+    <h1>Nástroje pro pohyb<br>v tvorbě. Ne<br><em>pro výsledek.</em></h1>
+    <p class="hero-sub">
+      Každý workshop vychází z jedné pohádky a jednoho zvířete.
+      Zvíře není diagnóza — je to mapa. Ukazuje, kudy se dá jít.
+      Kam dojdete, je na vás.
+    </p>
+    <p class="hero-note">
+      Nástroj nepracuje za vás. Nepředgeneruje výsledky.
+      Pomáhá vidět, co přehlížíte — a kudy se dá jít dál.
+    </p>
+    <div class="hero-cta-group">
+      <a class="btn btn-fill" href="#workshopy">Prohlédnout workshopy</a>
+      <a class="btn" href="#jak-funguje">Jak to funguje</a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ PROOF BAR ═══ -->
+<div class="proof-bar">
+  <div class="container">
+    <div class="proof-item"><strong>Pohádka</strong>vstup bez obrany</div>
+    <div class="proof-item"><strong>3 otázky</strong>na každý úhel pohledu</div>
+    <div class="proof-item"><strong>Diagnostický mód</strong>najde slepá místa</div>
+    <div class="proof-item"><strong>Intervence</strong>jako kreativní nástroj</div>
+    <div class="proof-item"><strong>90 minut</strong>nebo 30 solo</div>
+  </div>
+</div>
+
+<!-- ═══ JAK TO FUNGUJE JINAK ═══ -->
+<section id="jak-funguje">
+  <div class="container">
+    <p class="section-label">Kreativní mód vs. týmový mód</p>
+    <h2>Stejné zvíře.<br>Jiný člověk u stolu.</h2>
+
+    <div class="rozdil-grid">
+      <div class="rozdil-item">
+        <span class="r-label">Týmový workshop</span>
+        <h3>Diagnostika dysfunkce</h3>
+        <p>Tým odpovídá na otázky. Většina úhlů pohledu vyjde jako aktivní — jen pár jako deficitní. S deficitními se pracuje: tam je slepé místo.</p>
+      </div>
+      <div class="rozdil-item">
+        <span class="r-label">Kreativní workshop</span>
+        <h3>Diagnostika slepého místa</h3>
+        <p>Jednotlivec odpovídá na otázky. Většina úhlů vyjde jako deficitní — jen pár jako dominantní. Intervence přijde z protilehlého úhlu: tam kde dominantní nikdy nenahlédne sám.</p>
+      </div>
+    </div>
+
+    <p style="margin-top: 24px; font-size: .9rem; color: var(--muted); max-width: 680px;">
+      Například: přetěžujete filozofický úhel — tvoříte s velkými otázkami, hledáte smysl, ale práce se zasekne. Vaše intervence přijde z naivního: co nejjednoduššího byste mohli udělat právě teď, bez hledání smyslu? Protilehlý úhel není opak — je to východ, který filosofický sám od sebe nenajde.
+    </p>
+  </div>
+</section>
+
+<!-- ═══ DIAGNOSTICKÝ MÓD ═══ -->
+<section>
+  <div class="container">
+    <p class="section-label">Jak se používá</p>
+    <h2>Diagnostický mód<br>pro kreativce.</h2>
+
+    <div class="diag-box">
+      <h3>Tři kroky. Vždy v tomto pořadí.</h3>
+      <div class="diag-steps">
+        <div class="diag-step">
+          <div class="diag-step-num">1</div>
+          <div>
+            <h4>Přečtěte pohádku</h4>
+            <p>Pohádka otevírá téma bez přímé konfrontace. Sledujte, kde vás zastaví — kde cítíte odpor, poznání nebo překvapení. To místo je vstupní bod.</p>
+          </div>
+        </div>
+        <div class="diag-step">
+          <div class="diag-step-num">2</div>
+          <div>
+            <h4>Odpovězte na tři otázky pro každý úhel pohledu</h4>
+            <p>Každý ze 11 úhlů má tři otázky. Odpovídáte písemně, rychle, bez opravování. Z odpovědí vyjde vaše kognitivní mapa: které úhly přetěžujete, které přeskakujete.</p>
+          </div>
+        </div>
+        <div class="diag-step">
+          <div class="diag-step-num">3</div>
+          <div>
+            <h4>Vyberte intervenci z protilehlého úhlu</h4>
+            <p>Váš dominantní úhel — ten kde odpovídáte snadno a rychle — má naproti sobě úhel, který přeskakujete. Kreativní intervence přijde odtud. Ne proto, abyste změnili způsob tvorby — ale abyste viděli, co z něj vypadává.</p>
+          </div>
+        </div>
+      </div>
+      <div class="diag-note">
+        <strong>Protilehlé úhly v kreativním modu:</strong><br>
+        Filozofický ↔ Naivní &nbsp;·&nbsp;
+        Absurdní ↔ Groteskní &nbsp;·&nbsp;
+        Jazykový ↔ Archetypální &nbsp;·&nbsp;
+        Ironický ↔ Surrealistický &nbsp;·&nbsp;
+        Psychologický ↔ Kulturní &nbsp;·&nbsp;
+        Intro ↔ Metaforický
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ WORKSHOPY ═══ -->
+<section id="workshopy">
+  <div class="container">
+    <p class="section-label">Dostupné workshopy</p>
+    <h2>Vyberte zvíře.<br>Nebo nechte vybrat pohádku.</h2>
+    <p style="color: var(--muted); max-width: 600px; margin-bottom: 8px; font-size: .9rem;">
+      Každé zvíře otevírá jiné téma. Pokud nevíte kde začít — přečtěte si větu pod každým názvem. Ta, u které se zastavíte, je vaše vstupní karta.
+    </p>
+
+    <div class="workshopy-grid">
+
+      <!-- LEMUR -->
+      <a class="workshop-card" href="doma/lemur_kreativni_workshop.html">
+        <span class="wc-zvire">🦎</span>
+        <span class="wc-tag">Dostupné</span>
+        <p class="wc-label">Karta Lemur</p>
+        <h3 class="wc-nazev">Přestat se snažit jako metoda</h3>
+        <p class="wc-veta">„Nejlepší je nechat to být. Vše ostatní je moc nápadné."</p>
+        <div class="wc-tema">
+          <strong>Kreativní téma</strong>
+          Kde se vaše úsilí stává překážkou. Co se ukáže, když přestanete bránit.
+        </div>
+        <span class="wc-link">Otevřít workshop →</span>
+      </a>
+
+      <!-- JEDNOROŽEC -->
+      <a class="workshop-card" href="doma/jednorozec_kreativni_workshop.html">
+        <span class="wc-zvire">🦄</span>
+        <span class="wc-tag">Dostupné</span>
+        <p class="wc-label">Karta Jednorožec</p>
+        <h3 class="wc-nazev">Z čeho jste vyrobeni</h3>
+        <p class="wc-veta">„Nevěřím na delfíny ani na lední medvědy."</p>
+        <div class="wc-tema">
+          <strong>Kreativní téma</strong>
+          Vlivy a zdroje, které odmítáte přiznat. Originalita jako hybrid, ne jako čistota.
+        </div>
+        <span class="wc-link">Otevřít workshop →</span>
+      </a>
+
+      <!-- KOCOUR -->
+      <a class="workshop-card wc-brzy" href="#">
+        <span class="wc-zvire">🐈‍⬛</span>
+        <span class="wc-tag">Připravuje se</span>
+        <p class="wc-label">Karta Kocour</p>
+        <h3 class="wc-nazev">Věty které dokončíte dřív, než dozrají</h3>
+        <p class="wc-veta">„Sežral dvě berušky a půl hodiny krkal tečky."</p>
+        <div class="wc-tema">
+          <strong>Kreativní téma</strong>
+          Kde uzavíráte věci příliš brzy. Co by se stalo, kdyby věta nedostala tečku.
+        </div>
+        <span class="wc-link">Brzy →</span>
+      </a>
+
+      <!-- PLAMEŇÁK -->
+      <a class="workshop-card wc-brzy" href="#">
+        <span class="wc-zvire">🦩</span>
+        <span class="wc-tag">Připravuje se</span>
+        <p class="wc-label">Karta Plameňák</p>
+        <h3 class="wc-nazev">Tvořit bez cíle — a co z toho vzejde</h3>
+        <p class="wc-veta">„Lalalá poletíme spolu zřítíme se dolů lalalá budeme na hlavu."</p>
+        <div class="wc-tema">
+          <strong>Kreativní téma</strong>
+          Energie bez směru jako kreativní stav. Kde vás nadšení odnáší — a co tam najdete.
+        </div>
+        <span class="wc-link">Brzy →</span>
+      </a>
+
+      <!-- MYŠ -->
+      <a class="workshop-card wc-brzy" href="#">
+        <span class="wc-zvire">🐁</span>
+        <span class="wc-tag">Připravuje se</span>
+        <p class="wc-label">Karta Myš</p>
+        <h3 class="wc-nazev">Pozorovat bez soudu</h3>
+        <p class="wc-veta">„Chceš myš?"</p>
+        <div class="wc-tema">
+          <strong>Kreativní téma</strong>
+          Tvorba jako záznam bez hodnocení. Co vidíte, když se přestanete snažit interpretovat.
+        </div>
+        <span class="wc-link">Brzy →</span>
+      </a>
+
+      <!-- PÁV -->
+      <a class="workshop-card wc-brzy" href="#">
+        <span class="wc-zvire">🦚</span>
+        <span class="wc-tag">Připravuje se</span>
+        <p class="wc-label">Karta Páv</p>
+        <h3 class="wc-nazev">Kdy tvorba ukazuje jen sebe samu</h3>
+        <p class="wc-veta">„Oko za okem. Páv za pávem."</p>
+        <div class="wc-tema">
+          <strong>Kreativní téma</strong>
+          Kde vaše práce mluví o tom, jak pracujete — místo o čem pracujete.
+        </div>
+        <span class="wc-link">Brzy →</span>
+      </a>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══ CO DOSTANETE ═══ -->
+<section>
+  <div class="container">
+    <p class="section-label">Co je v každém workshopu</p>
+    <h2>Struktura.<br>Vždy stejná.</h2>
+
+    <div class="co-grid">
+      <div class="co-item">
+        <span class="co-num">01</span>
+        <h3>Pohádka</h3>
+        <p>Vstup bez konfrontace. Příběh, do kterého se promítnete — aniž byste se museli bránit. Tvorba začíná tam, kde skončí pohádka.</p>
+      </div>
+      <div class="co-item">
+        <span class="co-num">02</span>
+        <h3>Tři otázky</h3>
+        <p>Na každý ze 11 úhlů pohledu tři otázky. Píšete rychle, bez opravování. Z odpovědí vyjde mapa — které úhly přetěžujete, které přeskakujete.</p>
+      </div>
+      <div class="co-item">
+        <span class="co-num">03</span>
+        <h3>Cvičení</h3>
+        <p>Dvě cvičení v délce 20 minut. Pracujete ve svém médiu. Výsledkem není hotové dílo — je to materiál k pozorování.</p>
+      </div>
+      <div class="co-item">
+        <span class="co-num">04</span>
+        <h3>Diagnostický mód</h3>
+        <p>Volitelně: odpovídáte na otázky všech úhlů a z přetížených vyberete protilehlý. Intervence přijde odtud — z místa, kam dominantní úhel sám od sebe nevede.</p>
+      </div>
+      <div class="co-item">
+        <span class="co-num">05</span>
+        <h3>Intervence</h3>
+        <p>Kreativní nástroj, ne terapie. Konkrétní akce nebo způsob práce vycházející z protilehlého úhlu. Na 20 minut, na týden, nebo jako trvalá praxe.</p>
+      </div>
+      <div class="co-item">
+        <span class="co-num">06</span>
+        <h3>Manifest</h3>
+        <p>Čtyři věty na konci. Pro vás, ne pro ostatní. Kotva k tomu, co jste v průběhu workshopu viděli. Vytisknete a nechte na viditelném místě.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ PRO KOHO ═══ -->
+<section id="pro-koho">
+  <div class="container">
+    <p class="section-label">Pro koho</p>
+    <h2>Kdokoliv, kdo tvoří<br>a občas se zasekne.</h2>
+
+    <div class="prokoho-list">
+      <div class="prokoho-item">
+        <span class="role">Spisovatel, básník, dramatik</span>
+        <span class="popis">Práce s vlivem, s blokádou, s tím co se nechce napsat — nebo naopak co se píše samo bez vědomého záměru.</span>
+      </div>
+      <div class="prokoho-item">
+        <span class="role">Vizuální umělec, designér</span>
+        <span class="popis">Kde se opakujete bez toho abyste věděli proč. Co by se stalo, kdybyste dovolili zdroji, který popíráte, vstoupit do práce.</span>
+      </div>
+      <div class="prokoho-item">
+        <span class="role">Hudebník, skladatel, performer</span>
+        <span class="popis">Kde přetěžujete jeden způsob práce. Cvičení dávají konkrétní podmínky — ne rady jak tvořit, ale jiné prostředí pro tvorbu.</span>
+      </div>
+      <div class="prokoho-item">
+        <span class="role">Kouč nebo terapeut</span>
+        <span class="popis">Pohádka jako externalizace. Klient pracuje se zvířetem — ne se sebou. Tři otázky jako diagnostický nástroj pro kreativní blokádu nebo identitu.</span>
+      </div>
+      <div class="prokoho-item">
+        <span class="role">Pedagog, lektor kurzu kreativity</span>
+        <span class="popis">Workshop jako vstup do kurzu nebo semestru. Mapa vlivů studentů. Diagnostický mód jako nástroj pro pochopení kreativního procesu každého jednotlivce.</span>
+      </div>
+      <div class="prokoho-item">
+        <span class="role">Kdokoliv s projektem který stojí</span>
+        <span class="popis">Nemusíte být profesionální tvůrce. Stačí, že tvoříte — a že se v tom momentálně zasekujete. Workshop trvá 30 minut solo.</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ CITÁT ═══ -->
+<div class="citat-sekce">
+  <div class="container">
+    <blockquote>
+      „Nástroj nenavrhuje obsah.<br>
+      Navrhuje směr.<br>
+      Kam dojdete, je na vás."
+    </blockquote>
+    <cite>— metoda Chceš myš? · Michaela Nováková</cite>
+  </div>
+</div>
+
+<!-- ═══ CENA ═══ -->
+<section id="cena">
+  <div class="container">
+    <p class="section-label">Jak získat přístup</p>
+    <h2>Tři způsoby<br>jak začít.</h2>
+
+    <div class="cena-grid">
+      <div class="cena-item">
+        <p class="cena-label">Solo · zdarma</p>
+        <p class="cena-num">0 Kč</p>
+        <p class="cena-note">Každý workshop je volně přístupný online.</p>
+        <ul>
+          <li>Pohádka + tři otázky</li>
+          <li>Dvě cvičení</li>
+          <li>Manifest k vytištění</li>
+          <li>30–90 minut sami</li>
+        </ul>
+        <a class="btn btn-sm" href="#workshopy">Začít zdarma</a>
+      </div>
+      <div class="cena-item">
+        <p class="cena-label">Se skupinou · facilitovaně</p>
+        <p class="cena-num">od 4 900 Kč</p>
+        <p class="cena-note">Workshop pro kreativní skupinu do 12 lidí, 90 minut.</p>
+        <ul>
+          <li>Facilitovaný workshop</li>
+          <li>Diagnostický mód pro každého</li>
+          <li>Skupinová mapa slepých míst</li>
+          <li>Navazující check-in za 30 dní</li>
+        </ul>
+        <a class="btn btn-sm" href="mailto:chcesmys@gmail.com">Nezávazně napsat</a>
+      </div>
+      <div class="cena-item">
+        <p class="cena-label">Licence pro pedagogy a kouče</p>
+        <p class="cena-num">od 1 900 Kč</p>
+        <p class="cena-note">Roční licence na použití workshopů v kurzech a koučinku.</p>
+        <ul>
+          <li>Všechny dostupné workshopy</li>
+          <li>Tisknutelné materiály</li>
+          <li>Průvodce diagnostickým módem</li>
+          <li>Přístup k novým kartám</li>
+        </ul>
+        <a class="btn btn-sm" href="mailto:chcesmys@gmail.com">Nezávazně napsat</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ KONTAKT ═══ -->
+<section>
+  <div class="container">
+    <p class="section-label">Napište nám</p>
+    <div class="kontakt-box">
+      <h3>Nevíte, kde začít?<br>Napište nám.</h3>
+      <p>Rádi doporučíme, která karta je pro váš kontext nejvhodnější — nebo vysvětlíme jak diagnostický mód funguje v praxi.</p>
+      <div style="display:flex; gap:14px; flex-wrap:wrap;">
+        <a class="btn btn-light" href="mailto:chcesmys@gmail.com">chcesmys@gmail.com</a>
+        <a class="btn" href="/">← Zpět na hlavní stránku</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ FOOTER ═══ -->
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <div class="footer-left">
+        <p><strong>Chceš myš? — kreativní workshopy</strong></p>
+        <p>Součást systému kognitivního mapování slepých míst</p>
+        <p>© 2026 Michaela Nováková — metoda Repo dům</p>
+      </div>
+      <div class="footer-right">
+        <p><a href="/">Hlavní stránka</a></p>
+        <p><a href="/tymy">Slovník mezer — týmové workshopy</a></p>
+        <p><a href="/forezni">Forenzní jazykové mapování</a></p>
+        <p><a href="mailto:chcesmys@gmail.com">chcesmys@gmail.com</a></p>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
