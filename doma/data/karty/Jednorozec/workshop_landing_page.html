@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🦄 Jednorožec — kreativní workshop</title>
+  <style>
+    html { filter: grayscale(1); }
+    body {
+      font-family: 'Georgia', 'Times New Roman', serif;
+      background: #fff;
+      color: #000;
+      line-height: 1.8;
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 40px 24px;
+    }
+
+    .nav {
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      font-size: 11px;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+      color: #999;
+      margin-bottom: 48px;
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+    .nav a { color: #999; text-decoration: none; }
+    .nav a:hover { color: #000; }
+    .nav-sep { color: #ddd; }
+
+    .card-eyebrow {
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      font-size: 10px;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      color: #aaa;
+      margin-bottom: 16px;
+    }
+    h1 {
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      font-weight: 400;
+      line-height: 1.15;
+      margin-bottom: 12px;
+    }
+    .card-sentence {
+      font-size: 1.1rem;
+      font-style: italic;
+      color: #555;
+      border-left: 2px solid #000;
+      padding-left: 18px;
+      margin: 24px 0 40px;
+    }
+
+    .rozdil {
+      background: #f7f7f7;
+      border: 1px solid #e0e0e0;
+      padding: 24px 28px;
+      margin-bottom: 48px;
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      font-size: .88rem;
+    }
+    .rozdil-label {
+      font-size: .72rem;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: #999;
+      margin-bottom: 12px;
+      display: block;
+    }
+    .rozdil table { width: 100%; border-collapse: collapse; }
+    .rozdil td {
+      padding: 8px 12px 8px 0;
+      vertical-align: top;
+      border-bottom: 1px solid #e8e8e8;
+      font-size: .85rem;
+    }
+    .rozdil td:first-child {
+      width: 40%;
+      color: #999;
+      font-size: .78rem;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    .rozdil tr:last-child td { border-bottom: none; }
+
+    .sekce {
+      margin: 48px 0;
+      padding-top: 48px;
+      border-top: 1px solid #e0e0e0;
+    }
+    .sekce-label {
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      font-size: 10px;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      color: #aaa;
+      margin-bottom: 16px;
+    }
+    h2 {
+      font-size: 1.5rem;
+      font-weight: 400;
+      margin-bottom: 24px;
+    }
+    h3 {
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+    }
+    p { margin-bottom: 14px; }
+
+    .pohadka-wrap {
+      max-height: 380px;
+      overflow-y: auto;
+      border: 1px solid #000;
+      padding: 0 28px;
+      margin: 24px 0;
+      background: #fafafa;
+    }
+    .pohadka { font-style: italic; }
+    .pohadka p { padding: .4em 0; }
+
+    .otazky { margin: 24px 0; }
+    .otazka {
+      border-bottom: 1px solid #e0e0e0;
+      padding: 20px 0;
+    }
+    .otazka:first-child { border-top: 1px solid #e0e0e0; }
+    .q-label {
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      font-size: .72rem;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: #aaa;
+      margin-bottom: 8px;
+    }
+    .q-text { font-size: 1.05rem; margin-bottom: 8px; }
+    .q-note { font-size: .85rem; color: #777; font-style: italic; margin: 0; }
+
+    .krok {
+      display: grid;
+      grid-template-columns: 60px 1fr;
+      gap: 24px;
+      padding: 28px 0;
+      border-bottom: 1px solid #e0e0e0;
+      align-items: start;
+    }
+    .krok:first-child { border-top: 1px solid #e0e0e0; }
+    .krok-num {
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      font-size: 2.4rem;
+      font-weight: 300;
+      color: #ddd;
+      line-height: 1;
+      padding-top: 4px;
+    }
+    .krok-cas {
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      font-size: .72rem;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: #aaa;
+      margin-bottom: 8px;
+    }
+    .krok h3 { margin-bottom: 6px; }
+    .krok p { font-size: .92rem; color: #444; }
+    .krok-instrukce {
+      margin-top: 14px;
+      padding: 16px 20px;
+      background: #f7f7f7;
+      font-size: .88rem;
+      color: #555;
+      border-left: 2px solid #ccc;
+    }
+    .krok-instrukce p { margin-bottom: 8px; }
+    .krok-instrukce p:last-child { margin-bottom: 0; }
+    .krok-instrukce em { font-style: italic; color: #777; }
+
+    .uhly-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1px;
+      background: #e0e0e0;
+      border: 1px solid #e0e0e0;
+      margin: 16px 0;
+    }
+    .uhel-item { background: #fff; padding: 20px; }
+    .uhel-nazev {
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      font-size: .8rem;
+      font-weight: 700;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+    .uhel-vrstva {
+      font-size: .72rem;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: #aaa;
+      margin-bottom: 8px;
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+    }
+    .uhel-krea { font-size: .88rem; color: #444; }
+    @media (max-width: 580px) { .uhly-grid { grid-template-columns: 1fr; } }
+
+    /* Mapa hybridu — interaktivní */
+    .mapa-hybrid {
+      border: 1px solid #000;
+      padding: 32px;
+      margin: 24px 0;
+    }
+    .mapa-hybrid-label {
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      font-size: .72rem;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: #aaa;
+      margin-bottom: 20px;
+      display: block;
+    }
+    .mapa-cols {
+      display: grid;
+      grid-template-columns: 1fr 60px 1fr;
+      gap: 0;
+      align-items: start;
+    }
+    .mapa-col { padding: 20px; }
+    .mapa-col-label {
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      font-size: .75rem;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: #999;
+      margin-bottom: 16px;
+      display: block;
+    }
+    .mapa-col-text {
+      font-size: .85rem;
+      color: #777;
+      font-style: italic;
+    }
+    .mapa-stred {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px 0;
+      font-size: 1.6rem;
+      color: #ccc;
+      line-height: 2;
+    }
+    .mapa-vysledek {
+      border-top: 1px solid #e0e0e0;
+      margin-top: 24px;
+      padding-top: 20px;
+      text-align: center;
+      font-size: .9rem;
+      color: #777;
+      font-style: italic;
+    }
+    @media (max-width: 580px) {
+      .mapa-cols { grid-template-columns: 1fr; }
+      .mapa-stred { flex-direction: row; gap: 12px; padding: 8px 0; }
+    }
+
+    .manifest {
+      border: 1px solid #000;
+      padding: 32px;
+      margin: 24px 0;
+      text-align: center;
+    }
+    .manifest h3 { font-size: 1.2rem; margin-bottom: 16px; }
+    .manifest-radky { margin: 20px 0; }
+    .manifest-radek {
+      border-bottom: 1px solid #e0e0e0;
+      padding: 14px 0;
+      font-size: .95rem;
+      color: #777;
+      font-style: italic;
+    }
+    .manifest-radek:last-child { border-bottom: none; }
+
+    .varianty {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1px;
+      background: #e0e0e0;
+      border: 1px solid #e0e0e0;
+      margin: 16px 0;
+    }
+    .varianta { background: #fff; padding: 24px; }
+    .varianta-label {
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      font-size: .72rem;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+      color: #aaa;
+      margin-bottom: 8px;
+    }
+    .varianta h3 { font-size: .95rem; margin-bottom: 8px; }
+    .varianta p { font-size: .85rem; color: #555; margin: 0; }
+    @media (max-width: 580px) { .varianty { grid-template-columns: 1fr; } }
+
+    .citat {
+      border-left: 2px solid #000;
+      padding-left: 24px;
+      margin: 32px 0;
+      font-size: 1.1rem;
+      font-style: italic;
+      color: #555;
+    }
+
+    .jadro-box {
+      background: #000;
+      color: #fff;
+      padding: 32px;
+      margin: 32px 0;
+      font-size: 1rem;
+      line-height: 1.9;
+    }
+    .jadro-box p { margin-bottom: 10px; }
+    .jadro-box p:last-child { margin-bottom: 0; color: rgba(255,255,255,.6); font-size: .88rem; }
+
+    .footer {
+      margin-top: 56px;
+      padding-top: 24px;
+      border-top: 1px solid #e0e0e0;
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      font-size: .82rem;
+      color: #aaa;
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .footer a { color: #aaa; text-decoration: underline; }
+
+    @media print {
+      .nav { display: none; }
+      .pohadka-wrap { max-height: none; overflow: visible; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="nav">
+  <a href="../../../">Slovník mezer</a>
+  <span class="nav-sep">—</span>
+  <a href="../">Jednorožec</a>
+  <span class="nav-sep">—</span>
+  <span>Kreativní workshop</span>
+</div>
+
+<p class="card-eyebrow">Karta Jednorožec · Kreativní workshop · 90 minut</p>
+<h1>Z čeho jste<br>vyrobeni.</h1>
+
+<p class="card-sentence">
+  „Nevěřím na delfíny ani na lední medvědy."
+</p>
+
+<!-- ── JÁDRO KARTY PRO KREATIVCE ── -->
+<div class="jadro-box">
+  <p>Jednorožec vznikl ze spojení polárního medvěda a delfína. Dvou tvorů, kteří se nikdy potkat neměli. Jejich setkání bylo nehoda. Výsledek byl nemožný.</p>
+  <p>A přesto — právě proto — je jednorožec tím, čím je.</p>
+  <p>Jenže on nevěří, že delfíni a medvědi existují. Popírá to, z čeho je vyrobený. Myslí si, že jeho magie přišla z čistoty. Přišla z hybridu.</p>
+  <p>Pro kreativce: co popíráte, že vás ovlivnilo? Z čeho jste vyrobeni — a co odmítáte přiznat?</p>
+</div>
+
+<!-- ── ROZDÍL OD TÝMOVÉHO ── -->
+<div class="rozdil">
+  <span class="rozdil-label">Stejná karta, jiný vstup</span>
+  <table>
+    <tr>
+      <td>Týmový workshop</td>
+      <td>Jednorožec jako <strong>porucha</strong> — tým popírá svůj hybridní původ, aby udržel čistý obraz. Cíl: pojmenovat co se popírá a integrovat to.</td>
+    </tr>
+    <tr>
+      <td>Kreativní workshop</td>
+      <td>Jednorožec jako <strong>mapa původu</strong> — vaše tvorba je hybrid vlivů, zkušeností a zdrojů, které možná odmítáte přiznat. Cíl: najít své medvědy a delfíny.</td>
+    </tr>
+    <tr>
+      <td>Kdo u stolu</td>
+      <td>Spisovatel, hudebník, vizuální umělec, designér, kdokoliv kdo tvoří — a kdo má pocit, že by měl být „originální."</td>
+    </tr>
+    <tr>
+      <td>Klíčový posun</td>
+      <td>Originalita není čistota. Je to jedinečné spojení toho, z čeho jste. Čím víc to přiznáte, tím silnější je výsledek.</td>
+    </tr>
+  </table>
+</div>
+
+<!-- ── POHÁDKA ── -->
+<div class="sekce">
+  <p class="sekce-label">Pohádka</p>
+  <h2>O jednorožci, který nevěřil na delfíny ani na lední medvědy</h2>
+  <p style="color:#777; font-size:.9rem; margin-bottom: 16px;">Čtěte pomalu. Sledujte, kde vás pohádka zastaví — kde ucítíte odpor nebo poznání. To místo je důležité.</p>
+
+  <div class="pohadka-wrap">
+    <div class="pohadka">
+      <p>Jednorožec byl.<br>
+      To je první lež.<br>
+      Ale když se řekne „jednorožec", každý ví, co si představit.<br>
+      Bílý. Roh. Lesk.<br>
+      Neskutečný, ale přesto definovaný neskutečně přesně.</p>
+
+      <p>Jednorožec žil v krajině, kde se věřilo na všechno.<br>
+      Na víly, na mluvící stromy, na svítící houby.<br>
+      Na delfíny, zpívající podvodní songy, které nikdo neslyší.<br>
+      Na lední medvědy, tancující kankán, který naopak slyší každej — i ti delfíni v těch svých hlubinách.</p>
+
+      <p>Ale akorát ten ne.<br>
+      Jednorožec nevěřil.<br>
+      Ne v delfíny.<br>
+      Ne v lední medvědy.<br>
+      „Jsou jen vymyšlení," říkal. „Jako Polednice, dědek Potíž nebo třeba hadi."</p>
+
+      <p>A přitom je jmenoval.<br>
+      A přitom o nich věděl.<br>
+      A přitom měl v očích jejich stopy.</p>
+
+      <p>Protože kdysi — ne tak docela dávno, ale rozhodně ne dnes —<br>
+      se utrhla kra.<br>
+      Velká. Ledová.<br>
+      A na ní lední medvěd.<br>
+      Led a voda. Silný vítr a vlny moře.<br>
+      A delfíni.</p>
+
+      <p>A jeden z nich byl zvědavý.<br>
+      A medvěd byl sám.<br>
+      A kra byla dost velká.<br>
+      A příroda nemá moc rozumu.</p>
+
+      <p>A tak se stalo, co se stát nemělo.<br>
+      Spojili se.<br>
+      Ne z lásky.<br>
+      Z logiky, která se tvářila jako nehoda.</p>
+
+      <p>Ledová kra se houpala, jak ji moře nadnášelo na vlnách.<br>
+      Medvědovy tlapy klouzaly po ledu, delfín se nadechoval v bublinách.<br>
+      Vzduch byl plný soli a páry, zvuk zpěvu se mísil s praskáním ledu.</p>
+
+      <p>Dva světy, které se nikdy neměly potkat, se navzájem poznaly.<br>
+      A mráz, místo aby je oddělil, spojil je.<br>
+      A když si toho příroda všimla, bylo pozdě.<br>
+      Rozum to odmítl, jenže hmota už to věděla.</p>
+
+      <p>Medvěd se stal v té chvíli rybou a delfín šelmou.<br>
+      Dva životy stvořené z protikladů.<br>
+      Z původní nesmyslnosti střetu nemohlo vzejít nic kříženceho.</p>
+
+      <p>A tak vznikl tvor zcela vymyšlený.</p>
+
+      <p>A z toho se stal jednorožec.<br>
+      Ne hned. Ne přímo. Ale postupně.<br>
+      Z ploutve a tlapy. Z bělosti a lesku. Ze šupin a z kožichu.<br>
+      Z úsměvu a zubů a z dechu, co se mění v mlhu.</p>
+
+      <p>A když se jednorožec narodil, byl krásný.<br>
+      Ale nejistý.<br>
+      Jenže když zjistil, z čeho je vyrobený, z čeho je vysněný — zpanikařil.</p>
+
+      <p>Protože pokud je z reálných věcí,<br>
+      může být reálný.<br>
+      A pokud je reálný,<br>
+      přestává být jednorožec.</p>
+
+      <p>A tak začal popírat.<br>
+      Delfíny.<br>
+      Medvědy.<br>
+      Sebe sama.</p>
+
+      <p>Zůstaň v klidu, když ti někdo řekne, že něco není možné.<br>
+      Nejspíš právě zachraňuje jednorožce.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ── TŘI OTÁZKY ── -->
+<div class="sekce">
+  <p class="sekce-label">Tři otázky — odpovídáte sami, písemně</p>
+  <h2>Z čeho jste vyrobeni?</h2>
+  <p style="color:#777; font-size:.9rem; margin-bottom: 24px;">
+    Pište rychle. Neopravujte. První odpověď je vždy pravdivější než opravená.
+  </p>
+
+  <div class="otazky">
+    <div class="otazka">
+      <p class="q-label">Q1 — Medvědi a delfíni</p>
+      <p class="q-text">Co jsou vaše „lední medvědi a delfíni" — vlivy, zdroje, zkušenosti nebo části sebe, které ve své tvorbě odmítáte přiznat? Co říkáte, že vás neovlivnilo — ale přesto to v práci poznáte?</p>
+      <p class="q-note">Může to být žánr který opovrhujete, ale tajně čtete. Umělec, ke kterému se nehlásíte. Místo, profese, trauma, fáze života. Cokoli, co popíráte jako zdroj.</p>
+    </div>
+    <div class="otazka">
+      <p class="q-label">Q2 — Strach z reálnosti</p>
+      <p class="q-text">Jednorožec se bojí, že pokud je z reálných věcí, přestane být jednorožec. Kde se v tvorbě bojíte, že přiznat vliv nebo zdroj zničí iluzi originality? Kde se tváříte, že jste přišli z ničeho?</p>
+      <p class="q-note">Originalita není čistota. Je to jedinečné spojení. Ale tento strach je skutečný — kde je u vás?</p>
+    </div>
+    <div class="otazka">
+      <p class="q-label">Q3 — Hmota která to věděla</p>
+      <p class="q-text">„Rozum to odmítl, jenže hmota už to věděla." Kde ve vaší tvorbě věci vznikají samy — bez rozhodnutí, bez plánování, z logiky která se tváří jako nehoda? Co se ve výsledku objeví, aniž byste to zamýšleli?</p>
+      <p class="q-note">Tohle je místo, kde se váš hybrid projevuje přirozeně. Kde tvorba ví víc než vy.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ── MAPA HYBRIDU ── -->
+<div class="sekce">
+  <p class="sekce-label">Cvičení · Mapa hybridu</p>
+  <h2>Nakreslete svého medvěda a delfína.</h2>
+  <p style="color:#777; font-size:.9rem; margin-bottom: 8px;">
+    Toto cvičení předchází samotnému workshopu. Děláte ho sami, na papír — ne do počítače.
+  </p>
+
+  <div class="mapa-hybrid">
+    <span class="mapa-hybrid-label">Šablona · vyplňte na papír</span>
+    <div class="mapa-cols">
+      <div class="mapa-col" style="border-right: 1px solid #e0e0e0;">
+        <span class="mapa-col-label">🐻‍❄️ Medvědi — to těžké, silné, pozemské</span>
+        <p class="mapa-col-text">Vlivy, zkušenosti nebo části sebe, které jsou v tvorbě vidět — ale které byste raději popřeli.<br><br>
+        Těžká témata. Místa odkud jste. Bolestivé fáze. Žánry které opovrhujete. Lidé, ke kterým se nehlásíte.<br><br>
+        ___________________________<br>
+        ___________________________<br>
+        ___________________________</p>
+      </div>
+      <div class="mapa-stred">→<br>+<br>←</div>
+      <div class="mapa-col" style="border-left: 1px solid #e0e0e0;">
+        <span class="mapa-col-label">🐬 Delfíni — to lehké, rychlé, neuchopitelné</span>
+        <p class="mapa-col-text">Vlivy které přišly a odešly, ale zanechaly stopu. Inspirace o které nevíte přesně jak fungují. Náhody. Okamžiky. Věci které jste vstřebali, aniž byste se rozhodli.<br><br>
+        ___________________________<br>
+        ___________________________<br>
+        ___________________________</p>
+      </div>
+    </div>
+    <div class="mapa-vysledek">
+      Uprostřed — tam kde se medvěd a delfín potkali — je váš jednorožec.<br>
+      Napište jednu větu: <em>„Jsem vyrobený z __________ a __________."</em>
+    </div>
+  </div>
+</div>
+
+<!-- ── WORKSHOP ── -->
+<div class="sekce">
+  <p class="sekce-label">Workshop · 90 minut · pro jednotlivce i skupinu</p>
+  <h2>Struktura</h2>
+
+  <h3 style="font-family:'Helvetica Neue',Arial,sans-serif; letter-spacing:.1em; text-transform:uppercase; font-size:.78rem; color:#aaa; margin: 32px 0 16px;">Část 1 — Mapa původu · 30 minut</h3>
+
+  <div class="krok">
+    <div class="krok-num">01</div>
+    <div>
+      <p class="krok-cas">5 minut</p>
+      <h3>Čtení pohádky</h3>
+      <p>Pohádku čtěte nahlas, pomalu. Nechte ji doléhnout. Po dočtení ticho alespoň minutu.</p>
+      <div class="krok-instrukce">
+        <p>Facilitátor nebo účastník čte bez dramatizace. Ticho po dočtení není trapné — je to prostor, kde pohádka pracuje.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="krok">
+    <div class="krok-num">02</div>
+    <div>
+      <p class="krok-cas">15 minut</p>
+      <h3>Mapa hybridu — individuálně na papír</h3>
+      <p>Každý vyplní svou mapu medvědů a delfínů. V tichosti. Na papír, ne do počítače.</p>
+      <div class="krok-instrukce">
+        <p><em>Instrukce:</em> Napište co přijde jako první. Neopravujte. Nehodnoťte. Pokud nevíte co napsat do kolonky, napište „nevím" — a pak se zeptejte: co by tam bylo, kdybych věděl?</p>
+        <p>Na konci napište jednu větu: <em>„Jsem vyrobený z __________ a __________."</em></p>
+      </div>
+    </div>
+  </div>
+
+  <div class="krok">
+    <div class="krok-num">03</div>
+    <div>
+      <p class="krok-cas">10 minut</p>
+      <h3>Sdílení — jen ta jedna věta</h3>
+      <p>Ve skupině každý přečte svou větu „Jsem vyrobený z…" Bez vysvětlování. Bez komentářů.</p>
+      <div class="krok-instrukce">
+        <p>Pravidlo: po každé větě ticho 10 vteřin. Nechte to být. Neukazujeme mapy — jen čteme závěr.</p>
+        <p><em>Solo varianta:</em> Přečtěte větu nahlas sami pro sebe. Pak ji napište velkými písmeny na papír a nechte ho na viditelném místě po dobu workshopu.</p>
+      </div>
+    </div>
+  </div>
+
+  <h3 style="font-family:'Helvetica Neue',Arial,sans-serif; letter-spacing:.1em; text-transform:uppercase; font-size:.78rem; color:#aaa; margin: 40px 0 16px;">Část 2 — Práce s hybridem · 40 minut</h3>
+
+  <div class="krok">
+    <div class="krok-num">04</div>
+    <div>
+      <p class="krok-cas">20 minut</p>
+      <h3>Cvičení „Hmota která to věděla"</h3>
+      <p>Pracujete ve svém médiu — ale záměrně kombinujete dva zdroje z vaší mapy hybridu. Jeden medvěd, jeden delfín. Co vznikne ze setkání?</p>
+      <div class="krok-instrukce">
+        <p><em>Pro písmo:</em> Napište 1–2 stránky z pohledu člověka, který je vyrobený z vašich dvou zdrojů. Nepište o nich — pište jako oni.</p>
+        <p><em>Pro vizuální tvorbu:</em> Vytvořte obraz nebo koláž, kde jsou oba zdroje fyzicky přítomné — ne jako ilustrace, ale jako materiál.</p>
+        <p><em>Pro hudbu nebo pohyb:</em> Improvizujte tak, že střídáte „medvědí" a „delfíní" pohyb nebo zvuk — dokud se nezačnou prolínat samy.</p>
+        <p><em>Pro kohokoliv:</em> Cíl není hezký výsledek. Cíl je zjistit, co se stane, když dva „nespojitelné" zdroje potkáte záměrně.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="krok">
+    <div class="krok-num">05</div>
+    <div>
+      <p class="krok-cas">20 minut</p>
+      <h3>Cvičení „Pohled do vody"</h3>
+      <p>Prohlédněte si co vzniklo. Hledáte jednu věc: co je tam co byste jinak popřeli? Co je tam „jednorožčí" — co překročilo hranici mezi vašimi dvěma světy?</p>
+      <div class="krok-instrukce">
+        <p>Napište nebo zakroužkujte: <em>„Toto jsem neplánoval a přesto to tam je:"</em></p>
+        <p>To je místo, kde váš hybrid pracuje bez vašeho vědomí. Tam je váš roh.</p>
+        <p><em>Ve skupině:</em> Každý ukáže jedno místo ve výsledku — ne celou práci. Jen ten jeden moment, kde se medvěd a delfín potkali. Ostatní neposkytují zpětnou vazbu — jen sledují.</p>
+      </div>
+    </div>
+  </div>
+
+  <h3 style="font-family:'Helvetica Neue',Arial,sans-serif; letter-spacing:.1em; text-transform:uppercase; font-size:.78rem; color:#aaa; margin: 40px 0 16px;">Část 3 — Přiznání hybridu · 20 minut</h3>
+
+  <div class="krok">
+    <div class="krok-num">06</div>
+    <div>
+      <p class="krok-cas">10 minut</p>
+      <h3>Pojmenování jednoho popíraného zdroje</h3>
+      <p>Co je jeden „medvěd nebo delfín" z vaší mapy, kterého jste připraveni přestat popírat — a vědomě zahrnout do tvorby?</p>
+      <div class="krok-instrukce">
+        <p>Není to slib. Je to pojmenování. „Přestávám popírat, že mě ovlivnil/a/o…"</p>
+        <p><em>Ve skupině:</em> Každý řekne jednu větu. Začíná: <em>„Přestávám popírat…"</em> Ostatní nekomentují.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="krok">
+    <div class="krok-num">07</div>
+    <div>
+      <p class="krok-cas">10 minut</p>
+      <h3>Manifest hybridu</h3>
+      <p>Každý napíše čtyři věty — jako deklaraci, ne jako cíl.</p>
+      <div class="krok-instrukce">
+        <p>Věta 1: <em>„Jsem vyrobený z __________ a __________."</em></p>
+        <p>Věta 2: <em>„Přestávám popírat, že mě ovlivnil/a/o…"</em></p>
+        <p>Věta 3: <em>„Moje originalita není čistota — je to…"</em></p>
+        <p>Věta 4: <em>„Příště, když budu tvořit, dovolím si…"</em></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── MANIFEST K TISKU ── -->
+<div class="sekce">
+  <p class="sekce-label">Výstup · k vytištění</p>
+  <div class="manifest">
+    <h3>Manifest hybridu</h3>
+    <p style="font-size:.85rem; color:#aaa; margin-bottom: 24px; font-style:italic;">Vaše — nechte to u sebe.</p>
+    <div class="manifest-radky">
+      <div class="manifest-radek">Jsem vyrobený z _____________ a _____________.</div>
+      <div class="manifest-radek">Přestávám popírat, že mě ovlivnil/a/o: _________________________</div>
+      <div class="manifest-radek">Moje originalita není čistota — je to: _________________________</div>
+      <div class="manifest-radek">Příště, když budu tvořit, dovolím si: _________________________</div>
+    </div>
+    <p style="font-size:.75rem; color:#ccc; margin-top: 20px;">Karta Jednorožec · Chceš myš? — Slovník mezer · chcesmys@gmail.com</p>
+  </div>
+</div>
+
+<!-- ── ÚHLY PRO KREATIVCE ── -->
+<div class="sekce">
+  <p class="sekce-label">11 úhlů pohledu — kreativní čtení</p>
+  <h2>Stejné úhly. Jiná otázka.</h2>
+
+  <div class="uhly-grid">
+    <div class="uhel-item">
+      <p class="uhel-nazev">Absurdní</p>
+      <p class="uhel-vrstva">Akce</p>
+      <p class="uhel-krea">Jednorožec popírá to, z čeho vznikl. Jaká je nejabsurdnější věc, kterou o svém vlivu na tvorbu popíráte? Pojmenujte ji nahlas — a sledujte, zda se absurdita zmenší.</p>
+    </div>
+    <div class="uhel-item">
+      <p class="uhel-nazev">Jazykový</p>
+      <p class="uhel-vrstva">Porucha řeči</p>
+      <p class="uhel-krea">„Jsou jen vymyšlení" — ale přitom je jmenoval. Jaká slova, obraty nebo rytmy ve vaší tvorbě prozrazují zdroje, které neuvádíte? Co ve vašem jazyce mluví za vás?</p>
+    </div>
+    <div class="uhel-item">
+      <p class="uhel-nazev">Ironický</p>
+      <p class="uhel-vrstva">Stav</p>
+      <p class="uhel-krea">Čím víc jednorožec popírá, tím víc je vidět. Kde se vaše popírání vlivu projeví jako posílení tohoto vlivu? Co se v tvorbě opakuje právě proto, že se tomu bráníte?</p>
+    </div>
+    <div class="uhel-item">
+      <p class="uhel-nazev">Filozofický</p>
+      <p class="uhel-vrstva">Prostředí</p>
+      <p class="uhel-krea">„Pokud je z reálných věcí, přestává být jednorožec." Co by se stalo s vaší tvorbou, kdybyste přijali, že nemůžete být originální v smyslu „z ničeho"? Co by se uvolnilo?</p>
+    </div>
+    <div class="uhel-item">
+      <p class="uhel-nazev">Psychologický</p>
+      <p class="uhel-vrstva">Entita</p>
+      <p class="uhel-krea">Zpanikařil, když zjistil z čeho je. Jaký je váš kreativní strach z odhalení zdroje? Co se bojíte, že se stane, když lidé uvidí vaše medvědy a delfíny?</p>
+    </div>
+    <div class="uhel-item">
+      <p class="uhel-nazev">Surrealistický</p>
+      <p class="uhel-vrstva">Jev</p>
+      <p class="uhel-krea">Medvěd a delfín se potkali na ledové kře — nemožné místo setkání. Kde ve vaší tvorbě se potkaly dvě věci, které se neměly potkat? Co z tohoto nemožného setkání vzešlo?</p>
+    </div>
+    <div class="uhel-item">
+      <p class="uhel-nazev">Kulturní</p>
+      <p class="uhel-vrstva">Role</p>
+      <p class="uhel-krea">Jednorožec je kulturně definovaný — každý ví co si představit. Jaký je váš „kulturní jednorožec" — ideál tvůrce, ke kterému se hlásíte? A co tento ideál vyžaduje popírat?</p>
+    </div>
+    <div class="uhel-item">
+      <p class="uhel-nazev">Naivní</p>
+      <p class="uhel-vrstva">Zákon</p>
+      <p class="uhel-krea">Jednoduchá otázka: kdo vás naučil tvořit? A kdo nebo co vás naučilo, aniž byste o tom věděli? Napište seznam — bez hodnocení, jen seznam.</p>
+    </div>
+    <div class="uhel-item">
+      <p class="uhel-nazev">Intro</p>
+      <p class="uhel-vrstva">Jazyk</p>
+      <p class="uhel-krea">„Hmota to věděla dřív než rozum." Kde vaše tělo nebo intuice v tvorbě ví dřív než vědomé rozhodnutí? Kde se pohybujete správně bez toho, abyste věděli proč?</p>
+    </div>
+    <div class="uhel-item">
+      <p class="uhel-nazev">Groteskní</p>
+      <p class="uhel-vrstva">Symbol</p>
+      <p class="uhel-krea">Jednorožec — dokonalý, čistý, magický — je ve skutečnosti výsledek ledové nehody a mezidruhovéhonemožna. Jaký je groteskní původ vaší „nejčistější" nebo „nejoriginálnější" práce?</p>
+    </div>
+    <div class="uhel-item">
+      <p class="uhel-nazev">Archetypální</p>
+      <p class="uhel-vrstva">Čas</p>
+      <p class="uhel-krea">Jednorožec se stal legendou — ale legenda zakrývá prehistorii. Jaká je prehistorie vaší tvorby, o které nemluvíte? Co bylo „před jednorožcem"?</p>
+    </div>
+  </div>
+</div>
+
+<!-- ── VARIANTY ── -->
+<div class="sekce">
+  <p class="sekce-label">Varianty použití</p>
+  <h2>Kdo a jak.</h2>
+  <div class="varianty">
+    <div class="varianta">
+      <p class="varianta-label">Jednotlivý tvůrce</p>
+      <h3>Práce s vlivem a zdrojem</h3>
+      <p>Mapa hybridu, tři otázky, 20 minut kombinovaná tvorba. Výsledek: pojmenovaný hybrid a jeden zdroj, který přestanete popírat. Kdykoli, bez facilitátora.</p>
+    </div>
+    <div class="varianta">
+      <p class="varianta-label">Kreativní skupina</p>
+      <h3>Začátek společného projektu</h3>
+      <p>Každý přinese svou mapu hybridu. Sdílí jednu větu. Pak pracují na společné „kře" — místě, kde se jejich medvědi a delfíni potkají. Co tam vznikne bez plánování?</p>
+    </div>
+    <div class="varianta">
+      <p class="varianta-label">Vzdělávání</p>
+      <h3>Kurz originality nebo vlivu</h3>
+      <p>Jako vstup do tématu „odkud přichází originalita." Pohádka otevírá debatu o zdrojích, vlivech a hybridu — bez akademického jazyka. Výsledek: mapa vlivů každého studenta.</p>
+    </div>
+    <div class="varianta">
+      <p class="varianta-label">Koučink</p>
+      <h3>Práce s kreativní identitou</h3>
+      <p>Klient přinese mapu hybridu vyplněnou předem. Na sezení kouč pracuje s Q2 — kde se klient bojí reálnosti. Výsledek: konkrétní popíraný zdroj a co by se stalo bez popírání.</p>
+    </div>
+    <div class="varianta">
+      <p class="varianta-label">Residency</p>
+      <h3>Zahájení tvůrčího pobytu</h3>
+      <p>První den residency. Každý účastník sdílí větu „Jsem vyrobený z…" Manifesty se vyvěsí ve sdíleném prostoru na celou dobu pobytu. Slouží jako referenční bod k návratu.</p>
+    </div>
+    <div class="varianta">
+      <p class="varianta-label">Solo · 30 minut</p>
+      <h3>Zkrácená verze</h3>
+      <p>Pohádka (5 min) → mapa hybridu (10 min) → 10 min tvorby s oběma zdroji → manifest. Kdykoli, při blokádě nebo na začátku nového projektu.</p>
+    </div>
+  </div>
+</div>
+
+<div class="citat">
+  „Rozum to odmítl.<br>
+  Jenže hmota už to věděla."
+</div>
+
+<p style="color:#777; font-size:.9rem;">
+  Toto je kreativní verze workshopu ke kartě Jednorožec. Týmovou verzi — která pracuje s popíráním hybridního původu organizace — najdete v diagnostickém kitu.
+</p>
+
+<div class="footer">
+  <span>Karta Jednorožec · Chceš myš? — Slovník mezer · © 2026 Michaela Nováková</span>
+  <span><a href="mailto:chcesmys@gmail.com">chcesmys@gmail.com</a></span>
+</div>
+
+</body>
+</html>
