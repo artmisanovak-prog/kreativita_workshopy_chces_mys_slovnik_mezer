@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kreativní miniatury — Chceš myš?</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #ffffff;
+      --fg: #111111;
+      --muted: #666666;
+      --light: #f5f5f5;
+      --border: #e0e0e0;
+      --serif: Georgia, 'Times New Roman', serif;
+      --sans: 'Helvetica Neue', Arial, sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--fg);
+      font-family: var(--sans);
+      font-size: 16px;
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a { color: inherit; }
+    p { margin-bottom: 14px; }
+    p:last-child { margin-bottom: 0; }
+
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* ── NAV ── */
+    nav {
+      border-bottom: 1px solid var(--border);
+      padding: 14px 0;
+      position: sticky; top: 0;
+      background: var(--bg); z-index: 100;
+    }
+    nav .container {
+      display: flex; align-items: center;
+      justify-content: space-between; flex-wrap: wrap; gap: 10px;
+    }
+    .nav-logo {
+      font-size: 11px; letter-spacing: .18em; text-transform: uppercase;
+      font-weight: 700; text-decoration: none; color: var(--fg);
+    }
+    .nav-logo span { color: var(--muted); font-weight: 400; margin-left: 6px; }
+    .nav-links { display: flex; gap: 24px; list-style: none; }
+    .nav-links a {
+      font-size: 11px; letter-spacing: .1em; text-transform: uppercase;
+      text-decoration: none; color: var(--muted);
+    }
+    .nav-links a:hover { color: var(--fg); }
+
+    /* ── HERO ── */
+    .hero {
+      padding: 80px 0 64px;
+      border-bottom: 1px solid var(--border);
+    }
+    .hero-label {
+      font-size: 10px; letter-spacing: .22em; text-transform: uppercase;
+      color: var(--muted); margin-bottom: 20px;
+    }
+    .hero h1 {
+      font-family: var(--serif);
+      font-size: clamp(2.2rem, 5vw, 3.8rem);
+      font-weight: 400; line-height: 1.1;
+      margin-bottom: 24px;
+    }
+    .hero h1 em { font-style: italic; }
+    .hero-sub {
+      font-size: 1.05rem; color: var(--muted);
+      max-width: 580px; margin-bottom: 14px; line-height: 1.8;
+    }
+    .hero-note {
+      font-size: .85rem; color: var(--muted);
+      border-left: 2px solid var(--border);
+      padding-left: 16px; max-width: 520px;
+      margin-bottom: 40px; line-height: 1.7;
+    }
+    .hero-btns { display: flex; gap: 12px; flex-wrap: wrap; }
+    .btn {
+      display: inline-block; padding: 12px 26px;
+      font-size: 11px; letter-spacing: .1em; text-transform: uppercase;
+      text-decoration: none; border: 1px solid var(--fg); color: var(--fg);
+      background: transparent; transition: background .15s, color .15s;
+      cursor: pointer;
+    }
+    .btn:hover { background: var(--fg); color: var(--bg); }
+    .btn-fill { background: var(--fg); color: var(--bg); }
+    .btn-fill:hover { background: #333; border-color: #333; }
+
+    /* ── JAK TO FUNGUJE ── */
+    .jak {
+      padding: 64px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .section-label {
+      font-size: 10px; letter-spacing: .22em; text-transform: uppercase;
+      color: var(--muted); margin-bottom: 14px;
+    }
+    .jak h2 {
+      font-family: var(--serif);
+      font-size: clamp(1.6rem, 3vw, 2.4rem);
+      font-weight: 400; margin-bottom: 40px;
+    }
+
+    .kroky {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+    }
+    .krok {
+      background: var(--bg);
+      padding: 28px 24px;
+    }
+    .krok-n {
+      font-family: var(--serif);
+      font-size: 2.4rem; font-weight: 400;
+      color: var(--border); line-height: 1;
+      margin-bottom: 14px; display: block;
+    }
+    .krok h3 {
+      font-size: .9rem; font-weight: 700;
+      margin-bottom: 8px; letter-spacing: .02em;
+    }
+    .krok p { font-size: .83rem; color: var(--muted); margin: 0; }
+
+    .varianty {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      margin-top: 32px;
+    }
+    .varianta {
+      background: var(--light);
+      padding: 24px;
+    }
+    .varianta .v-pis {
+      font-size: 1.4rem; margin-bottom: 12px;
+    }
+    .varianta h3 { font-size: .88rem; margin-bottom: 6px; }
+    .varianta p { font-size: .82rem; color: var(--muted); margin: 0; }
+
+    @media (max-width: 700px) {
+      .kroky { grid-template-columns: 1fr 1fr; }
+      .varianty { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 460px) {
+      .kroky { grid-template-columns: 1fr; }
+    }
+
+    /* ── KARTY ── */
+    .karty-sekce {
+      padding: 64px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .karty-sekce h2 {
+      font-family: var(--serif);
+      font-size: clamp(1.6rem, 3vw, 2.4rem);
+      font-weight: 400; margin-bottom: 8px;
+    }
+    .karty-sekce .podtitul {
+      font-size: .88rem; color: var(--muted);
+      max-width: 560px; margin-bottom: 36px;
+    }
+
+    .karty-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+    }
+
+    .karta {
+      background: var(--bg);
+      padding: 28px 24px;
+      text-decoration: none;
+      color: var(--fg);
+      display: flex;
+      flex-direction: column;
+      transition: background .12s;
+      min-height: 200px;
+    }
+    .karta:hover { background: var(--light); }
+    .karta.brzy { background: var(--light); cursor: default; }
+    .karta.brzy:hover { background: var(--light); }
+
+    .karta-zvire { font-size: 2rem; line-height: 1; margin-bottom: 14px; }
+    .karta-tag {
+      font-size: .68rem; letter-spacing: .14em; text-transform: uppercase;
+      color: var(--muted); border: 1px solid var(--border);
+      padding: 2px 8px; display: inline-block; margin-bottom: 12px;
+      width: fit-content;
+    }
+    .karta-nazev {
+      font-family: var(--serif);
+      font-size: 1.1rem; font-weight: 400; margin-bottom: 6px;
+    }
+    .karta-veta {
+      font-size: .8rem; color: var(--muted); font-style: italic;
+      line-height: 1.6; margin-bottom: auto; padding-bottom: 14px;
+    }
+    .karta-link {
+      font-size: .75rem; letter-spacing: .1em; text-transform: uppercase;
+      color: var(--muted); text-decoration: underline; margin-top: auto;
+    }
+    .karta.brzy .karta-link { opacity: .35; }
+
+    /* ── CO DOSTANETE ── */
+    .obsah-sekce {
+      padding: 64px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .obsah-sekce h2 {
+      font-family: var(--serif);
+      font-size: clamp(1.6rem, 3vw, 2.4rem);
+      font-weight: 400; margin-bottom: 36px;
+    }
+
+    .obsah-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+    }
+    .obsah-item {
+      background: var(--bg);
+      padding: 28px;
+    }
+    .obsah-item .o-num {
+      font-family: var(--serif); font-size: 2rem;
+      color: var(--border); line-height: 1;
+      margin-bottom: 14px; display: block;
+    }
+    .obsah-item h3 { font-size: .9rem; margin-bottom: 8px; }
+    .obsah-item p { font-size: .83rem; color: var(--muted); margin: 0; }
+
+    @media (max-width: 560px) { .obsah-grid { grid-template-columns: 1fr; } }
+
+    /* ── CITÁT ── */
+    .citat {
+      padding: 60px 0;
+      background: var(--fg);
+      color: var(--bg);
+      border-bottom: 1px solid var(--border);
+    }
+    .citat blockquote {
+      font-family: var(--serif);
+      font-size: clamp(1.2rem, 2.8vw, 1.8rem);
+      font-weight: 400; font-style: italic;
+      line-height: 1.5; max-width: 680px;
+    }
+    .citat cite {
+      display: block; margin-top: 18px;
+      font-size: .78rem; letter-spacing: .14em;
+      text-transform: uppercase; color: rgba(255,255,255,.4);
+      font-style: normal;
+    }
+
+    /* ── KONTAKT ── */
+    .kontakt {
+      padding: 64px 0;
+    }
+    .kontakt h2 {
+      font-family: var(--serif);
+      font-size: clamp(1.4rem, 3vw, 2rem);
+      font-weight: 400; margin-bottom: 12px;
+    }
+    .kontakt p { color: var(--muted); max-width: 520px; margin-bottom: 28px; }
+    .kontakt-linky { display: flex; gap: 12px; flex-wrap: wrap; }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 36px 0;
+    }
+    .footer-inner {
+      display: flex; justify-content: space-between;
+      flex-wrap: wrap; gap: 20px;
+    }
+    .footer-inner p, .footer-inner a {
+      font-size: .8rem; color: var(--muted);
+      margin: 0; text-decoration: none; display: block;
+      margin-bottom: 4px;
+    }
+    .footer-inner a:hover { color: var(--fg); }
+    .footer-right { text-align: right; }
+  </style>
+</head>
+<body>
+
+<!-- ── NAV ── -->
+<nav>
+  <div class="container">
+    <a class="nav-logo" href="/">Chceš myš?<span>— kreativní miniatury</span></a>
+    <ul class="nav-links">
+      <li><a href="#jak">Jak to funguje</a></li>
+      <li><a href="#karty">Karty</a></li>
+      <li><a href="#obsah">Co dostanete</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- ── HERO ── */
+<section class="hero">
+  <div class="container">
+    <p class="hero-label">Chceš myš? — kreativní miniatury</p>
+    <h1>20 minut.<br>Jedna pohádka.<br><em>Jeden nápad.</em></h1>
+    <p class="hero-sub">
+      Každé zvíře otevírá jiné kreativní téma.
+      Přečtete pohádku, odpovíte na tři otázky
+      a dostanete konkrétní miniaturní projekt — přesně ten,
+      který ukazuje na vaše slepé místo.
+    </p>
+    <p class="hero-note">
+      Nástroj nepracuje za vás. Neurčuje, co tvořit.
+      Ukáže, kam se ještě nepodívali — a dá vám 20 minut na to,
+      abyste tam zašli.
+    </p>
+    <div class="hero-btns">
+      <a class="btn btn-fill" href="#karty">Vybrat zvíře</a>
+      <a class="btn" href="#jak">Jak to funguje</a>
+    </div>
+  </div>
+</section>
+
+<!-- ── JAK TO FUNGUJE ── -->
+<section class="jak" id="jak">
+  <div class="container">
+    <p class="section-label">Jak to funguje</p>
+    <h2>Čtyři kroky.<br>Dvacet minut.</h2>
+
+    <div class="kroky">
+      <div class="krok">
+        <span class="krok-n">1</span>
+        <h3>Vyberte zvíře</h3>
+        <p>Každá karta otevírá jiné téma. Nevíte které? Přečtěte si větu pod každým jménem — u které se zastavíte, tam začněte.</p>
+      </div>
+      <div class="krok">
+        <span class="krok-n">2</span>
+        <h3>Přečtěte pohádku</h3>
+        <p>Pomalu. Bez analýzy. Sledujte, kde vás zastaví — kde cítíte odpor nebo poznání. To místo je vstupní bod.</p>
+      </div>
+      <div class="krok">
+        <span class="krok-n">3</span>
+        <h3>Odpovězte na 3 otázky</h3>
+        <p>Smysl, zaujetí, aplikace. Pište první věc, která přijde. Z odpovědí vyjde váš dominantní úhel pohledu.</p>
+      </div>
+      <div class="krok">
+        <span class="krok-n">4</span>
+        <h3>Udělejte protilehlý nápad</h3>
+        <p>Tabulka ukáže, který mini-projekt odpovídá vašemu slepému místu. Udělejte ho. Trvá 20 minut — nebo ho rozviňte do čehokoli.</p>
+      </div>
+    </div>
+
+    <div class="varianty">
+      <div class="varianta">
+        <div class="v-pis">🎲</div>
+        <h3>Varianta A — Náhodně</h3>
+        <p>Zavřete oči, ťukněte na obrazovku a udělejte ten nápad, který vybere prst.</p>
+      </div>
+      <div class="varianta">
+        <div class="v-pis">🧭</div>
+        <h3>Varianta B — Podle nálady</h3>
+        <p>Přečtěte si všech 12 miniatur a vyberte tu, která vás právě teď nejvíc oslovuje.</p>
+      </div>
+      <div class="varianta">
+        <div class="v-pis">🔍</div>
+        <h3>Varianta C — Diagnosticky</h3>
+        <p>Odpovězte na 3 otázky, zjistěte svůj přetížený úhel a vezměte protilehlý mini-nápad z tabulky.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── KARTY ── -->
+<section class="karty-sekce" id="karty">
+  <div class="container">
+    <p class="section-label">16 karet · 16 kreativních témat</p>
+    <h2>Vyberte zvíře.</h2>
+    <p class="podtitul">
+      U které věty se zastavíte — tam začněte.
+    </p>
+
+    <div class="karty-grid">
+
+      <a class="karta" href="plamennak.html">
+        <div class="karta-zvire">🦩</div>
+        <span class="karta-tag">Dostupné</span>
+        <h3 class="karta-nazev">Plameňák</h3>
+        <p class="karta-veta">„Lalalá poletíme spolu zřítíme se dolů lalalá budeme na hlavu."</p>
+        <span class="karta-link">Otevřít →</span>
+      </a>
+
+<a class="karta brzy" href="doma/karty/Had/">
+        <div class="karta-zvire">🐍</div>
+        <span class="karta-tag">Připravuje se</span>
+        <h3 class="karta-nazev">Had</h3>
+        <p class="karta-veta">„Ďáblové jsou původem z nebesss"</p>
+        <span class="karta-link">Brzy</span>
+</a>
+
+      <a class="karta brzy" href="doma/karty/Cap/landing_page.html">
+        <div class="karta-zvire">🦅</div>
+        <span class="karta-tag">Připravuje se</span>
+        <h3 class="karta-nazev">Čáp</h3>
+        <p class="karta-veta">„1 2 čáp letí 3 4 nemá děti 5 6 mi je máme 7 8 neprodáme"</p>
+        <span class="karta-link">Brzy</span>
+      </a>
+      
+      <a class="karta" href="netopyr.html">
+        <div class="karta-zvire">🦇</div>
+        <span class="karta-tag">Dostupné</span>
+        <h3 class="karta-nazev">Netopýr</h3>
+        <p class="karta-veta">„Krása, co ráno už se nehodí."</p>
+        <span class="karta-link">Otevřít →</span>
+      </a>
+
+      <a class="karta" href="osel.html">
+        <div class="karta-zvire">🫏</div>
+        <span class="karta-tag">Dostupné</span>
+        <h3 class="karta-nazev">Osel</h3>
+        <p class="karta-veta">„Stál mezi dvěma hromadami sena a nemohl se rozhodnout."</p>
+        <span class="karta-link">Otevřít →</span>
+      </a>
+
+      <a class="karta" href="motyl.html">
+        <div class="karta-zvire">🦋</div>
+        <span class="karta-tag">Dostupné</span>
+        <h3 class="karta-nazev">Motýl</h3>
+        <p class="karta-veta">„Horác a Florián — motýl bez palců."</p>
+        <span class="karta-link">Otevřít →</span>
+      </a>
+
+      <a class="karta" href="zajecice.html">
+        <div class="karta-zvire">🐇</div>
+        <span class="karta-tag">Dostupné</span>
+        <h3 class="karta-nazev">Zaječice</h3>
+        <p class="karta-veta">„Zaječice skočí do plamenů, ale neshoří."</p>
+        <span class="karta-link">Otevřít →</span>
+      </a>
+
+      <a class="karta" href="veverka.html">
+        <div class="karta-zvire">🐿️</div>
+        <span class="karta-tag">Dostupné</span>
+        <h3 class="karta-nazev">Veverka</h3>
+        <p class="karta-veta">„Neměla čas na odpovědi, tak si nenosila otázky."</p>
+        <span class="karta-link">Otevřít →</span>
+      </a>
+
+      <a class="karta brzy" href="#">
+        <div class="karta-zvire">🐁</div>
+        <span class="karta-tag">Připravuje se</span>
+        <h3 class="karta-nazev">Myš</h3>
+        <p class="karta-veta">„Chceš myš?"</p>
+        <span class="karta-link">Brzy</span>
+      </a>
+
+<a class="karta brzy" href="doma/karty/Pavouk/landing_page.html">
+        <div class="karta-zvire">🕷️</div>
+        <span class="karta-tag">Připravuje se</span>
+        <h3 class="karta-nazev">Pavouk</h3>
+        <p class="karta-veta">„Všechno zůstalo viset. Jen tak. Tak."</p>
+        <span class="karta-link">Brzy</span>
+      </a>
+      <a class="karta brzy" href="doma/karty/Kravy/landing_page.html">
+        <div class="karta-zvire">🐄</div>
+        <span class="karta-tag">Připravuje se</span>
+        <h3 class="karta-nazev">Krávy</h3>
+        <p class="karta-veta">„Bú bú bú blbnu ti hlavu bú bú."</p>
+        <span class="karta-link">Brzy</span>
+      </a>
+      
+      <a class="karta brzy" href="#">
+        <div class="karta-zvire">🐈‍⬛</div>
+        <span class="karta-tag">Připravuje se</span>
+        <h3 class="karta-nazev">Kocour</h3>
+        <p class="karta-veta">„Sežral dvě berušky a půl hodiny krkal tečky."</p>
+        <span class="karta-link">Brzy</span>
+      </a>
+
+      <a class="karta brzy" href="#">
+        <div class="karta-zvire">🦝</div>
+        <span class="karta-tag">Připravuje se</span>
+        <h3 class="karta-nazev">Lemur</h3>
+        <p class="karta-veta">„Nejlepší je nechat to být. Vše ostatní je moc nápadné."</p>
+        <span class="karta-link">Brzy</span>
+      </a>
+
+      <a class="karta brzy" href="#">
+        <div class="karta-zvire">🦄</div>
+        <span class="karta-tag">Připravuje se</span>
+        <h3 class="karta-nazev">Jednorožec</h3>
+        <p class="karta-veta">„Nevěřím na delfíny ani na lední medvědy."</p>
+        <span class="karta-link">Brzy</span>
+      </a>
+
+      <a class="karta brzy" href="#">
+        <div class="karta-zvire">🦚</div>
+        <span class="karta-tag">Připravuje se</span>
+        <h3 class="karta-nazev">Páv</h3>
+        <p class="karta-veta">„Oko za okem. Páv za pávem."</p>
+        <span class="karta-link">Brzy</span>
+      </a>
+
+      <a class="karta brzy" href="#">
+        <div class="karta-zvire">🐟</div>
+        <span class="karta-tag">Připravuje se</span>
+        <h3 class="karta-nazev">Ryba</h3>
+        <p class="karta-veta">„Rybí rap."</p>
+        <span class="karta-link">Brzy</span>
+      </a>
+
+      <a class="karta brzy" href="#">
+        <div class="karta-zvire">🐉</div>
+        <span class="karta-tag">Připravuje se</span>
+        <h3 class="karta-nazev">Drak</h3>
+        <p class="karta-veta">„Kuck kuck ehl eche kuck. Zákaz kouření."</p>
+        <span class="karta-link">Brzy</span>
+      </a>
+
+      <a class="karta brzy" href="#">
+        <div class="karta-zvire">🐢</div>
+        <span class="karta-tag">Připravuje se</span>
+        <h3 class="karta-nazev">Želva</h3>
+        <p class="karta-veta">„Zajíc poslal už čtyři pohlednice — Sicílie, Madrid, Grónsko."</p>
+        <span class="karta-link">Brzy</span>
+      </a>
+
+      <a class="karta brzy" href="#">
+        <div class="karta-zvire">🐼</div>
+        <span class="karta-tag">Připravuje se</span>
+        <h3 class="karta-nazev">Panda</h3>
+        <p class="karta-veta">„Jsem barevnější než dalmatin. Pssst."</p>
+        <span class="karta-link">Brzy</span>
+      </a>
+
+      <a class="doma/karty/Opice/" href="#">
+        <div class="karta-zvire">🐒</div>
+        <span class="karta-tag">Připravuje se</span>
+        <h3 class="karta-nazev">Opice</h3>
+        <p class="karta-veta">„Chyby nehledej, nejsou."</p>
+        <span class="karta-link">Brzy</span>
+      </a>
+
+    </div>
+  </div>
+</section>
+
+<!-- ── CO DOSTANETE ── -->
+<section class="obsah-sekce" id="obsah">
+  <div class="container">
+    <p class="section-label">Co je v každé kartě</p>
+    <h2>Struktura.<br>Vždy stejná.</h2>
+
+    <div class="obsah-grid">
+      <div class="obsah-item">
+        <span class="o-num">01</span>
+        <h3>Pohádka</h3>
+        <p>Vstup bez konfrontace. Příběh, do kterého se promítnete — aniž byste se museli bránit. Čtěte pomalu, sledujte kde vás zastaví.</p>
+      </div>
+      <div class="obsah-item">
+        <span class="o-num">02</span>
+        <h3>Tři otázky</h3>
+        <p>Smysl, zaujetí, aplikace. Odpovídáte písemně, rychle, bez opravování. Z odpovědí vyjde váš dominantní úhel pohledu.</p>
+      </div>
+      <div class="obsah-item">
+        <span class="o-num">03</span>
+        <h3>12 miniatur</h3>
+        <p>Dvanáct konkrétních projektů — každý proveditelný za 20 minut. Každý otevírá jiný úhel pohledu. Každý je samostatný.</p>
+      </div>
+      <div class="obsah-item">
+        <span class="o-num">04</span>
+        <h3>Tabulka protilehlých</h3>
+        <p>Váš dominantní úhel má naproti sobě slepé místo. Tabulka ukáže, která miniatura tam míří — přesně k tomu, co přehlížíte.</p>
+      </div>
+      <div class="obsah-item">
+        <span class="o-num">05</span>
+        <h3>Noční a denní verze</h3>
+        <p>Každou miniaturu lze udělat ve dne nebo v noci. Výsledky jsou různé. Porovnejte.</p>
+      </div>
+      <div class="obsah-item">
+        <span class="o-num">06</span>
+        <h3>Zdarma, offline, bez registrace</h3>
+        <p>Žádný účet. Žádné sledování. Data zůstávají u vás. Stránka funguje i bez internetu po prvním načtení.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── CITÁT ── -->
+<div class="citat">
+  <div class="container">
+    <blockquote>
+      „Miniatura není méně.<br>
+      Je to tvorba bez záminky."
+    </blockquote>
+    <cite>— Chceš myš? · metoda Repo dům · Michaela Nováková</cite>
+  </div>
+</div>
+
+<!-- ── KONTAKT ── -->
+<section class="kontakt">
+  <div class="container">
+    <p class="section-label">Kontakt</p>
+    <h2>Chcete víc karet najednou,<br>nebo workshop skupiny?</h2>
+    <p>Napište — doporučíme zvíře pro váš kontext, nebo připravíme session pro skupinu.</p>
+    <div class="kontakt-linky">
+      <a class="btn btn-fill" href="mailto:chcesmys@gmail.com">chcesmys@gmail.com</a>
+      <a class="btn" href="/">← Zpět na hlavní stránku</a>
+    </div>
+  </div>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <div>
+        <p><strong>Chceš myš? — kreativní miniatury</strong></p>
+        <p>Součást systému kognitivního mapování slepých míst</p>
+        <p>© 2026 Michaela Nováková — metoda Repo dům</p>
+      </div>
+      <div class="footer-right">
+        <a href="/">Hlavní stránka</a>
+        <a href="/tymy">Slovník mezer — týmy</a>
+        <a href="/forezni">Forenzní mapování</a>
+        <a href="mailto:chcesmys@gmail.com">chcesmys@gmail.com</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
