@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Čáp — kreativní miniatury</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #0f0f0f; --surface: #161616; --cream: #e8e0d0;
+      --dim: rgba(232,224,208,.42); --accent: #a89880;
+      --border: rgba(168,152,128,.15);
+      --serif: 'Cormorant Garamond', Georgia, serif;
+      --mono: 'DM Mono', monospace;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg); color: var(--cream);
+      font-family: var(--mono); font-size: 14px;
+      line-height: 1.8; -webkit-font-smoothing: antialiased;
+    }
+    a { color: inherit; text-decoration: none; }
+    p { margin-bottom: 12px; }
+    p:last-child { margin-bottom: 0; }
+    .wrap { max-width: 760px; margin: 0 auto; padding: 0 28px; }
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      border-bottom: 1px solid var(--border);
+      background: rgba(15,15,15,.92); backdrop-filter: blur(12px);
+      padding: 14px 28px;
+      display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;
+    }
+    .nav-back { font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--dim); transition: color .2s; }
+    .nav-back:hover { color: var(--cream); }
+    .nav-title { font-size: 11px; letter-spacing: .18em; text-transform: uppercase; color: var(--accent); }
+    .hero { padding: 72px 0 56px; border-bottom: 1px solid var(--border); }
+    .hero-label { font-size: 10px; letter-spacing: .24em; text-transform: uppercase; color: var(--accent); margin-bottom: 20px; }
+    .hero h1 {
+      font-family: var(--serif); font-size: clamp(3rem, 7vw, 5.5rem);
+      font-weight: 300; line-height: 1.0; color: var(--cream); margin-bottom: 8px;
+    }
+    .hero h1 em { font-style: italic; color: var(--accent); }
+    .hero-rikanka {
+      font-family: var(--serif); font-size: clamp(.95rem, 2vw, 1.2rem);
+      font-style: italic; color: var(--dim);
+      border-left: 1px solid var(--accent); padding-left: 20px;
+      max-width: 480px; margin: 20px 0 36px; line-height: 2;
+    }
+    .var-bar { display: flex; gap: 1px; background: var(--border); border: 1px solid var(--border); }
+    .var-btn {
+      flex: 1; padding: 13px 12px; background: var(--surface);
+      border: none; cursor: pointer; font-family: var(--mono);
+      font-size: .78rem; letter-spacing: .08em; text-transform: uppercase;
+      color: var(--dim); transition: background .12s, color .12s; text-align: center;
+    }
+    .var-btn:hover { background: #1e1e1e; color: var(--cream); }
+    .var-btn.active { background: var(--accent); color: var(--bg); }
+    .var-popis {
+      padding: 12px 16px; font-size: .8rem; color: var(--dim);
+      border: 1px solid var(--border); border-top: none; background: var(--surface);
+    }
+    .sekce { padding: 56px 0; border-bottom: 1px solid var(--border); }
+    .sekce-label { font-size: 10px; letter-spacing: .22em; text-transform: uppercase; color: var(--accent); margin-bottom: 16px; }
+    h2 {
+      font-family: var(--serif); font-size: clamp(1.5rem, 3.5vw, 2.2rem);
+      font-weight: 300; color: var(--cream); margin-bottom: 18px;
+    }
+    h2 em { font-style: italic; color: var(--accent); }
+    .pohadka-outer {
+      border: 1px solid var(--border); background: var(--surface);
+      max-height: 360px; overflow-y: auto; padding: 0 28px;
+    }
+    .pohadka { font-family: var(--serif); font-style: italic; font-size: .97rem; }
+    .pohadka p { padding: .45em 0; color: rgba(232,224,208,.8); }
+    .pohadka-outer::-webkit-scrollbar { width: 2px; }
+    .pohadka-outer::-webkit-scrollbar-thumb { background: var(--accent); }
+    .otazky { border-top: 1px solid var(--border); }
+    .otazka { padding: 22px 0; border-bottom: 1px solid var(--border); }
+    .q-label { font-size: .7rem; letter-spacing: .2em; text-transform: uppercase; color: var(--accent); margin-bottom: 8px; }
+    .q-text { font-size: .95rem; margin-bottom: 6px; color: var(--cream); }
+    textarea {
+      width: 100%; margin-top: 10px;
+      background: var(--surface); border: 1px solid var(--border);
+      color: var(--cream); padding: 12px; font-family: var(--mono);
+      font-size: .85rem; line-height: 1.7; resize: vertical; min-height: 68px;
+    }
+    textarea:focus { outline: 1px solid var(--accent); }
+    textarea::placeholder { color: rgba(232,224,208,.25); }
+    .btn-diag {
+      margin-top: 20px; padding: 12px 28px;
+      font-size: 11px; letter-spacing: .12em; text-transform: uppercase;
+      background: var(--accent); color: var(--bg); border: none;
+      cursor: pointer; font-family: var(--mono); transition: background .15s;
+    }
+    .btn-diag:hover { background: #c0aa90; }
+    .diag-vysledek {
+      display: none; border: 1px solid var(--accent);
+      padding: 24px; margin-top: 20px; background: var(--surface);
+    }
+    .diag-vysledek h3 { font-family: var(--serif); font-size: 1.1rem; font-weight: 400; color: var(--cream); margin-bottom: 10px; }
+    .diag-vysledek .dominant { font-size: .82rem; color: var(--dim); margin-bottom: 16px; }
+    .navrh-btn {
+      display: block; width: 100%; padding: 11px 16px; margin-bottom: 6px;
+      background: transparent; border: 1px solid var(--border);
+      color: var(--cream); font-family: var(--mono); font-size: .82rem;
+      text-align: left; cursor: pointer; transition: background .12s, border-color .12s;
+    }
+    .navrh-btn:hover { background: var(--accent); border-color: var(--accent); color: var(--bg); }
+    .navrh-btn:last-child { margin-bottom: 0; }
+    .uhly { display: flex; flex-direction: column; }
+    .uhel { border-bottom: 1px solid var(--border); }
+    .uhel-header {
+      display: grid; grid-template-columns: 52px 1fr auto;
+      padding: 18px 0; cursor: pointer; align-items: center;
+    }
+    .uhel-header:hover .uhel-nazev { color: var(--accent); }
+    .u-num {
+      font-family: var(--serif); font-size: 1.7rem; font-weight: 300;
+      color: rgba(168,152,128,.2); line-height: 1;
+    }
+    .uhel-nazev { font-size: .88rem; font-weight: 400; color: var(--cream); }
+    .uhel-princip { font-size: .74rem; color: var(--dim); margin-top: 3px; font-style: italic; font-family: var(--serif); }
+    .u-toggle { font-size: .72rem; letter-spacing: .1em; text-transform: uppercase; color: var(--dim); padding-right: 2px; }
+    .uhel-body { display: none; padding: 0 0 28px 52px; }
+    .uhel-body.open { display: block; }
+    .otazky-inline { margin-bottom: 20px; }
+    .oi { padding: 10px 0; border-bottom: 1px solid rgba(168,152,128,.08); }
+    .oi:last-child { border-bottom: none; }
+    .oi-label { font-size: .68rem; letter-spacing: .16em; text-transform: uppercase; color: var(--accent); margin-bottom: 4px; }
+    .oi-text { font-size: .85rem; color: rgba(232,224,208,.7); }
+    .intervence {
+      background: rgba(168,152,128,.08); border-left: 2px solid var(--accent);
+      padding: 18px 20px; margin: 16px 0;
+    }
+    .intervence-label { font-size: .68rem; letter-spacing: .16em; text-transform: uppercase; color: var(--accent); margin-bottom: 10px; }
+    .intervence p { font-size: .86rem; color: rgba(232,224,208,.75); margin-bottom: 8px; }
+    .intervence p:last-child { margin-bottom: 0; }
+    .protilehly { font-size: .76rem; color: var(--dim); font-style: italic; }
+    .protilehly a { color: var(--accent); text-decoration: underline; text-underline-offset: 2px; cursor: pointer; }
+    .tbl-outer { border: 1px solid var(--border); overflow-x: auto; margin-top: 20px; }
+    table { width: 100%; border-collapse: collapse; font-size: .78rem; }
+    thead tr { border-bottom: 1px solid var(--border); }
+    thead th {
+      padding: 12px 16px; text-align: left;
+      font-size: .68rem; letter-spacing: .14em; text-transform: uppercase;
+      color: var(--accent); font-weight: 400; font-family: var(--mono);
+    }
+    thead th:first-child { color: var(--dim); }
+    tbody tr { border-bottom: 1px solid rgba(168,152,128,.07); }
+    tbody tr:last-child { border-bottom: none; }
+    tbody td { padding: 12px 16px; color: rgba(232,224,208,.6); vertical-align: top; }
+    tbody td:first-child { color: var(--accent); font-size: .72rem; letter-spacing: .08em; white-space: nowrap; }
+    tbody td:nth-child(3) { color: rgba(232,224,208,.45); font-style: italic; }
+    tbody td:nth-child(4) { color: rgba(168,152,128,.7); }
+    @media (max-width: 600px) { tbody td:first-child { white-space: normal; } }
+    .page-footer {
+      padding: 36px 0; border-top: 1px solid var(--border);
+      display: flex; justify-content: space-between; flex-wrap: wrap; gap: 14px;
+    }
+    .page-footer p { font-size: .76rem; color: var(--dim); }
+    .page-footer a { color: var(--accent); }
+    .page-footer a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-back" href="miniatury_landing.html">← Všechna zvířata</a>
+  <span class="nav-title">🦢 Čáp</span>
+</nav>
+
+<div class="wrap">
+
+<section class="hero">
+  <p class="hero-label">Kreativní miniatura · Karta Čáp</p>
+  <h1>🦢 Čáp</h1>
+  <div class="hero-rikanka">
+    1, 2 čáp letí.<br>
+    3, 4 nemá děti.<br>
+    5, 6 my je máme.<br>
+    7, 8 <strong>NEprodáme.</strong>
+  </div>
+
+  <div class="var-bar">
+    <button class="var-btn active" onclick="setVar('A',this)">🎲 Náhodně</button>
+    <button class="var-btn" onclick="setVar('B',this)">🧭 Podle nálady</button>
+    <button class="var-btn" onclick="setVar('C',this)">🔍 Diagnosticky</button>
+  </div>
+  <div class="var-popis" id="var-popis">Zavřete oči, ťukněte prstem na obrazovku a udělejte ten úhel, který vybere prst.</div>
+</section>
+
+<!-- POHÁDKA -->
+<section class="sekce">
+  <p class="sekce-label">Pohádka · přečtěte pomalu</p>
+  <h2>O čápovi,<br>který <em>nic nenosil.</em></h2>
+  <p style="font-size:.82rem;color:var(--dim);margin-bottom:16px;">Sledujte kde vás zastaví — kde cítíte odpor nebo poznání.</p>
+  <div class="pohadka-outer">
+    <div class="pohadka">
+      <p>1, 2 čáp letí. 3, 4 nemá děti. 5, 6 my je máme. 7, 8 NEprodáme.</p>
+      <p>Tak začíná říkanka, kterou si šeptají děti v trávě, když se dívají na nebe. A čáp tam opravdu je. Letí vysoko, klidně, bez nákladu. Bez uzlíku. Bez cíle. Jen tak.</p>
+      <p>Kdysi dávno se říkalo, že čáp nosí děti. Že když přistane na komíně, někdo se narodí. Ale tenhle čáp nikdy nepřistál. Jen kroužil. A začalo se o něm šeptat, že je prázdný. Že zapomněl. Že je bezradný — možná i vadný.</p>
+      <p>Ale myš věděla, že to není pravda. Čáp nebyl prázdej. Plnej byl — jen ne toho, co by šlo vidět. Nesl nápady. Nesl možnosti. Nesl to, co se nestalo, ale mohlo.</p>
+      <p>A pak se objevily děti. Nečekaně. Bez vysvětlení. Bez čápa. Jen tak. V trávě. V koutě. V náručí těch, kteří je nečekali. A lidi se ptali: „Kde se vzaly?"</p>
+      <p>Myš odpověděla: „Pět šest — my je máme."</p>
+      <p>Začali přicházet kupci. S penězi, s smlouvami, s nabídkami. Chtěli si děti odnést. Chtěli je vlastnit. Ale myš jen zavrtěla hlavou.</p>
+      <p>„Sedm osm — NEprodáme."</p>
+      <p>Protože některé věci nejdou koupit. Některé věci přicházejí samy. A některé věci nejsou na prodej. Něco se nedá vlastnit.</p>
+      <p>Čáp mezitím letěl dál. A v tom začal si zpívat. Ale ne jednohlasně — druhý hlas, ten jeho stín, zpíval s ním. Když přeletěl nad polem, tráva se na chvíli načechrala. Když přeletěl nad vesnicí, děti se přestaly hádat. Když přeletěl nad řekou, ryby přestaly jen pokukovat a ploutvemi rovnaly vodní kruhy — protože voda se malem rozestoupila, jako by čekala, co nikdy nepřijde.</p>
+      <p>A pak jednoho dne přistál. Ne na komíně. Ale na prázdném poli. Tam, kde minule hořelo. Jak tam zaječice proskočila plamenama. Tam se vždy dějou různé věci. Které přesto nikdo nečeká.</p>
+      <p>A ostatní se tam sešli. Myš, kocour, zaječice, lemur, slon. Všichni, kdo věděli, že svět není jenom to, co se dá spočítat. A čáp se jich neptal. Jen rozprostřel křídla a z nich vypadly věty. Nedokončené. Neprodané. Nepřijaté.</p>
+      <p>A děti si je začaly sbírat. Skládaly si z nich vlastní pohádky. Vlastní jména. Vlastní smysly.</p>
+      <p>A to znamená, že čáp, který nic nenosí, je ten, který nese všechno. Akorát ne to, co jsme čekali.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 3 OTÁZKY -->
+<section class="sekce" id="otazky">
+  <p class="sekce-label">Tři otázky · odpovězte rychle, bez opravování</p>
+  <h2>Vaše odpovědi.</h2>
+  <div class="otazky">
+    <div class="otazka">
+      <p class="q-label">Q1 — Vstup</p>
+      <p class="q-text">Co je podle vás hlavní pointa nebo sdělení tohoto příběhu?</p>
+      <textarea id="q1" placeholder="První věc, která vás napadne..."></textarea>
+    </div>
+    <div class="otazka">
+      <p class="q-label">Q2 — Zaujetí</p>
+      <p class="q-text">Která konkrétní věta, obraz nebo moment vás nejvíc zaujal — a proč?</p>
+      <textarea id="q2" placeholder="Konkrétní věta nebo moment..."></textarea>
+    </div>
+    <div class="otazka">
+      <p class="q-label">Q3 — Aplikace</p>
+      <p class="q-text">Kdyby tento příběh byl zadáním pro vaši tvorbu, co by vám radil dělat (nebo nedělat)?</p>
+      <textarea id="q3" placeholder="Rada pohádky pro vaši tvorbu..."></textarea>
+    </div>
+  </div>
+  <button class="btn-diag" onclick="diagnostika()">Zjistit moje slepé místo →</button>
+  <div class="diag-vysledek" id="diag-out">
+    <h3>Váš dominantní úhel</h3>
+    <p class="dominant" id="diag-dominant"></p>
+    <p style="font-size:.8rem;color:var(--dim);margin-bottom:14px;">Zkuste protilehlý mini-projekt:</p>
+    <div id="diag-navrhy"></div>
+  </div>
+</section>
+
+<!-- 12 ÚHLŮ -->
+<section class="sekce" id="uhly">
+  <p class="sekce-label">12 úhlů · každý se třemi otázkami a intervencí</p>
+  <h2>Vyberte nebo nechte<br><em>vybrat tabulku.</em></h2>
+  <div class="uhly" id="uhly-list"></div>
+</section>
+
+<!-- MATICE -->
+<section class="sekce">
+  <p class="sekce-label">Diagnostická matice</p>
+  <h2>Co o vás prozrazuje<br><em>váš oblíbený úhel.</em></h2>
+  <div class="tbl-outer">
+    <table>
+      <thead>
+        <tr>
+          <th>Dominantní úhel</th>
+          <th>Váš kreativní styl</th>
+          <th>Co vám hrozí</th>
+          <th>Co potřebujete</th>
+        </tr>
+      </thead>
+      <tbody id="matice-body"></tbody>
+    </table>
+  </div>
+</section>
+
+<!-- PROTILEHLÉ -->
+<section class="sekce">
+  <p class="sekce-label">Tabulka protilehlých</p>
+  <h2>Když dominuje jeden úhel —<br><em>zkuste protilehlý.</em></h2>
+  <div class="tbl-outer">
+    <table>
+      <thead>
+        <tr><th>Když dominuje...</th><th>Zkuste</th></tr>
+      </thead>
+      <tbody id="protilehle-body"></tbody>
+    </table>
+  </div>
+</section>
+
+<footer class="page-footer">
+  <p>Karta Čáp · Chceš myš? — kreativní miniatury · © 2026 Michaela Nováková</p>
+  <p><a href="miniatury_landing.html">← Zpět</a> · <a href="mailto:chcesmys@gmail.com">chcesmys@gmail.com</a></p>
+</footer>
+
+</div>
+
+<script>
+const data = [
+  {
+    nazev: "Prázdný čáp",
+    princip: "Frustrace z nenaplněného očekávání může být začátkem tvorby.",
+    q: [
+      "Zaujal vás ten pocit zklamání — že čáp je \"prázdný, zapomněl, vadný\"?",
+      "Čekali jste někdy na něco, co mělo přijít a nepřišlo — a museli jste začít tvořit sami?",
+      "Radila by vám pohádka přestat čekat na \"čápa\" a začít tvořit z toho, co je?"
+    ],
+    intervence: "Vytvoř něco, co vzniklo jako náhrada za něco, co nepřišlo. Třeba báseň o tom, co jsi čekal a nedostal. Obrázek zachycující prázdné místo, kde mělo být něco jiného. Zvuk, který je jen ozvěnou toho, co nepřiletělo.",
+    protilehly: 8,
+    styl: "Tvoříš z místa zklamání, z toho, co nepřišlo",
+    hrozba: "Můžeš uvíznout v čekání",
+    potrebuje: "9. Nosiče všeho v nicotě — objevit, že nic je taky něco",
+    klic: ["čekat","nepřišlo","prázdný","zklamání","nenaplněný","frustrace","čáp","zapomněl"]
+  },
+  {
+    nazev: "Neviditelný náklad",
+    princip: "Nejvíc nese ten, kdo nese neviditelné.",
+    q: [
+      "Oslovila vás myš, která ví, že čáp je \"plnej — jen ne toho, co by šlo vidět\"?",
+      "Nosíte ve své tvorbě něco, co není vidět — možnosti, které se ještě nestaly, nápady, které nemají formu?",
+      "Radila by vám pohádka tvořit z toho neviditelného nákladu — a netlačit na to, aby byl hned vidět?"
+    ],
+    intervence: "Vytvoř něco, co je o tom, co se (ještě) nestalo. Třeba báseň o zítřku. Obrázek budoucnosti, která možná nikdy nenastane. Píseň o tom, co by mohlo být, kdyby... Pracuj s možnostmi, ne s realitou.",
+    protilehly: 5,
+    styl: "Tvoříš možnosti, ne hotové věci",
+    hrozba: "Můžeš být neviditelný",
+    potrebuje: "6. Katastrofické přistání — dopadnout na zem",
+    klic: ["neviditelný","možnosti","nápady","potenciál","nenastalé","budoucnost","mohlo by"]
+  },
+  {
+    nazev: "Děti v trávě",
+    princip: "To nejcennější vzniká samo, nečekaně, bez pozvání.",
+    q: [
+      "Zaujal vás ten zázrak — že děti se objevily \"bez čápa. Jen tak\"?",
+      "Stalo se vám někdy, že ve vaší tvorbě vzniklo něco samovolně, nečekaně, aniž byste to plánovali?",
+      "Radila by vám pohádka víc se dívat do \"trávy\" — do toho, co roste samo kolem vás — a méně na nebe?"
+    ],
+    intervence: "Vytvoř něco, co vznikne \"jen tak\". Bez plánu, bez záměru, bez cíle. Třeba si sedni do trávy (nebo na koberec) a nech ruku, ať kreslí, co chce. Nebo napiš, co tě právě napadá, bez jakékoli kontroly. Sleduj, co se objeví.",
+    protilehly: 3,
+    styl: "Tvoříš organicky, nečekaně, bez plánu",
+    hrozba: "Můžeš být chaotický",
+    potrebuje: "4. Neprodejnost — naučit se chránit to, co vzniká",
+    klic: ["samo","nečekaně","bez plánu","organicky","spontánní","jen tak","samovolně"]
+  },
+  {
+    nazev: "Neprodejnost",
+    princip: "Některé věci se nesmějí prodat. Když přijdou kupci, musíš umět říct NE.",
+    q: [
+      "Zaujala vás myš, která říká \"NEprodáme\"?",
+      "Je něco ve vaší tvorbě, co byste neprodal/a za žádnou cenu? Něco, co je neprodejné?",
+      "Radila by vám pohádka chránit to neprodejné — i když přicházejí kupci s dobrými nabídkami?"
+    ],
+    intervence: "Vytvoř něco, co je záměrně neprodejné. Co nemá cenu. Co se nedá zpeněžit, okopírovat, ukrást. Třeba báseň napsaná na vodě. Obrázek, který se po dokončení zničí. Zvuk, který existuje jen v okamžiku, kdy ho tvoříš.",
+    protilehly: 2,
+    styl: "Chráníš svou tvorbu před zneužitím",
+    hrozba: "Můžeš být příliš uzavřený",
+    potrebuje: "3. Děti v trávě — nechat věci volně růst",
+    klic: ["neprodejné","chránit","NE","odmítnout","hodnota","nelze prodat","vlastnit"]
+  },
+  {
+    nazev: "Dvojhlas a stín",
+    princip: "Každá tvorba nese svůj stín. Druhý hlas, pochybnost, nejistota.",
+    q: [
+      "Zaujal vás obraz čápa, který zpívá a \"druhý hlas, ten jeho stín, zpíval s ním\"?",
+      "Cítíte ve své tvorbě ten \"druhý hlas\" — pochybnost, stín, který je součástí všeho, co tvoříte?",
+      "Radila by vám pohádka neskrývat ten druhý hlas, ale nechat ho zpívat s sebou?"
+    ],
+    intervence: "Vytvoř něco, co má dva hlasy. Třeba báseň, kde každý druhý verš je pochybnost o tom prvním. Obrázek, který má svůj stín přímo v sobě. Píseň, kde se dva hlasy překřikují, doplňují, popírají.",
+    protilehly: 6,
+    styl: "Tvá tvorba má hloubku, nosí v sobě pochybnost",
+    hrozba: "Můžeš být paralyzován pochybami",
+    potrebuje: "7. Shromáždění poznávajících — najít ty, kteří rozumějí",
+    klic: ["pochybnost","stín","druhý hlas","nejistota","ambivalence","váhání","dualita"]
+  },
+  {
+    nazev: "Katastrofické přistání",
+    princip: "Čáp nepřistává na bezpečných komínech, ale na spáleništích.",
+    q: [
+      "Zaujala vás věta, že čáp přistál \"tam, kde minule hořelo\"?",
+      "Stalo se vám, že vaše nejlepší tvorba přišla z místa bolesti, selhání, ztráty?",
+      "Radila by vám pohádka hledat svá \"spáleniště\" — místa, kde to bolelo — a tam tvořit?"
+    ],
+    intervence: "Vytvoř něco, co vzniklo z místa, kde \"hořelo\". Třeba báseň o něčem, co tě bolelo. Obrázek zachycující bolest nebo ztrátu. Zvuk, který zní jako křik nebo pláč. Důležité je, aby to nebylo o bolesti — ale z bolesti.",
+    protilehly: 1,
+    styl: "Tvoříš z bolesti a selhání",
+    hrozba: "Můžeš uvíznout v traumatu",
+    potrebuje: "2. Neviditelný náklad — najít v tom i možnosti",
+    klic: ["bolest","selhání","ztráta","hořelo","spáleniště","trauma","krize","hořká"]
+  },
+  {
+    nazev: "Shromáždění poznávajících",
+    princip: "Kolem pravdy se scházejí ti, kteří vědí, že svět není jen to, co se dá spočítat.",
+    q: [
+      "Oslovilo vás, že se sešli ti, \"kdo věděli, že svět není jenom to, co se dá spočítat\"?",
+      "Máte kolem sebe lidi, kteří rozumějí vaší tvorbě jinak než většina?",
+      "Radila by vám pohádka hledat a chránit tyto \"poznávající\" — a tvořit pro ně a s nimi?"
+    ],
+    intervence: "Vytvoř něco pro úzký kruh — pro ty, kteří rozumějí. Třeba báseň, které rozumí jen tři lidi. Obrázek, který ukážeš jen jednomu. Zvuk, který nahraješ jen pro sebe a pro ně. Důležité je, že to není pro všechny.",
+    protilehly: 4,
+    styl: "Tvoříš pro ty, kteří rozumějí",
+    hrozba: "Můžeš být elitářský",
+    potrebuje: "5. Dvojhlas a stín — připustit pochybnost",
+    klic: ["komunita","rozumět","kruh","setkání","poznání","sdílet","blízcí"]
+  },
+  {
+    nazev: "Vypadlé věty",
+    princip: "Čáp nenosí hotová řešení — nosí nedokončené věty.",
+    q: [
+      "Zaujala vás myšlenka, že čáp nenosí děti, ale \"nedokončené věty\"?",
+      "Dostali jste někdy v tvorbě něco, co nebylo hotové, ale právě to vás nastartovalo?",
+      "Radila by vám pohádka dávat druhým (i sobě) nedokončené věty — a nechat je, ať si je dokončí sami?"
+    ],
+    intervence: "Vytvoř něco záměrně nedokončeného. Třeba báseň, která končí uprostřed věty. Obrázek, který má bílá místa, kam můžeš (nebo někdo jiný) dodělat. Zvuk, který skončí dřív, než by měl. Dej to někomu a řekni: \"Dokonči to.\"",
+    protilehly: 10,
+    styl: "Dáváš podněty, ne hotová řešení",
+    hrozba: "Můžeš být nedokončený",
+    potrebuje: "11. Proměna prostředí — nechat to působit",
+    klic: ["nedokončené","fragment","zárodek","podnět","otevřené","nehotové","nedokončená"]
+  },
+  {
+    nazev: "Nosiče všeho v nicotě",
+    princip: "Ten, kdo nic nenosí, nese všechno — protože nese možnost všeho.",
+    q: [
+      "Oslovil vás paradox: \"čáp, který nic nenosí, je ten, který nese všechno\"?",
+      "Zažili jste stav, kdy jste neměli nic — a najednou jste měli všechno, protože všechno bylo možné?",
+      "Radila by vám pohádka tvořit z místa \"nicoty\" — z místa, kde ještě nic není, a proto může být cokoli?"
+    ],
+    intervence: "Vytvoř něco z ničeho. Třeba báseň o prázdnu. Obrázek, který je skoro prázdný. Zvuk, který je skoro ticho. Pracuj s vědomím, že v té prázdnotě je obsaženo všechno — jen to ještě nemá tvar.",
+    protilehly: 0,
+    styl: "Tvoříš z prázdna, z možnosti",
+    hrozba: "Můžeš být neuchopitelný",
+    potrebuje: "1. Prázdný čáp — přijmout, že někdy nic opravdu není",
+    klic: ["prázdno","nicota","ticho","nic","prázdný","nekonečné","cokoli","vše možné"]
+  },
+  {
+    nazev: "Říkanka jako zákon",
+    princip: "Nejhlubší pravdy se předávají v říkankách, ne v analýzách.",
+    q: [
+      "Zaujala vás říkanka — 1,2 čáp letí; 3,4 nenosí, co čekáš; 5,6 hodnota je jinde; 7,8 chraň ji?",
+      "Máte ve své tvorbě nějakou \"říkanku\" — jednoduchou formulku, která vám připomíná, co je důležité?",
+      "Radila by vám pohádka hledat jednoduché formy pro hluboké pravdy — a předávat je dál?"
+    ],
+    intervence: "Vytvoř svou vlastní říkanku. Třeba o tom, jak tvoříš. Nebo o tom, co je ve tvé tvorbě nejdůležitější. Čtyři verše, jednoduché, rytmické. A pak ji řekni někomu — nebo si ji jen šeptej pro sebe.",
+    protilehly: 11,
+    styl: "Hledáš jednoduché pravdy v komplexitě",
+    hrozba: "Můžeš být zjednodušující",
+    potrebuje: "12. Příchod bez pozvání — být otevřený překvapení",
+    klic: ["říkanka","jednoduché","formulka","pravidlo","zákon","rytmus","opakovat","jednoduchý"]
+  },
+  {
+    nazev: "Proměna prostředí",
+    princip: "I pouhá přítomnost může měnit svět.",
+    q: [
+      "Zaujala vás jemná proměna — tráva se načechrá, děti se přestanou hádat, ryby narovnávají kruhy?",
+      "Cítili jste někdy, že vaše pouhá přítomnost (třeba v ateliéru, v místnosti) mění atmosféru?",
+      "Radila by vám pohádka tvořit někdy jen tím, že jsi — a nechat to působit?"
+    ],
+    intervence: "Vytvoř něco, co vzniká pouhou přítomností. Třeba fotka místa předtím, než do něj vstoupíš — a potom. Zvuková nahrávka ticha, když jsi v místnosti. Báseň o tom, jak se věci mění, když jsi nablízku.",
+    protilehly: 7,
+    styl: "Měníš svět pouhou přítomností",
+    hrozba: "Můžeš být pasivní",
+    potrebuje: "8. Vypadlé věty — začít dávat podněty",
+    klic: ["přítomnost","atmosféra","vliv","změna","tiše","prostředí","prostě být"]
+  },
+  {
+    nazev: "Příchod bez pozvání",
+    princip: "To nejcennější přichází nečekaně, bez pozvání, bez dovolení.",
+    q: [
+      "Zaujal vás ten závěr — \"Čáp se jich neptal. Jen rozprostřel křídla\"?",
+      "Stalo se vám, že k vám přišla tvorba nečekaně, bez pozvání, v nejméně vhodnou chvíli?",
+      "Radila by vám pohádka být otevřený těmto nečekaným příchodům — a nepoplašit je?"
+    ],
+    intervence: "Vytvoř něco, co přišlo nečekaně. Třeba zapiš sen, který se ti zdál. Nebo nápad, který tě napadl ve sprše. Nebo větu, kterou jsi zaslechl na ulici. Neupravuj to, nehodnoť — jen to zaznamenej jako dar, který přišel bez pozvání.",
+    protilehly: 9,
+    styl: "Jsi otevřený nečekaným darům",
+    hrozba: "Můžeš být závislý na náhodě",
+    potrebuje: "10. Říkanka jako zákon — najít svůj řád",
+    klic: ["nečekaně","dar","náhoda","spontánní","bez pozvání","překvapení","přišlo samo"]
+  }
+];
+
+// render
+const list = document.getElementById('uhly-list');
+data.forEach((u,i) => {
+  const d = document.createElement('div');
+  d.className = 'uhel'; d.id = 'u-'+i;
+  d.innerHTML = `
+    <div class="uhel-header" onclick="toggle(${i})">
+      <span class="u-num">${String(i+1).padStart(2,'0')}</span>
+      <div><div class="uhel-nazev">${u.nazev}</div><div class="uhel-princip">${u.princip}</div></div>
+      <span class="u-toggle" id="t-${i}">+</span>
+    </div>
+    <div class="uhel-body" id="b-${i}">
+      <div class="otazky-inline">
+        ${u.q.map((q,j)=>`<div class="oi"><div class="oi-label">Q${j+1}</div><div class="oi-text">${q}</div></div>`).join('')}
+      </div>
+      <div class="intervence">
+        <div class="intervence-label">Kreativní intervence · 20 minut</div>
+        <p>${u.intervence}</p>
+      </div>
+      <p class="protilehly">Protilehlý úhel: <a onclick="jump(${u.protilehly})">${u.protilehly+1}. ${data[u.protilehly].nazev}</a></p>
+    </div>`;
+  list.appendChild(d);
+});
+
+const matice = document.getElementById('matice-body');
+data.forEach((u,i) => {
+  const tr = document.createElement('tr');
+  tr.innerHTML = `<td>${i+1}. ${u.nazev}</td><td>${u.styl}</td><td>${u.hrozba}</td><td>${u.potrebuje}</td>`;
+  matice.appendChild(tr);
+});
+
+const prot = document.getElementById('protilehle-body');
+data.forEach((u,i) => {
+  const tr = document.createElement('tr');
+  tr.innerHTML = `<td>${i+1}. ${u.nazev}</td><td>${u.protilehly+1}. ${data[u.protilehly].nazev}</td>`;
+  prot.appendChild(tr);
+});
+
+function toggle(i) {
+  const b = document.getElementById('b-'+i);
+  const t = document.getElementById('t-'+i);
+  const open = b.classList.toggle('open');
+  t.textContent = open ? '−' : '+';
+}
+function jump(i) {
+  if (!document.getElementById('b-'+i).classList.contains('open')) toggle(i);
+  document.getElementById('u-'+i).scrollIntoView({behavior:'smooth',block:'start'});
+}
+const varText = {
+  A: "Zavřete oči, ťukněte prstem na obrazovku a udělejte ten úhel, který vybere prst.",
+  B: "Přečtěte si všech 12 úhlů a vyberte ten, který vás právě teď nejvíc oslovuje.",
+  C: "Odpovězte na 3 otázky níže, zjistěte svůj dominantní úhel a pak zkuste protilehlý."
+};
+function setVar(v,btn) {
+  document.querySelectorAll('.var-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('var-popis').textContent = varText[v];
+  if (v==='A') { const r=Math.floor(Math.random()*12); setTimeout(()=>{ toggle(r); document.getElementById('u-'+r).scrollIntoView({behavior:'smooth',block:'center'}); },300); }
+  if (v==='C') document.getElementById('otazky').scrollIntoView({behavior:'smooth'});
+}
+function diagnostika() {
+  const txt = ['q1','q2','q3'].map(id=>document.getElementById(id).value).join(' ').toLowerCase();
+  if (!txt.trim()) { alert('Vyplňte alespoň jednu odpověď.'); return; }
+  const skore = data.map(u=>u.klic.reduce((s,k)=>s+(txt.includes(k)?1:0),0));
+  let max = skore.indexOf(Math.max(...skore));
+  if (skore[max]===0) max = Math.floor(Math.random()*12);
+  const pI = data[max].protilehly;
+  document.getElementById('diag-dominant').textContent = `Vaše odpovědi ukazují nejsilněji na: ${max+1}. ${data[max].nazev}`;
+  document.getElementById('diag-navrhy').innerHTML = `
+    <button class="navrh-btn" onclick="jump(${pI})">→ Protilehlý: ${pI+1}. ${data[pI].nazev}</button>
+    <button class="navrh-btn" onclick="jump(${max})">→ Prohloubit dominantní: ${max+1}. ${data[max].nazev}</button>`;
+  const out = document.getElementById('diag-out');
+  out.style.display = 'block';
+  out.scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+</script>
+</body>
+</html>
