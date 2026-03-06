@@ -12,6 +12,13 @@
 ---
 
 ## katalog
-- [osel](doma/data/karty/Osel/nastroje//workshop_landing_page.html)
-- [jednorožec](doma/data/karty/Jednorozec/nastroje/workshop_landing_page.html)
-- [lemur](doma/data/karty/Lemur/nastroje/workshop_landing_page.html)
+
+- [osel](doma/karty/Osel/index.html)
+- [jednorožec](doma/karty/Jednorozec/index.html)
+- [lemur](doma/karty/Lemur/index.html)
+- [netopýr](doma/karty/Netopyr/index.html)
+- [čáp](doma/karty/Cap/index.html)
+- [had](doma/karty/Had/index.html)  -   - 
+- [motýl](doma/karty/Motyl/index.html)
+- [ryba](doma/karty/Ryba/index.html)
+  
