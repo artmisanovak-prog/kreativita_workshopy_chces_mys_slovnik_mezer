@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ryba — kreativní miniatury</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--bg:#0f0f0f;--surface:#161616;--cream:#e8e0d0;--dim:rgba(232,224,208,.42);--accent:#a89880;--border:rgba(168,152,128,.15);--serif:'Cormorant Garamond',Georgia,serif;--mono:'DM Mono',monospace}
+    html{scroll-behavior:smooth}
+    body{background:var(--bg);color:var(--cream);font-family:var(--mono);font-size:14px;line-height:1.8;-webkit-font-smoothing:antialiased}
+    a{color:inherit;text-decoration:none}
+    p{margin-bottom:12px}p:last-child{margin-bottom:0}
+    .wrap{max-width:760px;margin:0 auto;padding:0 28px}
+    nav{position:sticky;top:0;z-index:100;border-bottom:1px solid var(--border);background:rgba(15,15,15,.92);backdrop-filter:blur(12px);padding:14px 28px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+    .nav-back{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);transition:color .2s}
+    .nav-back:hover{color:var(--cream)}
+    .nav-title{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--accent)}
+    .hero{padding:72px 0 56px;border-bottom:1px solid var(--border)}
+    .hero-label{font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:var(--accent);margin-bottom:20px}
+    .hero h1{font-family:var(--serif);font-size:clamp(3rem,7vw,5.5rem);font-weight:300;line-height:1.0;color:var(--cream);margin-bottom:8px}
+    .hero h1 em{font-style:italic;color:var(--accent)}
+    .hero-veta{font-family:var(--serif);font-size:clamp(.95rem,2vw,1.25rem);font-style:italic;color:var(--dim);border-left:1px solid var(--accent);padding-left:20px;max-width:500px;margin:20px 0 36px;line-height:1.9}
+    .var-bar{display:flex;gap:1px;background:var(--border);border:1px solid var(--border)}
+    .var-btn{flex:1;padding:13px 12px;background:var(--surface);border:none;cursor:pointer;font-family:var(--mono);font-size:.78rem;letter-spacing:.08em;text-transform:uppercase;color:var(--dim);transition:background .12s,color .12s;text-align:center}
+    .var-btn:hover{background:#1e1e1e;color:var(--cream)}
+    .var-btn.active{background:var(--accent);color:var(--bg)}
+    .var-popis{padding:12px 16px;font-size:.8rem;color:var(--dim);border:1px solid var(--border);border-top:none;background:var(--surface)}
+    .sekce{padding:56px 0;border-bottom:1px solid var(--border)}
+    .sekce-label{font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);margin-bottom:16px}
+    h2{font-family:var(--serif);font-size:clamp(1.5rem,3.5vw,2.2rem);font-weight:300;color:var(--cream);margin-bottom:18px}
+    h2 em{font-style:italic;color:var(--accent)}
+    .pohadka-outer{border:1px solid var(--border);background:var(--surface);max-height:360px;overflow-y:auto;padding:0 28px}
+    .pohadka{font-family:var(--serif);font-style:italic;font-size:.97rem}
+    .pohadka p{padding:.45em 0;color:rgba(232,224,208,.8)}
+    .pohadka-outer::-webkit-scrollbar{width:2px}
+    .pohadka-outer::-webkit-scrollbar-thumb{background:var(--accent)}
+    .otazky{border-top:1px solid var(--border)}
+    .otazka{padding:22px 0;border-bottom:1px solid var(--border)}
+    .q-label{font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:8px}
+    .q-text{font-size:.95rem;margin-bottom:6px;color:var(--cream)}
+    textarea{width:100%;margin-top:10px;background:var(--surface);border:1px solid var(--border);color:var(--cream);padding:12px;font-family:var(--mono);font-size:.85rem;line-height:1.7;resize:vertical;min-height:68px}
+    textarea:focus{outline:1px solid var(--accent)}
+    textarea::placeholder{color:rgba(232,224,208,.25)}
+    .btn-diag{margin-top:20px;padding:12px 28px;font-size:11px;letter-spacing:.12em;text-transform:uppercase;background:var(--accent);color:var(--bg);border:none;cursor:pointer;font-family:var(--mono);transition:background .15s}
+    .btn-diag:hover{background:#c0aa90}
+    .diag-vysledek{display:none;border:1px solid var(--accent);padding:24px;margin-top:20px;background:var(--surface)}
+    .diag-vysledek h3{font-family:var(--serif);font-size:1.1rem;font-weight:400;color:var(--cream);margin-bottom:10px}
+    .dominant{font-size:.82rem;color:var(--dim);margin-bottom:16px}
+    .navrh-btn{display:block;width:100%;padding:11px 16px;margin-bottom:6px;background:transparent;border:1px solid var(--border);color:var(--cream);font-family:var(--mono);font-size:.82rem;text-align:left;cursor:pointer;transition:background .12s,border-color .12s}
+    .navrh-btn:hover{background:var(--accent);border-color:var(--accent);color:var(--bg)}
+    .navrh-btn:last-child{margin-bottom:0}
+    .uhly{display:flex;flex-direction:column}
+    .uhel{border-bottom:1px solid var(--border)}
+    .uhel-header{display:grid;grid-template-columns:52px 1fr auto;padding:18px 0;cursor:pointer;align-items:center}
+    .uhel-header:hover .uhel-nazev{color:var(--accent)}
+    .u-num{font-family:var(--serif);font-size:1.7rem;font-weight:300;color:rgba(168,152,128,.2);line-height:1}
+    .uhel-nazev{font-size:.88rem;font-weight:400;color:var(--cream)}
+    .uhel-princip{font-size:.74rem;color:var(--dim);margin-top:3px;font-style:italic;font-family:var(--serif)}
+    .u-toggle{font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);padding-right:2px}
+    .uhel-body{display:none;padding:0 0 28px 52px}
+    .uhel-body.open{display:block}
+    .otazky-inline{margin-bottom:20px}
+    .oi{padding:10px 0;border-bottom:1px solid rgba(168,152,128,.08)}
+    .oi:last-child{border-bottom:none}
+    .oi-label{font-size:.68rem;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);margin-bottom:4px}
+    .oi-text{font-size:.85rem;color:rgba(232,224,208,.7)}
+    .intervence{background:rgba(168,152,128,.08);border-left:2px solid var(--accent);padding:18px 20px;margin:16px 0}
+    .intervence-label{font-size:.68rem;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);margin-bottom:10px}
+    .intervence p{font-size:.86rem;color:rgba(232,224,208,.75);margin-bottom:8px}
+    .intervence p:last-child{margin-bottom:0}
+    .protilehly{font-size:.76rem;color:var(--dim);font-style:italic}
+    .protilehly a{color:var(--accent);text-decoration:underline;text-underline-offset:2px;cursor:pointer}
+    .tbl-outer{border:1px solid var(--border);overflow-x:auto;margin-top:20px}
+    table{width:100%;border-collapse:collapse;font-size:.78rem}
+    thead tr{border-bottom:1px solid var(--border)}
+    thead th{padding:12px 16px;text-align:left;font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);font-weight:400;font-family:var(--mono)}
+    thead th:first-child{color:var(--dim)}
+    tbody tr{border-bottom:1px solid rgba(168,152,128,.07)}
+    tbody tr:last-child{border-bottom:none}
+    tbody td{padding:12px 16px;color:rgba(232,224,208,.6);vertical-align:top}
+    tbody td:first-child{color:var(--accent);font-size:.72rem;letter-spacing:.08em;white-space:nowrap}
+    tbody td:nth-child(3){color:rgba(232,224,208,.45);font-style:italic}
+    tbody td:nth-child(4){color:rgba(168,152,128,.7)}
+    @media(max-width:600px){tbody td:first-child{white-space:normal}}
+    .page-footer{padding:36px 0;border-top:1px solid var(--border);display:flex;justify-content:space-between;flex-wrap:wrap;gap:14px}
+    .page-footer p{font-size:.76rem;color:var(--dim)}
+    .page-footer a{color:var(--accent)}
+    .page-footer a:hover{text-decoration:underline}
+  </style>
+</head>
+<body>
+<nav>
+  <a class="nav-back" href="miniatury_landing.html">← Všechna zvířata</a>
+  <span class="nav-title">🐟 Ryba</span>
+</nav>
+<div class="wrap">
+
+<section class="hero">
+  <p class="hero-label">Kreativní miniatura · Karta Ryba</p>
+  <h1>🐟 Ryba</h1>
+  <p class="hero-veta">„Flow je king a king je ryba."</p>
+  <div class="var-bar">
+    <button class="var-btn active" onclick="setVar('A',this)">🎲 Náhodně</button>
+    <button class="var-btn" onclick="setVar('B',this)">🧭 Podle nálady</button>
+    <button class="var-btn" onclick="setVar('C',this)">🔍 Diagnosticky</button>
+  </div>
+  <div class="var-popis" id="var-popis">Zavřete oči, ťukněte prstem na obrazovku a udělejte ten úhel, který vybere prst.</div>
+</section>
+
+<section class="sekce">
+  <p class="sekce-label">Pohádka · přečtěte pomalu</p>
+  <h2>Pohádka o <em>rybaovi.</em></h2>
+  <p style="font-size:.82rem;color:var(--dim);margin-bottom:16px;">Sledujte kde vás zastaví — kde cítíte odpor nebo poznání.</p>
+  <div class="pohadka-outer"><div class="pohadka"><p>Říká se, že ryby mlčí.<br>Že nemají hlas.<br>Že jen plavou, koukají, a občas se nechají chytit.<br>Ale to je omyl. Kec. Suchozemská lež.</p>
+<p>Ryby totiž nemlčí.<br>Ryby rapujou.</p>
+<p>Rybí rap je jinej.<br>Je to rytmus proudů.<br>Je to nížka, výška vln a vlnek.<br>Je to tempo vodních kruhů.<br>Je to mezera mezi bublinama.</p>
+<p>Pod vodou se zvuk jinak šíří.<br>Hlubší. Širší. Pomalejší.<br>A tak ryby neřvou.<br>Ryby vibrujou.</p>
+<p>Každej druh rybí má svůj styl hudební.<br>Kosatky zpívají chansony. Žraloci zpívaj gospel. Velryba si troufne na operu.<br>Delfín je folklor. Chobotnice strihne jazzové improvizace.<br>Piraňi balady. A kapr zkouší hrdelní zpěvy.<br>Na pop je odbornice bělice. A úhoř nemá hudební ambice.</p>
+<p>Ale tohle všechno není hudba pro uši.<br>Tohle ovlivňuje různé vodní vlastnosti.</p>
+<p>A ryba?<br>Ryba má rap. Ne kvůli slávě. Kvůli přesnosti.</p>
+<p>Flow je king a king je ryba.<br>Beat jí dělá sea i jezera.<br>Riff kape, flow teče.<br>Přesná slova proudí jak voda.<br>Její punchline je fontána.</p>
+<p>Ptačí zpěv? Křikot je to.<br>Řev, ryk, krákot, jekot.<br>Píp rýmuje s píp, jinak bez ideje.<br>Cokoli řeknou hned se cenzuruje.</p>
+<p>Zato ryby fakt dávaj.<br>Dávaj rytmus vodě.<br>Dávaj smysl tichu.<br>Dávají beaty proudům.</p>
+<p>A stalo se jednoho dne, že ryba začala rapovat i na hladině.<br>Ne pro ostatní.<br>Pro vodu.</p>
+<p>A voda odpověděla.<br>Jinak se zavlnila. Do rytmu se natřásala.<br>Tvořila verše jako vodní kruhy, v kterých byly další kruhy.<br>Mlha, spadlá do polí, opsala jejich flow.<br>A vytvořila kruhy v obilí.</p>
+<p>Rybí hudba byla slyšet — ne uchem, ale okem, tělem.</p>
+<p>A tak se po kapkách roznáší všude kolem,<br>že první místo v hitparádě vyhrály ryby — nepochybně.</p>
+<p>Ne proto, že zpívaj.<br>Ale proto, že ví…<br>…kdy mlčet.</p></div></div>
+</section>
+
+<section class="sekce" id="otazky">
+  <p class="sekce-label">Tři otázky · odpovězte rychle, bez opravování</p>
+  <h2>Vaše odpovědi.</h2>
+  <div class="otazky">
+    <div class="otazka"><p class="q-label">Q1 — Vstup</p><p class="q-text">Co je podle vás hlavní pointa nebo sdělení tohoto příběhu?</p><textarea id="q1" placeholder="První věc, která vás napadne..."></textarea></div>
+    <div class="otazka"><p class="q-label">Q2 — Zaujetí</p><p class="q-text">Která konkrétní věta, obraz nebo moment vás nejvíc zaujal — a proč?</p><textarea id="q2" placeholder="Konkrétní věta nebo moment..."></textarea></div>
+    <div class="otazka"><p class="q-label">Q3 — Aplikace</p><p class="q-text">Kdyby tento příběh byl zadáním pro vaši tvorbu, co by vám radil dělat (nebo nedělat)?</p><textarea id="q3" placeholder="Rada pohádky pro vaši tvorbu..."></textarea></div>
+  </div>
+  <button class="btn-diag" onclick="diagnostika()">Zjistit moje slepé místo →</button>
+  <div class="diag-vysledek" id="diag-out">
+    <h3>Váš dominantní úhel</h3>
+    <p class="dominant" id="diag-dominant"></p>
+    <p style="font-size:.8rem;color:var(--dim);margin-bottom:14px;">Zkuste protilehlý mini-projekt:</p>
+    <div id="diag-navrhy"></div>
+  </div>
+</section>
+
+<section class="sekce" id="uhly">
+  <p class="sekce-label">12 úhlů · každý se třemi otázkami a intervencí</p>
+  <h2>Vyberte nebo nechte<br><em>vybrat tabulku.</em></h2>
+  <div class="uhly" id="uhly-list"></div>
+</section>
+
+<section class="sekce">
+  <p class="sekce-label">Diagnostická matice</p>
+  <h2>Co o vás prozrazuje<br><em>váš oblíbený úhel.</em></h2>
+  <div class="tbl-outer">
+    <table>
+      <thead><tr><th>Dominantní úhel</th><th>Váš kreativní styl</th><th>Co vám hrozí</th><th>Co potřebujete</th></tr></thead>
+      <tbody id="matice-body"></tbody>
+    </table>
+  </div>
+</section>
+
+<section class="sekce">
+  <p class="sekce-label">Tabulka protilehlých</p>
+  <h2>Když dominuje jeden úhel —<br><em>zkuste protilehlý.</em></h2>
+  <div class="tbl-outer">
+    <table>
+      <thead><tr><th>Když dominuje...</th><th>Zkuste</th></tr></thead>
+      <tbody id="protilehle-body"></tbody>
+    </table>
+  </div>
+</section>
+
+<footer class="page-footer">
+  <p>Karta Ryba · Chceš myš? — kreativní miniatury · © 2026 Michaela Nováková</p>
+  <p><a href="miniatury_landing.html">← Zpět</a> · <a href="mailto:chcesmys@gmail.com">chcesmys@gmail.com</a></p>
+</footer>
+
+</div>
+<script>
+const data=[{"nazev":"Vibrační komunikace","princip":"Ryby neřvou, ryby vibrujou. Jejich projev není hlasitý, ale přesto rezonuje.","q":["Zaujala vás představa, že ryby 'neřvou, ale vibrujou' — že jejich projev rezonuje i bez hlasitosti?","Cítili jste někdy, že vaše tvorba 'vibruje' — že působí na prostředí, i když není hlasitá?","Radila by vám pohádka hledat ve své tvorbě spíš rezonanci než hlasitost?"],"intervence":"Vytvoř něco, co je záměrně tiché, ale má rezonovat. Třeba báseň, kterou budeš šeptat. Obrázek, který je sotva viditelný. Zvuk, který je spíš pocit než melodie. Důležité je, aby to nepůsobilo silou, ale přítomností.","protilehly":4,"styl":"Tvá tvorba rezonuje, působí jemně, ale hluboce","hrozba":"Můžeš být neslyšitelný/á","potrebuje":"5. Ptáčí křikot — občas přidat na hlasitosti","klic":["vibrace","rezonance","tichý","jemný","pod povrchem","působit","přítomnost"]},{"nazev":"Systemický dopad","princip":"Skutečná tvorba není o předání sdělení, ale o změně systému.","q":["Oslovila vás věta, že rybí hudba 'ovlivňuje různé vodní vlastnosti'?","Přemýšlíte při tvorbě o tom, jak změní prostředí — nejen co řekne, ale co udělá s těmi, kdo ji vnímají?","Radila by vám pohádka tvořit s vědomím systemického dopadu — že každý verš, každá čára, každý tón mění 'vodu' kolem?"],"intervence":"Vytvoř něco, co má za cíl změnit prostředí, ne jen vyjádřit tebe. Třeba instalaci v prostoru, která změní jeho atmosféru. Text, který po přečtení změní čtenářovo vnímání něčeho. Sleduj, co se děje s okolím.","protilehly":2,"styl":"Měníš prostředí, tvé dílo působí v kontextu","hrozba":"Můžeš ztratit svůj vlastní hlas","potrebuje":"3. Přesnost před hlasitostí — najít svůj střed","klic":["systém","prostředí","dopad","vliv","změna","kontext","oko","tělo"]},{"nazev":"Přesnost před hlasitostí","princip":"Ryba rapuje kvůli přesnosti. Flow je king. Hodnotu má ten, kdo je nejpřesnější.","q":["Zaujala vás věta, že ryba rapuje 'kvůli přesnosti' — ne kvůli slávě, ne kvůli být slyšet?","Usilujete ve své tvorbě o přesnost, nebo spíš o to být slyšet, vidět, oceněn?","Radila by vám pohádka hledat 'flow' — stav, kde každé slovo, každý tah má svou váhu a místo?"],"intervence":"Vytvoř něco s maximální úsporností. Třeba báseň o deseti slovech, která ale řekne víc než sto. Obrázek s minimem čar, který ale vyjadřuje maximum. Zvuk s jediným tónem, který nese celou náladu. Hledej přesnost, ne kvantitu.","protilehly":1,"styl":"Tvá tvorba je úsporná, přesná, každé slovo má váhu","hrozba":"Můžeš být suchý/á","potrebuje":"2. Systemický dopad — rozšířit perspektivu","klic":["přesnost","úsporný","flow","každé slovo","váha","minimum","přesný"]},{"nazev":"Různorodé žánry","princip":"Každý druh ryb má svůj styl. Systém oceňuje diverzitu projevu.","q":["Zaujal vás ten přehled — že každý druh ryb má svůj vlastní hudební styl?","Jaký je váš přirozený 'žánr'? Co vám nejvíc sedí, v čem jste autentičtí?","Radila by vám pohádka nebát se svého žánru — a zároveň respektovat, že jiní mají jiný?"],"intervence":"Vytvoř něco ve svém přirozeném žánru — ale udělej to ještě víc, ještě autentičtěji. Pokud jsi 'delfín-folklorista', napiš folkovou píseň. Pokud jsi 'medúza-trianglistka', vytvoř něco jemného, křehkého. Nepřizpůsobuj se.","protilehly":4,"styl":"Jsi flexibilní, umíš různé styly, jsi autentický/á","hrozba":"Můžeš být rozptýlený/á","potrebuje":"5. Ptáčí křikot — občas zvolit jeden směr","klic":["žánr","styl","autentický","svůj","přirozený","druh","diverzita"]},{"nazev":"Ptáčí křikot","princip":"Povrchní, hlasitý, prázdný projev, který jen naplňuje prostor.","q":["Zaujala vás ta kritika ptačího zpěvu — že je to jen 'křikot, píp rýmuje s píp, jinak bez ideje'?","Cítíte někdy, že vaše tvorba sklouzává k 'ptačímu křiku' — že je hlasitá, ale prázdná?","Radila by vám pohádka rozpoznat tyto momenty a umět se zastavit?"],"intervence":"Vytvoř něco, co je záměrně 'ptačí' — hlasité, prázdné, opakující se. Třeba báseň, kde se pořád dokola opakuje stejné slovo. Obrázek, který je agresivně barevný, ale nic neříká. A pak se podívej, co jsi o tom zjistil.","protilehly":0,"styl":"Tvá tvorba je hlasitá, výrazná, ale může být prázdná","hrozba":"Můžeš být jen povrchní","potrebuje":"1. Vibrační komunikace — najít hloubku","klic":["hlasitý","křik","prázdný","povrchní","výrazný","hodně","přehnaný"]},{"nazev":"Mlčení jako mocná dovednost","princip":"Ryby vyhrály, protože vědí, kdy mlčet. Síla je ve strategickém tichu.","q":["Zaujala vás ta pointa — že vyhrály, protože vědí, kdy mlčet?","Umíte ve své tvorbě mlčet? Nechat prázdno, pauzu, ticho?","Radila by vám pohádka kultivovat schopnost mlčet — a vnímat, co se v tom tichu objevuje?"],"intervence":"Vytvoř něco, kde hlavním prvkem je ticho. Třeba báseň, která má víc prázdných míst než slov. Obrázek, kde je bílá plocha důležitější než kresba. Skladbu, kde jsou pauzy delší než tóny. Dovol tichu, aby promluvilo.","protilehly":4,"styl":"Umíš mlčet, necháváš prostor, jsi strategický/á","hrozba":"Můžeš být neviditelný/á","potrebuje":"5. Ptáčí křikot — občas promluvit","klic":["ticho","mlčení","pauza","prázdno","strategický","kdy mlčet","prostor"]},{"nazev":"Komunikace s prostředím","princip":"Ryba rapovala pro vodu. A voda odpověděla. Nejvyšší forma tvorby — pro samotný ekosystém.","q":["Zaujala vás věta, že ryba začala rapovat 'na hladině. Ne pro ostatní. Pro vodu.'?","Pro koho vlastně tvoříte? Pro publikum, pro sebe, nebo pro něco většího — pro 'vodu'?","Radila by vám pohádka zkusit tvořit jednou 'pro vodu' — pro samotné prostředí, ne pro ty, kdo v něm plavou?"],"intervence":"Vytvoř něco, co není určeno k tomu, aby to někdo viděl nebo slyšel. Třeba báseň, kterou napíšeš a zahrabeš do země. Obrázek, který namaluješ na skálu, kde ho smyje déšť. Zvuk, který nahraješ a smažeš. Důležité je, aby to bylo pro 'vodu'.","protilehly":4,"styl":"Tvoříš pro systém, pro vodu, ne pro publikum","hrozba":"Můžeš být nepochopený/á","potrebuje":"11. Autentické vyjádření — neztratit sebe","klic":["voda","prostředí","ekosystém","pro přírodu","bez publika","pro akt","příroda"]},{"nazev":"Ticho, které nese obsah","princip":"'Aby se ticho konečně dostalo nad hladinu.' Ticho není absence, je to nositel obsahu.","q":["Zaujala vás ta poslední věta — 'aby se ticho konečně dostalo nad hladinu'?","Vnímáte ticho jako něco, co může nést obsah, nebo jen jako prázdno?","Radila by vám pohádka hledat ve své tvorbě to, co je pod hladinou — co není slyšet, ale přesto to rezonuje?"],"intervence":"Vytvoř něco, co je postavené na tom, co není řečeno. Třeba dialog, kde jsou důležitější pomlky než slova. Obrázek, kde hlavní téma je mimo plátno. Příběh, kde se vše důležité děje mezi řádky. Dovol tichu nést obsah.","protilehly":4,"styl":"Tvá tvorba je v mezerách, v pauzách, v náznaku","hrozba":"Můžeš být příliš subtilní","potrebuje":"5. Ptáčí křikot — občas říct věci naplno","klic":["pod hladinou","nevyřčené","náznaky","mezery","ticho","obsah","skryté"]},{"nazev":"Beaty z prostředí","princip":"Beat jí dělá sea i jezera. Rybí rap je neoddělitelný od prostředí — je jím tvořen a zároveň ho tvoří.","q":["Oslovila vás věta, že 'beat jí dělá sea i jezera' — že rytmus přichází z prostředí?","Vnímáte své tvůrčí prostředí jako zdroj rytmu, nebo jako překážku?","Radila by vám pohádka naslouchat 'beatům' svého prostředí a nechat se jimi vést?"],"intervence":"Vytvoř něco, co vznikne nasloucháním svému prostředí. Třeba báseň napsaná podle rytmu dopravy za oknem. Obrázek, který zachycuje vibrace města. Zvuk, který je složený z ruchů tvé místnosti. Nech prostředí, ať ti diktuje beat.","protilehly":0,"styl":"Nasloucháš okolí, necháš se vést rytmem světa","hrozba":"Můžeš ztratit vlastní rytmus","potrebuje":"1. Vibrační komunikace — najít svou vlastní vibraci","klic":["beat","rytmus","prostředí","naslouchat","okolí","město","příroda","ruch"]},{"nazev":"Vnímání místo poslouchání","princip":"Rybí hudbu nelze slyšet uchem, ale 'okem, tělem'. Posun od auditivní k celostní percepci.","q":["Zaujala vás věta, že rybí hudba byla slyšet 'ne uchem, ale okem, tělem'?","Jakými smysly vnímáte svou tvorbu? Jen zrakem a sluchem, nebo celým tělem?","Radila by vám pohádka rozvíjet vnímání 'celým tělem' — a tvořit tak, aby to bylo cítit, ne jen slyšet?"],"intervence":"Vytvoř něco, co má působit na všechny smysly. Třeba báseň, která se dá i ochutnat (metaforicky). Obrázek, který má teplotu. Zvuk, který cítíš v těle. Důležité je, aby to nebylo jen 'o tom', ale aby to bylo 'v tom'.","protilehly":4,"styl":"Tvá tvorba působí na všechny smysly, je celostní","hrozba":"Můžeš být chaotický/á","potrebuje":"3. Přesnost před hlasitostí — zjednodušit","klic":["tělo","smysly","cítit","vnímat","oko","vůně","hmat","celostní"]},{"nazev":"Autentické vyjádření","princip":"Úhoř nemá hudební ambice. Kapr zkouší hrdelní zpěvy. Autenticita — každý vyjadřuje svou vlastní podstatu.","q":["Zaujal vás ten výčet — že úhoř nemá ambice, kapr zkouší hrdelní zpěvy, a je to v pořádku?","Tvoříte to, co opravdu chcete, nebo to, co se od vás očekává?","Radila by vám pohádka být ve své tvorbě tak autentický, jak jen dokážete — i kdyby to znamenalo 'nemít ambice'?"],"intervence":"Vytvoř něco, co je autenticky tvoje. Třeba báseň o něčem, co tě opravdu trápí nebo těší, bez ohledu na to, jestli je to 'hodnotné'. Obrázek, který vypadá jako tvůj vnitřní svět. Zvuk, který je tvůj vlastní, ne naučený. Důležité je, aby to bylo z tebe.","protilehly":4,"styl":"Jsi věrný/á sobě, tvoříš z vlastní podstaty","hrozba":"Můžeš být nepochopený/á","potrebuje":"2. Systemický dopad — zvážit, jak to působí venku","klic":["autentický","svůj","vlastní","podstata","pravý","z tebe","věrný sobě"]},{"nazev":"Neviditelné vítězství","princip":"První místo vyhrály ryby — ale neviditelně, pod hladinou. Skutečný úspěch zůstává skryt.","q":["Zaujala vás ta pointa — že vyhrály, ale nikdo to neviděl, protože se to dělo pod hladinou?","Usilujete ve své tvorbě o viditelné úspěchy, nebo vám stačí vědomí, že něco funguje 'pod hladinou'?","Radila by vám pohádka vážit si i neviditelných vítězství — těch, která nejsou vidět, ale mění něco k lepšímu?"],"intervence":"Vytvoř něco, co nikdy nebude oceněno. Třeba báseň, kterou napíšeš a zahrabeš. Obrázek, který namaluješ na místo, kde ho nikdo neuvidí. Zvuk, který nahraješ jen pro sebe. Důležité je, aby sis byl vědom, že to vítězství je jen tvoje — a že to stačí.","protilehly":4,"styl":"Tvoříš pro sebe, pro radost, pro proces","hrozba":"Můžeš být přehlížený/á","potrebuje":"4. Různorodé žánry — občas zkusit i něco pro druhé","klic":["vítězství","neviditelný","pod hladinou","pro sebe","ocenění","hitparáda","uznání"]}];
+const list=document.getElementById('uhly-list');
+data.forEach((u,i)=>{
+  const d=document.createElement('div');
+  d.className='uhel';d.id='u-'+i;
+  d.innerHTML=`<div class="uhel-header" onclick="toggle(${i})"><span class="u-num">${String(i+1).padStart(2,'0')}</span><div><div class="uhel-nazev">${u.nazev}</div><div class="uhel-princip">${u.princip}</div></div><span class="u-toggle" id="t-${i}">+</span></div><div class="uhel-body" id="b-${i}"><div class="otazky-inline">${u.q.map((q,j)=>`<div class="oi"><div class="oi-label">Q${j+1}</div><div class="oi-text">${q}</div></div>`).join('')}</div><div class="intervence"><div class="intervence-label">Kreativní intervence · 20 minut</div><p>${u.intervence}</p></div><p class="protilehly">Protilehlý úhel: <a onclick="jump(${u.protilehly})">${u.protilehly+1}. ${data[u.protilehly].nazev}</a></p></div>`;
+  list.appendChild(d);
+});
+const matice=document.getElementById('matice-body');
+data.forEach((u,i)=>{const tr=document.createElement('tr');tr.innerHTML=`<td>${i+1}. ${u.nazev}</td><td>${u.styl}</td><td>${u.hrozba}</td><td>${u.potrebuje}</td>`;matice.appendChild(tr);});
+const prot=document.getElementById('protilehle-body');
+data.forEach((u,i)=>{const tr=document.createElement('tr');tr.innerHTML=`<td>${i+1}. ${u.nazev}</td><td>${u.protilehly+1}. ${data[u.protilehly].nazev}</td>`;prot.appendChild(tr);});
+function toggle(i){const b=document.getElementById('b-'+i);const t=document.getElementById('t-'+i);const o=b.classList.toggle('open');t.textContent=o?'−':'+';}
+function jump(i){if(!document.getElementById('b-'+i).classList.contains('open'))toggle(i);document.getElementById('u-'+i).scrollIntoView({behavior:'smooth',block:'start'});}
+const varText={A:"Zavřete oči, ťukněte prstem na obrazovku a udělejte ten úhel, který vybere prst.",B:"Přečtěte si všech 12 úhlů a vyberte ten, který vás právě teď nejvíc oslovuje.",C:"Odpovězte na 3 otázky níže, zjistěte svůj dominantní úhel a pak zkuste protilehlý."};
+function setVar(v,btn){document.querySelectorAll('.var-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');document.getElementById('var-popis').textContent=varText[v];if(v==='A'){const r=Math.floor(Math.random()*12);setTimeout(()=>{toggle(r);document.getElementById('u-'+r).scrollIntoView({behavior:'smooth',block:'center'});},300);}if(v==='C')document.getElementById('otazky').scrollIntoView({behavior:'smooth'});}
+function diagnostika(){const txt=['q1','q2','q3'].map(id=>document.getElementById(id).value).join(' ').toLowerCase();if(!txt.trim()){alert('Vyplňte alespoň jednu odpověď.');return;}const skore=data.map(u=>u.klic.reduce((s,k)=>s+(txt.includes(k)?1:0),0));let max=skore.indexOf(Math.max(...skore));if(skore[max]===0)max=Math.floor(Math.random()*12);const pI=data[max].protilehly;document.getElementById('diag-dominant').textContent=`Vaše odpovědi ukazují nejsilněji na: ${max+1}. ${data[max].nazev}`;document.getElementById('diag-navrhy').innerHTML=`<button class="navrh-btn" onclick="jump(${pI})">→ Protilehlý: ${pI+1}. ${data[pI].nazev}</button><button class="navrh-btn" onclick="jump(${max})">→ Prohloubit dominantní: ${max+1}. ${data[max].nazev}</button>`;const out=document.getElementById('diag-out');out.style.display='block';out.scrollIntoView({behavior:'smooth',block:'nearest'});}
+</script>
+</body>
+</html>
