@@ -13,12 +13,12 @@
 
 ## katalog
 
-- [osel](doma/karty/Osel/index.html)
-- [jednorožec](doma/karty/Jednorozec/index.html)
-- [lemur](doma/karty/Lemur/index.html)
-- [netopýr](doma/karty/Netopyr/index.html)
-- [čáp](doma/karty/Cap/index.html)
-- [had](doma/karty/Had/index.html)  -   - 
-- [motýl](doma/karty/Motyl/index.html)
-- [ryba](doma/karty/Ryba/index.html)
+- [osel](doma/data/karty/Osel/index.html)
+- [jednorožec](doma/data/karty/Jednorozec/index.html)
+- [lemur](doma/data/karty/Lemur/index.html)
+- [netopýr](doma/data/karty/Netopyr/index.html)
+- [čáp](doma/data/karty/Cap/index.html)
+- [had](doma/data/karty/Had/index.html)  -   - 
+- [motýl](doma/data/karty/Motyl/index.html)
+- [ryba](doma/data/karty/Ryba/index.html)
   
