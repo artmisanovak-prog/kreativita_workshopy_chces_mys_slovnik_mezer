@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chceš myš? — kreativní miniatury</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,600;1,300&family=IBM+Plex+Mono:wght@300;400&family=Zilla+Slab:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+
+  <style>
+    /* ─── RESET & VARIABLES ──────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --black:   #0a0a0a;
+      --white:   #f0ece4;
+      --grey1:   #1a1a1a;   /* card bg */
+      --grey2:   #252525;   /* hover */
+      --grey3:   #333;      /* border */
+      --grey4:   #555;      /* muted text */
+      --grey5:   #888;      /* very muted */
+      --sans:    'IBM Plex Sans', system-ui, sans-serif;
+      --mono:    'IBM Plex Mono', 'Courier New', monospace;
+      --slab:    'Zilla Slab', Georgia, serif;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--black);
+      color: var(--white);
+      font-family: var(--sans);
+      font-size: 16px;
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a { color: inherit; text-decoration: none; }
+    img { display: block; max-width: 100%; }
+
+    /* ─── UTILITIES ─────────────────────────────────── */
+    .label {
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: var(--grey5);
+    }
+
+    .divider {
+      border: none;
+      border-top: 1px solid var(--grey3);
+      margin: 0;
+    }
+
+    /* ─── NAV ───────────────────────────────────────── */
+    nav {
+      position: sticky; top: 0; z-index: 200;
+      background: var(--black);
+      border-bottom: 1px solid var(--grey3);
+      padding: 0 32px;
+      display: flex; align-items: stretch;
+      justify-content: space-between;
+      min-height: 52px;
+    }
+
+    .nav-logo {
+      display: flex; align-items: center;
+      font-family: var(--mono); font-size: 13px;
+      letter-spacing: .06em; color: var(--white);
+      border-right: 1px solid var(--grey3);
+      padding-right: 24px; margin-right: 0;
+    }
+
+    .nav-links {
+      display: flex; align-items: stretch; gap: 0;
+      list-style: none; overflow-x: auto;
+    }
+    .nav-links li a {
+      display: flex; align-items: center;
+      padding: 0 18px;
+      font-family: var(--mono); font-size: 11px;
+      letter-spacing: .12em; text-transform: uppercase;
+      color: var(--grey4);
+      border-left: 1px solid var(--grey3);
+      transition: color .15s, background .15s;
+      white-space: nowrap;
+    }
+    .nav-links li a:hover { color: var(--white); background: var(--grey1); }
+    .nav-links li a.ext::after { content: ' ↗'; opacity: .5; }
+
+    /* ─── HERO ──────────────────────────────────────── */
+    .hero {
+      border-bottom: 1px solid var(--grey3);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .hero-text {
+      padding: 72px 48px 72px 32px;
+      border-right: 1px solid var(--grey3);
+    }
+
+    .hero-kicker {
+      font-family: var(--mono); font-size: 11px;
+      letter-spacing: .16em; text-transform: uppercase;
+      color: var(--grey5); margin-bottom: 24px;
+    }
+
+    .hero h1 {
+      font-family: var(--slab);
+      font-size: clamp(2.8rem, 5.5vw, 5rem);
+      font-weight: 600; line-height: 1.05;
+      color: var(--white);
+      margin-bottom: 6px;
+    }
+    .hero h1 em {
+      font-style: italic; font-weight: 400;
+    }
+
+    .hero-sub {
+      font-family: var(--slab); font-style: italic;
+      font-size: clamp(1.1rem, 2vw, 1.4rem);
+      color: var(--grey4); margin-bottom: 36px;
+      line-height: 1.5;
+    }
+
+    .hero-perex {
+      font-size: 15px; line-height: 1.8;
+      color: rgba(240,236,228,.65);
+      max-width: 440px; margin-bottom: 40px;
+    }
+
+    .hero-pills {
+      display: flex; flex-direction: column; gap: 0;
+      border: 1px solid var(--grey3);
+      max-width: 420px;
+    }
+    .hero-pill {
+      padding: 14px 18px;
+      border-bottom: 1px solid var(--grey3);
+      display: flex; gap: 16px; align-items: baseline;
+    }
+    .hero-pill:last-child { border-bottom: none; }
+    .pill-n {
+      font-family: var(--mono); font-size: 10px;
+      letter-spacing: .16em; text-transform: uppercase;
+      color: var(--grey5); white-space: nowrap; flex: 0 0 90px;
+    }
+    .pill-t { font-size: 14px; color: rgba(240,236,228,.7); line-height: 1.6; }
+
+    .hero-image {
+      position: relative; overflow: hidden;
+      min-height: 420px;
+    }
+    .hero-image img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      filter: grayscale(100%) contrast(1.1);
+      opacity: .55;
+    }
+    .hero-image-label {
+      position: absolute; bottom: 20px; left: 20px;
+      font-family: var(--mono); font-size: 10px;
+      letter-spacing: .14em; text-transform: uppercase;
+      color: rgba(240,236,228,.4);
+    }
+
+    @media (max-width: 768px) {
+      .hero { grid-template-columns: 1fr; }
+      .hero-text { padding: 48px 24px; border-right: none; }
+      .hero-image { min-height: 240px; }
+    }
+
+    /* ─── JAK TO FUNGUJE ────────────────────────────── */
+    .jak {
+      border-bottom: 1px solid var(--grey3);
+    }
+
+    .sek-header {
+      padding: 32px 32px 24px;
+      border-bottom: 1px solid var(--grey3);
+      display: flex; align-items: baseline; gap: 20px;
+    }
+    .sek-header h2 {
+      font-family: var(--slab); font-size: clamp(1.3rem, 2.5vw, 1.9rem);
+      font-weight: 400; color: var(--white);
+    }
+    .sek-header h2 em { font-style: italic; }
+
+    .kroky-grid {
+      display: grid; grid-template-columns: repeat(4, 1fr);
+    }
+    .krok {
+      padding: 28px 24px;
+      border-right: 1px solid var(--grey3);
+    }
+    .krok:last-child { border-right: none; }
+    .k-num {
+      font-family: var(--mono); font-size: 11px;
+      letter-spacing: .14em; text-transform: uppercase;
+      color: var(--grey5); margin-bottom: 14px;
+    }
+    .k-title {
+      font-family: var(--slab); font-size: 1.05rem; font-weight: 600;
+      color: var(--white); margin-bottom: 8px;
+    }
+    .k-text { font-size: 13px; color: var(--grey4); line-height: 1.7; }
+
+    @media (max-width: 900px) {
+      .kroky-grid { grid-template-columns: 1fr 1fr; }
+      .krok { border-bottom: 1px solid var(--grey3); }
+      .krok:nth-child(2n) { border-right: none; }
+    }
+    @media (max-width: 500px) {
+      .kroky-grid { grid-template-columns: 1fr; }
+      .krok { border-right: none; }
+    }
+
+    /* ─── VARIANTY (klikací dlaždice) ───────────────── */
+    .var-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      border-top: 1px solid var(--grey3);
+    }
+
+    .var-tile {
+      padding: 28px 24px;
+      border-right: 1px solid var(--grey3);
+      cursor: pointer; transition: background .15s;
+      display: block; text-decoration: none;
+    }
+    .var-tile:last-child { border-right: none; }
+    .var-tile:hover { background: var(--grey1); }
+    .var-tile.active { background: var(--white); color: var(--black); }
+    .var-tile.active .var-name { color: var(--black); }
+    .var-tile.active .var-desc { color: rgba(10,10,10,.65); }
+    .var-tile.active .var-ico { filter: invert(1); }
+
+    .var-ico { font-size: 1.6rem; margin-bottom: 12px; line-height: 1; }
+    .var-name {
+      font-family: var(--mono); font-size: 11px;
+      letter-spacing: .14em; text-transform: uppercase;
+      color: var(--grey5); margin-bottom: 8px;
+    }
+    .var-desc { font-size: 13px; color: var(--grey4); line-height: 1.7; }
+
+    @media (max-width: 600px) {
+      .var-grid { grid-template-columns: 1fr; }
+      .var-tile { border-right: none; border-bottom: 1px solid var(--grey3); }
+      .var-tile:last-child { border-bottom: none; }
+    }
+
+    /* ─── KARTY ─────────────────────────────────────── */
+    .karty-sek { border-bottom: 1px solid var(--grey3); }
+
+    .karty-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    }
+
+    .karta {
+      border-right: 1px solid var(--grey3);
+      border-bottom: 1px solid var(--grey3);
+      display: flex; flex-direction: column;
+      text-decoration: none;
+      transition: background .12s;
+      overflow: hidden;
+    }
+    .karta:hover:not(.brzy) { background: var(--grey1); }
+    .karta.brzy { opacity: .35; pointer-events: none; }
+
+    .karta-img {
+      width: 100%; aspect-ratio: 4/3;
+      overflow: hidden; position: relative;
+    }
+    .karta-img img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      filter: grayscale(100%) contrast(1.05);
+      transition: transform .3s ease, opacity .3s;
+      opacity: .8;
+    }
+    .karta:hover .karta-img img {
+      transform: scale(1.03);
+      opacity: 1;
+    }
+    .karta-img-placeholder {
+      width: 100%; aspect-ratio: 4/3;
+      background: var(--grey1);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 3rem; opacity: .3;
+    }
+
+    .karta-body { padding: 20px 20px 16px; flex: 1; display: flex; flex-direction: column; }
+    .karta-nazev {
+      font-family: var(--slab); font-size: 1.2rem; font-weight: 600;
+      color: var(--white); margin-bottom: 6px;
+    }
+    .karta-veta {
+      font-family: var(--slab); font-style: italic;
+      font-size: 13px; color: var(--grey4);
+      line-height: 1.6; margin-bottom: auto;
+    }
+    .karta-footer {
+      margin-top: 16px; padding-top: 12px;
+      border-top: 1px solid var(--grey3);
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .badge {
+      font-family: var(--mono); font-size: 10px;
+      letter-spacing: .12em; text-transform: uppercase;
+      padding: 3px 8px; border: 1px solid;
+    }
+    .badge-ok  { border-color: var(--grey3); color: var(--grey4); }
+    .badge-brzy { border-color: var(--grey3); color: var(--grey5); }
+    .karta-arrow { font-size: 14px; color: var(--grey4); }
+
+    /* ─── OSTATNÍ NÁSTROJE ───────────────────────────── */
+    .nastroje-sek { border-bottom: 1px solid var(--grey3); }
+
+    .nastroje-grid {
+      display: grid; grid-template-columns: repeat(2, 1fr);
+    }
+
+    .nastroj {
+      padding: 32px 28px;
+      border-right: 1px solid var(--grey3);
+      border-bottom: 1px solid var(--grey3);
+      text-decoration: none; display: block;
+      transition: background .12s;
+    }
+    .nastroj:hover { background: var(--grey1); }
+    .nastroj:nth-child(2n) { border-right: none; }
+    .nastroj:nth-last-child(-n+2) { border-bottom: none; }
+
+    .n-tag {
+      font-family: var(--mono); font-size: 10px;
+      letter-spacing: .16em; text-transform: uppercase;
+      color: var(--grey5); margin-bottom: 10px; display: block;
+    }
+    .n-nazev {
+      font-family: var(--slab); font-size: 1.15rem; font-weight: 600;
+      color: var(--white); margin-bottom: 10px;
+    }
+    .n-popis { font-size: 14px; color: var(--grey4); margin-bottom: 20px; line-height: 1.75; }
+    .n-odkaz {
+      font-family: var(--mono); font-size: 11px;
+      letter-spacing: .1em; text-transform: uppercase;
+      color: rgba(240,236,228,.6);
+      text-decoration: underline; text-underline-offset: 3px;
+    }
+
+    @media (max-width: 600px) {
+      .nastroje-grid { grid-template-columns: 1fr; }
+      .nastroj { border-right: none; }
+      .nastroj:nth-last-child(-n+2) { border-bottom: 1px solid var(--grey3); }
+      .nastroj:last-child { border-bottom: none; }
+    }
+
+    /* ─── ZÁVĚR ─────────────────────────────────────── */
+    .zaver {
+      padding: 96px 32px 80px;
+      text-align: center;
+      border-bottom: 1px solid var(--grey3);
+    }
+    .zaver-kicker {
+      font-family: var(--mono); font-size: 11px;
+      letter-spacing: .18em; text-transform: uppercase;
+      color: var(--grey5); margin-bottom: 28px;
+    }
+    .velka {
+      font-family: var(--slab);
+      font-size: clamp(2.4rem, 7vw, 5.5rem);
+      font-weight: 400; font-style: italic;
+      line-height: 1.1; color: var(--white);
+      margin-bottom: 24px;
+    }
+    .zaver-note {
+      font-size: 15px; color: var(--grey4);
+      max-width: 340px; margin: 0 auto 40px; line-height: 1.8;
+    }
+    .cta-row { display: flex; gap: 0; justify-content: center; flex-wrap: wrap; }
+    .cta {
+      padding: 13px 32px;
+      font-family: var(--mono); font-size: 11px;
+      letter-spacing: .14em; text-transform: uppercase;
+      border: 1px solid var(--grey3);
+      color: var(--white); text-decoration: none;
+      transition: background .15s, border-color .15s;
+      margin: 4px;
+    }
+    .cta:hover { background: var(--grey1); border-color: var(--grey4); }
+    .cta.inv { background: var(--white); color: var(--black); border-color: var(--white); }
+    .cta.inv:hover { background: var(--grey1); color: var(--white); border-color: var(--grey4); }
+
+    /* ─── FOOTER ─────────────────────────────────────── */
+    footer {
+      padding: 28px 32px;
+      display: flex; justify-content: space-between;
+      flex-wrap: wrap; gap: 12px; align-items: center;
+    }
+    footer p { font-family: var(--mono); font-size: 11px; color: var(--grey5); }
+    footer a { color: var(--grey4); }
+    footer a:hover { color: var(--white); }
+
+    /* ─── SCROLL REVEAL ─────────────────────────────── */
+    .reveal { opacity: 0; transform: translateY(20px); transition: opacity .6s, transform .6s; }
+    .reveal.vis { opacity: 1; transform: none; }
+
+    /* ─── HERO ANIMACE ──────────────────────────────── */
+    @keyframes fadeUp { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:none; } }
+    .hero-kicker { animation: fadeUp .6s .1s both; }
+    .hero h1     { animation: fadeUp .7s .2s both; }
+    .hero-sub    { animation: fadeUp .7s .32s both; }
+    .hero-perex  { animation: fadeUp .7s .44s both; }
+    .hero-pills  { animation: fadeUp .7s .56s both; }
+
+    ::-webkit-scrollbar { width: 3px; height: 3px; }
+    ::-webkit-scrollbar-track { background: var(--black); }
+    ::-webkit-scrollbar-thumb { background: var(--grey3); }
+  </style>
+</head>
+<body>
+
+<!-- ── NAV ── -->
+<nav>
+  <span class="nav-logo">Chceš myš? / miniatury</span>
+  <ul class="nav-links">
+    <li><a href="#karty">Karty</a></li>
+    <li><a href="#jak">Jak to funguje</a></li>
+    <li><a href="https://artmisanovak-prog.github.io/chces_MYS_slovnik_mezer/" target="_blank" class="ext">Slovník mezer</a></li>
+    <li><a href="https://artmisanovak-prog.github.io/Chces_MYS-_forezni_jazykove_mapovani/" target="_blank" class="ext">Forenzní mapování</a></li>
+    <li><a href="https://artmisanovak-prog.github.io/chces_MYS_slovnik_mezer/doma/MYS/index.html" target="_blank" class="ext">O metodě</a></li>
+    <li><a href="mailto:chcesmys@gmail.com">Kontakt</a></li>
+  </ul>
+</nav>
+
+<!-- ── HERO ── -->
+<section class="hero">
+  <div class="hero-text">
+    <p class="hero-kicker">Kreativní miniatury · systém Chceš myš?</p>
+    <h1>20 minut.<br><em>Jedno zvíře.</em></h1>
+    <p class="hero-sub">Pohádka. Tři otázky. Protilehlý projekt.</p>
+    <p class="hero-perex">
+      Každá karta pracuje s jiným tvůrčím blokem. Pohádka vás zavede dovnitř bez obrany.
+      Tři otázky odhalí váš dominantní úhel pohledu.
+      Protilehlý projekt vás pošle tam, kam vaše pozornost přirozeně nejde.
+    </p>
+    <div class="hero-pills">
+      <div class="hero-pill">
+        <span class="pill-n">12 úhlů</span>
+        <span class="pill-t">Každá karta má 12 kreativních přístupů, každý s intervencí.</span>
+      </div>
+      <div class="hero-pill">
+        <span class="pill-n">20 minut</span>
+        <span class="pill-t">Miniatura, ne maraton. Jeden krok, ne plán.</span>
+      </div>
+      <div class="hero-pill">
+        <span class="pill-n">Slepé místo</span>
+        <span class="pill-t">Diagnostika ukáže dominantní úhel a pošle vás na protilehlý.</span>
+      </div>
+    </div>
+  </div>
+  <div class="hero-image">
+    <img src="doma/ilustrace/ryba.jpg" alt="Ryba — ilustrace" onerror="this.style.display='none'">
+    <span class="hero-image-label">ilustrace · ryba</span>
+  </div>
+</section>
+
+<!-- ── JAK TO FUNGUJE ── -->
+<section class="jak reveal" id="jak">
+  <div class="sek-header">
+    <span class="label">Jak to funguje</span>
+    <h2>Čtyři kroky. <em>Dvacet minut.</em></h2>
+  </div>
+  <div class="kroky-grid">
+    <div class="krok">
+      <div class="k-num">01 — Vyberte zvíře</div>
+      <div class="k-title">Náhodně, intuitivně nebo diagnosticky</div>
+      <p class="k-text">Každé zvíře pracuje s jiným tvůrčím principem. Vyberete mód — a zvíře vám ukáže, kde jste.</p>
+    </div>
+    <div class="krok">
+      <div class="k-num">02 — Přečtěte pohádku</div>
+      <div class="k-title">Pomalu, s pauzami</div>
+      <p class="k-text">Sledujte, kde vás zastaví. Kde cítíte odpor nebo neočekávané poznání — tam je data.</p>
+    </div>
+    <div class="krok">
+      <div class="k-num">03 — Odpovězte na 3 otázky</div>
+      <div class="k-title">Rychle, bez opravování</div>
+      <p class="k-text">První věc, která vás napadne. Kognitivní mapa z odpovědí odhalí váš dominantní úhel pohledu.</p>
+    </div>
+    <div class="krok">
+      <div class="k-num">04 — Protilehlý projekt</div>
+      <div class="k-title">Konkrétní akce na 20 minut</div>
+      <p class="k-text">Cílí přesně tam, kde vaše pozornost přirozeně nejde. Slepé místo se stane materiálem.</p>
+    </div>
+  </div>
+
+  <!-- VARIANTY — klikací dlaždice -->
+  <div class="sek-header" style="margin-top:0;">
+    <span class="label">Tři vstupy</span>
+    <h2>Vyberte <em>způsob vstupu.</em></h2>
+  </div>
+  <div class="var-grid" id="var-grid">
+    <div class="var-tile active" data-var="A" onclick="setVar(this)">
+      <div class="var-ico">🎲</div>
+      <div class="var-name">A — Náhodně</div>
+      <p class="var-desc">Zavřete oči, ťukněte prstem. Udělejte, na co prst ukáže. Bez přemýšlení, bez výběru.</p>
+    </div>
+    <div class="var-tile" data-var="B" onclick="setVar(this)">
+      <div class="var-ico">🧭</div>
+      <div class="var-name">B — Podle nálady</div>
+      <p class="var-desc">Přečtěte si všech 12 úhlů a vyberte ten, který vás právě dnes oslovuje. Instinkt je data.</p>
+    </div>
+    <div class="var-tile" data-var="C" onclick="setVar(this)">
+      <div class="var-ico">🔍</div>
+      <div class="var-name">C — Diagnosticky</div>
+      <p class="var-desc">Odpovězte na 3 otázky. Systém sestaví kognitivní mapu a doporučí protilehlý projekt.</p>
+    </div>
+  </div>
+  <div id="var-popis-panel" style="padding:20px 24px;border-top:1px solid var(--grey3);background:var(--grey1);">
+    <span class="label" style="margin-right:12px;">Varianta A</span>
+    <span style="font-size:14px;color:var(--grey4);">Zavřete oči, ťukněte prstem na obrazovku a udělejte ten úhel, který vybere prst.</span>
+  </div>
+</section>
+
+<!-- ── KARTY ── -->
+<section class="karty-sek reveal" id="karty">
+  <div class="sek-header">
+    <span class="label">Dostupné karty</span>
+    <h2>Vyberte <em>zvíře.</em></h2>
+  </div>
+
+  <div class="karty-grid">
+
+    <!-- DOSTUPNÉ -->
+    <a class="karta" href="doma/karty/Ryba/index.html">
+      <div class="karta-img">
+        <img src="doma/ilustrace/ryba.jpg" alt="Ryba"
+             onerror="this.parentElement.innerHTML='<div class=karta-img-placeholder>🐟</div>'">
+      </div>
+      <div class="karta-body">
+        <div class="karta-nazev">Ryba</div>
+        <div class="karta-veta">„Flow je king a king je ryba."</div>
+        <div class="karta-footer">
+          <span class="badge badge-ok">Dostupná</span>
+          <span class="karta-arrow">→</span>
+        </div>
+      </div>
+    </a>
+
+    <a class="karta" href="doma/karty/Netopyr/index.html">
+      <div class="karta-img">
+        <img src="doma/ilustrace/netopyr.jpg" alt="Netopýr"
+             onerror="this.parentElement.innerHTML='<div class=karta-img-placeholder>🦇</div>'">
+      </div>
+      <div class="karta-body">
+        <div class="karta-nazev">Netopýr</div>
+        <div class="karta-veta">„Noc není lež. Je to jiný jazyk."</div>
+        <div class="karta-footer">
+          <span class="badge badge-ok">Dostupná</span>
+          <span class="karta-arrow">→</span>
+        </div>
+      </div>
+    </a>
+
+    <a class="karta" href="doma/karty/Jednorozec/index.html">
+      <div class="karta-img">
+        <img src="doma/ilustrace/jednorozec.jpg" alt="Jednorožec"
+             onerror="this.parentElement.innerHTML='<div class=karta-img-placeholder>🦄</div>'">
+      </div>
+      <div class="karta-body">
+        <div class="karta-nazev">Jednorožec</div>
+        <div class="karta-veta">„Nevěřím na delfíny ani na lední medvědy."</div>
+        <div class="karta-footer">
+          <span class="badge badge-ok">Dostupná</span>
+          <span class="karta-arrow">→</span>
+        </div>
+      </div>
+    </a>
+
+    <a class="karta" href="doma/karty/Cap/index.html">
+      <div class="karta-img">
+        <img src="doma/ilustrace/cap.jpg" alt="Čáp"
+             onerror="this.parentElement.innerHTML='<div class=karta-img-placeholder>🦢</div>'">
+      </div>
+      <div class="karta-body">
+        <div class="karta-nazev">Čáp</div>
+        <div class="karta-veta">„Sedm osm — NEprodáme."</div>
+        <div class="karta-footer">
+          <span class="badge badge-ok">Dostupná</span>
+          <span class="karta-arrow">→</span>
+        </div>
+      </div>
+    </a>
+
+    <a class="karta" href="doma/karty/Had/index.html">
+      <div class="karta-img">
+        <img src="doma/ilustrace/had.jpg" alt="Had"
+             onerror="this.parentElement.innerHTML='<div class=karta-img-placeholder>🐍</div>'">
+      </div>
+      <div class="karta-body">
+        <div class="karta-nazev">Had</div>
+        <div class="karta-veta">„Ďáblové jsou původem z nebesss."</div>
+        <div class="karta-footer">
+          <span class="badge badge-ok">Dostupná</span>
+          <span class="karta-arrow">→</span>
+        </div>
+      </div>
+    </a>
+
+    <a class="karta" href="doma/karty/Plamennak/index.html">
+      <div class="karta-img">
+        <img src="doma/ilustrace/plamennak.jpg" alt="Plameňák"
+             onerror="this.parentElement.innerHTML='<div class=karta-img-placeholder>🦩</div>'">
+      </div>
+      <div class="karta-body">
+        <div class="karta-nazev">Plameňák</div>
+        <div class="karta-veta">„Lalalá poletíme dolů."</div>
+        <div class="karta-footer">
+          <span class="badge badge-ok">Dostupná</span>
+          <span class="karta-arrow">→</span>
+        </div>
+      </div>
+    </a>
+
+    <!-- PŘIPRAVUJÍ SE -->
+    <div class="karta brzy">
+      <div class="karta-img">
+        <img src="doma/ilustrace/osel.jpg" alt="Osel"
+             onerror="this.parentElement.innerHTML='<div class=karta-img-placeholder>🐴</div>'">
+      </div>
+      <div class="karta-body">
+        <div class="karta-nazev">Osel</div>
+        <div class="karta-veta">„Mezi dvěma hromadami sena."</div>
+        <div class="karta-footer"><span class="badge badge-brzy">Připravuje se</span></div>
+      </div>
+    </div>
+
+    <div class="karta brzy">
+      <div class="karta-img">
+        <img src="doma/ilustrace/motyl.jpg" alt="Motýl"
+             onerror="this.parentElement.innerHTML='<div class=karta-img-placeholder>🦋</div>'">
+      </div>
+      <div class="karta-body">
+        <div class="karta-nazev">Motýl</div>
+        <div class="karta-veta">„Horác a Florián."</div>
+        <div class="karta-footer"><span class="badge badge-brzy">Připravuje se</span></div>
+      </div>
+    </div>
+
+    <div class="karta brzy">
+      <div class="karta-img">
+        <img src="doma/ilustrace/zajecice.jpg" alt="Zaječice"
+             onerror="this.parentElement.innerHTML='<div class=karta-img-placeholder>🐇</div>'">
+      </div>
+      <div class="karta-body">
+        <div class="karta-nazev">Zaječice</div>
+        <div class="karta-veta">„Skok do ohně."</div>
+        <div class="karta-footer"><span class="badge badge-brzy">Připravuje se</span></div>
+      </div>
+    </div>
+
+    <div class="karta brzy">
+      <div class="karta-img">
+        <img src="doma/ilustrace/veverka.jpg" alt="Veverka"
+             onerror="this.parentElement.innerHTML='<div class=karta-img-placeholder>🐿️</div>'">
+      </div>
+      <div class="karta-body">
+        <div class="karta-nazev">Veverka</div>
+        <div class="karta-veta">„Neměla čas na odpovědi."</div>
+        <div class="karta-footer"><span class="badge badge-brzy">Připravuje se</span></div>
+      </div>
+    </div>
+
+    <div class="karta brzy">
+      <div class="karta-img">
+        <img src="doma/ilustrace/kocour.jpg" alt="Kocour"
+             onerror="this.parentElement.innerHTML='<div class=karta-img-placeholder>🐱</div>'">
+      </div>
+      <div class="karta-body">
+        <div class="karta-nazev">Kocour</div>
+        <div class="karta-veta karta-veta"></div>
+        <div class="karta-footer"><span class="badge badge-brzy">Připravuje se</span></div>
+      </div>
+    </div>
+
+    <div class="karta brzy">
+      <div class="karta-img">
+        <img src="doma/ilustrace/mys.jpg" alt="Myš"
+             onerror="this.parentElement.innerHTML='<div class=karta-img-placeholder>🐭</div>'">
+      </div>
+      <div class="karta-body">
+        <div class="karta-nazev">Myš</div>
+        <div class="karta-veta"></div>
+        <div class="karta-footer"><span class="badge badge-brzy">Připravuje se</span></div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ── OSTATNÍ NÁSTROJE ── -->
+<section class="nastroje-sek reveal">
+  <div class="sek-header">
+    <span class="label">Celý systém</span>
+    <h2>Kreativní miniatury jsou <em>jeden ze tří vstupů.</em></h2>
+  </div>
+  <div class="nastroje-grid">
+    <a class="nastroj" href="https://artmisanovak-prog.github.io/chces_MYS_slovnik_mezer/" target="_blank">
+      <span class="n-tag">Týmová metoda</span>
+      <div class="n-nazev">Slovník mezer</div>
+      <p class="n-popis">Karty, pohádky, workshopy. Kognitivní profil týmu. Pro facilitátory, HR a leadery, kteří chtějí vidět, co se v týmu děje pod povrchem.</p>
+      <span class="n-odkaz">Otevřít Slovník mezer ↗</span>
+    </a>
+    <a class="nastroj" href="https://artmisanovak-prog.github.io/Chces_MYS-_forezni_jazykove_mapovani/" target="_blank">
+      <span class="n-tag">Forenzní mapování</span>
+      <div class="n-nazev">Jazykové mapování případů</div>
+      <p class="n-popis">Baseline, výpovědi, kognitivní mapa odchylek. Pro mediátory, právníky a vyšetřovatele, kteří čtou, co jazyk říká mimo obsah.</p>
+      <span class="n-odkaz">Otevřít forenzní mapování ↗</span>
+    </a>
+    <a class="nastroj" href="https://artmisanovak-prog.github.io/chces_MYS_slovnik_mezer/doma/MYS/index.html" target="_blank">
+      <span class="n-tag">Jádro systému</span>
+      <div class="n-nazev">O metodě Chceš myš?</div>
+      <p class="n-popis">Co jsou slepá místa, proč pohádky, proč meta-jazyk. Celý princip na jednom místě — pro ty, kdo chtějí rozumět, ne jen používat.</p>
+      <span class="n-odkaz">Číst o metodě ↗</span>
+    </a>
+    <a class="nastroj" href="mailto:chcesmys@gmail.com">
+      <span class="n-tag">Nevím kde začít</span>
+      <div class="n-nazev">Napsat přímo</div>
+      <p class="n-popis">Poradíme, který vstup je pro váš kontext nejvhodnější — jestli tým, případ nebo jednotlivec.</p>
+      <span class="n-odkaz">chcesmys@gmail.com</span>
+    </a>
+  </div>
+</section>
+
+<!-- ── ZÁVĚR ── -->
+<section class="zaver reveal">
+  <p class="zaver-kicker">Jedna věta</p>
+  <p class="velka">Miniatura není méně.</p>
+  <p class="zaver-note">Je to tvorba bez záminky.<br>Dvacet minut. Jedno zvíře. Jeden krok.</p>
+  <div class="cta-row">
+    <a class="cta inv" href="#karty">Vybrat zvíře</a>
+    <a class="cta" href="mailto:chcesmys@gmail.com">Napsat</a>
+    <a class="cta" href="https://artmisanovak-prog.github.io/chces_MYS_slovnik_mezer/" target="_blank">Slovník mezer ↗</a>
+  </div>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <p>© 2026 Michaela Nováková — metoda Repo dům · <a href="mailto:chcesmys@gmail.com">chcesmys@gmail.com</a></p>
+  <p>
+    <a href="https://artmisanovak-prog.github.io/chces_MYS_slovnik_mezer/" target="_blank">Slovník mezer</a>
+    &nbsp;·&nbsp;
+    <a href="https://artmisanovak-prog.github.io/Chces_MYS-_forezni_jazykove_mapovani/" target="_blank">Forenzní mapování</a>
+    &nbsp;·&nbsp;
+    <a href="https://artmisanovak-prog.github.io/chces_MYS_slovnik_mezer/doma/MYS/index.html" target="_blank">O metodě</a>
+  </p>
+</footer>
+
+<script>
+  /* ── scroll reveal ── */
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('vis'); obs.unobserve(e.target); } });
+  }, { threshold: 0.06 });
+  document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+  /* ── varianty ── */
+  const varText = {
+    A: { label: 'Varianta A', text: 'Zavřete oči, ťukněte prstem na obrazovku a udělejte ten úhel, který vybere prst.' },
+    B: { label: 'Varianta B', text: 'Přečtěte si všech 12 úhlů a vyberte ten, který vás právě teď nejvíc oslovuje.' },
+    C: { label: 'Varianta C', text: 'Odpovězte na 3 otázky u vybrané karty. Systém sestaví kognitivní mapu a doporučí protilehlý projekt.' }
+  };
+
+  function setVar(tile) {
+    document.querySelectorAll('.var-tile').forEach(t => t.classList.remove('active'));
+    tile.classList.add('active');
+    const v = tile.dataset.var;
+    const panel = document.getElementById('var-popis-panel');
+    panel.innerHTML = `<span class="label" style="margin-right:12px;">${varText[v].label}</span><span style="font-size:14px;color:var(--grey4);">${varText[v].text}</span>`;
+  }
+</script>
+
+</body>
+</html>
