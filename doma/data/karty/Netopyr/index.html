@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Netopýr — kreativní miniatury</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--bg:#0f0f0f;--surface:#161616;--cream:#e8e0d0;--dim:rgba(232,224,208,.42);--accent:#a89880;--border:rgba(168,152,128,.15);--serif:'Cormorant Garamond',Georgia,serif;--mono:'DM Mono',monospace}
+    html{scroll-behavior:smooth}
+    body{background:var(--bg);color:var(--cream);font-family:var(--mono);font-size:14px;line-height:1.8;-webkit-font-smoothing:antialiased}
+    a{color:inherit;text-decoration:none}
+    p{margin-bottom:12px}p:last-child{margin-bottom:0}
+    .wrap{max-width:760px;margin:0 auto;padding:0 28px}
+    nav{position:sticky;top:0;z-index:100;border-bottom:1px solid var(--border);background:rgba(15,15,15,.92);backdrop-filter:blur(12px);padding:14px 28px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+    .nav-back{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);transition:color .2s}
+    .nav-back:hover{color:var(--cream)}
+    .nav-title{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--accent)}
+    .hero{padding:72px 0 56px;border-bottom:1px solid var(--border)}
+    .hero-label{font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:var(--accent);margin-bottom:20px}
+    .hero h1{font-family:var(--serif);font-size:clamp(3rem,7vw,5.5rem);font-weight:300;line-height:1.0;color:var(--cream);margin-bottom:8px}
+    .hero h1 em{font-style:italic;color:var(--accent)}
+    .hero-veta{font-family:var(--serif);font-size:clamp(.95rem,2vw,1.25rem);font-style:italic;color:var(--dim);border-left:1px solid var(--accent);padding-left:20px;max-width:500px;margin:20px 0 36px;line-height:1.9}
+    .var-bar{display:flex;gap:1px;background:var(--border);border:1px solid var(--border)}
+    .var-btn{flex:1;padding:13px 12px;background:var(--surface);border:none;cursor:pointer;font-family:var(--mono);font-size:.78rem;letter-spacing:.08em;text-transform:uppercase;color:var(--dim);transition:background .12s,color .12s;text-align:center}
+    .var-btn:hover{background:#1e1e1e;color:var(--cream)}
+    .var-btn.active{background:var(--accent);color:var(--bg)}
+    .var-popis{padding:12px 16px;font-size:.8rem;color:var(--dim);border:1px solid var(--border);border-top:none;background:var(--surface)}
+    .sekce{padding:56px 0;border-bottom:1px solid var(--border)}
+    .sekce-label{font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);margin-bottom:16px}
+    h2{font-family:var(--serif);font-size:clamp(1.5rem,3.5vw,2.2rem);font-weight:300;color:var(--cream);margin-bottom:18px}
+    h2 em{font-style:italic;color:var(--accent)}
+    .pohadka-outer{border:1px solid var(--border);background:var(--surface);max-height:360px;overflow-y:auto;padding:0 28px}
+    .pohadka{font-family:var(--serif);font-style:italic;font-size:.97rem}
+    .pohadka p{padding:.45em 0;color:rgba(232,224,208,.8)}
+    .pohadka-outer::-webkit-scrollbar{width:2px}
+    .pohadka-outer::-webkit-scrollbar-thumb{background:var(--accent)}
+    .otazky{border-top:1px solid var(--border)}
+    .otazka{padding:22px 0;border-bottom:1px solid var(--border)}
+    .q-label{font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:8px}
+    .q-text{font-size:.95rem;margin-bottom:6px;color:var(--cream)}
+    textarea{width:100%;margin-top:10px;background:var(--surface);border:1px solid var(--border);color:var(--cream);padding:12px;font-family:var(--mono);font-size:.85rem;line-height:1.7;resize:vertical;min-height:68px}
+    textarea:focus{outline:1px solid var(--accent)}
+    textarea::placeholder{color:rgba(232,224,208,.25)}
+    .btn-diag{margin-top:20px;padding:12px 28px;font-size:11px;letter-spacing:.12em;text-transform:uppercase;background:var(--accent);color:var(--bg);border:none;cursor:pointer;font-family:var(--mono);transition:background .15s}
+    .btn-diag:hover{background:#c0aa90}
+    .diag-vysledek{display:none;border:1px solid var(--accent);padding:24px;margin-top:20px;background:var(--surface)}
+    .diag-vysledek h3{font-family:var(--serif);font-size:1.1rem;font-weight:400;color:var(--cream);margin-bottom:10px}
+    .dominant{font-size:.82rem;color:var(--dim);margin-bottom:16px}
+    .navrh-btn{display:block;width:100%;padding:11px 16px;margin-bottom:6px;background:transparent;border:1px solid var(--border);color:var(--cream);font-family:var(--mono);font-size:.82rem;text-align:left;cursor:pointer;transition:background .12s,border-color .12s}
+    .navrh-btn:hover{background:var(--accent);border-color:var(--accent);color:var(--bg)}
+    .navrh-btn:last-child{margin-bottom:0}
+    .uhly{display:flex;flex-direction:column}
+    .uhel{border-bottom:1px solid var(--border)}
+    .uhel-header{display:grid;grid-template-columns:52px 1fr auto;padding:18px 0;cursor:pointer;align-items:center}
+    .uhel-header:hover .uhel-nazev{color:var(--accent)}
+    .u-num{font-family:var(--serif);font-size:1.7rem;font-weight:300;color:rgba(168,152,128,.2);line-height:1}
+    .uhel-nazev{font-size:.88rem;font-weight:400;color:var(--cream)}
+    .uhel-princip{font-size:.74rem;color:var(--dim);margin-top:3px;font-style:italic;font-family:var(--serif)}
+    .u-toggle{font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);padding-right:2px}
+    .uhel-body{display:none;padding:0 0 28px 52px}
+    .uhel-body.open{display:block}
+    .otazky-inline{margin-bottom:20px}
+    .oi{padding:10px 0;border-bottom:1px solid rgba(168,152,128,.08)}
+    .oi:last-child{border-bottom:none}
+    .oi-label{font-size:.68rem;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);margin-bottom:4px}
+    .oi-text{font-size:.85rem;color:rgba(232,224,208,.7)}
+    .intervence{background:rgba(168,152,128,.08);border-left:2px solid var(--accent);padding:18px 20px;margin:16px 0}
+    .intervence-label{font-size:.68rem;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);margin-bottom:10px}
+    .intervence p{font-size:.86rem;color:rgba(232,224,208,.75);margin-bottom:8px}
+    .intervence p:last-child{margin-bottom:0}
+    .protilehly{font-size:.76rem;color:var(--dim);font-style:italic}
+    .protilehly a{color:var(--accent);text-decoration:underline;text-underline-offset:2px;cursor:pointer}
+    .tbl-outer{border:1px solid var(--border);overflow-x:auto;margin-top:20px}
+    table{width:100%;border-collapse:collapse;font-size:.78rem}
+    thead tr{border-bottom:1px solid var(--border)}
+    thead th{padding:12px 16px;text-align:left;font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);font-weight:400;font-family:var(--mono)}
+    thead th:first-child{color:var(--dim)}
+    tbody tr{border-bottom:1px solid rgba(168,152,128,.07)}
+    tbody tr:last-child{border-bottom:none}
+    tbody td{padding:12px 16px;color:rgba(232,224,208,.6);vertical-align:top}
+    tbody td:first-child{color:var(--accent);font-size:.72rem;letter-spacing:.08em;white-space:nowrap}
+    tbody td:nth-child(3){color:rgba(232,224,208,.45);font-style:italic}
+    tbody td:nth-child(4){color:rgba(168,152,128,.7)}
+    @media(max-width:600px){tbody td:first-child{white-space:normal}}
+    .page-footer{padding:36px 0;border-top:1px solid var(--border);display:flex;justify-content:space-between;flex-wrap:wrap;gap:14px}
+    .page-footer p{font-size:.76rem;color:var(--dim)}
+    .page-footer a{color:var(--accent)}
+    .page-footer a:hover{text-decoration:underline}
+  </style>
+</head>
+<body>
+<nav>
+  <a class="nav-back" href="miniatury_landing.html">← Všechna zvířata</a>
+  <span class="nav-title">🦇 Netopýr</span>
+</nav>
+<div class="wrap">
+
+<section class="hero">
+  <p class="hero-label">Kreativní miniatura · Karta Netopýr</p>
+  <h1>🦇 Netopýr</h1>
+  <p class="hero-veta">„Noc není lež. Je to jiný jazyk."</p>
+  <div class="var-bar">
+    <button class="var-btn active" onclick="setVar('A',this)">🎲 Náhodně</button>
+    <button class="var-btn" onclick="setVar('B',this)">🧭 Podle nálady</button>
+    <button class="var-btn" onclick="setVar('C',this)">🔍 Diagnosticky</button>
+  </div>
+  <div class="var-popis" id="var-popis">Zavřete oči, ťukněte prstem na obrazovku a udělejte ten úhel, který vybere prst.</div>
+</section>
+
+<section class="sekce">
+  <p class="sekce-label">Pohádka · přečtěte pomalu</p>
+  <h2>Pohádka o <em>netopýrovi.</em></h2>
+  <p style="font-size:.82rem;color:var(--dim);margin-bottom:16px;">Sledujte kde vás zastaví — kde cítíte odpor nebo poznání.</p>
+  <div class="pohadka-outer"><div class="pohadka"><p>Netopýr žil v noci.<br>Ne jen fyzicky.<br>Esteticky.<br>Filozoficky.</p>
+<p>V noci bylo všechno správně.<br>Stíny měly tvar.<br>Zvuky měly smysl.<br>Lidé byli krásní, protože nebyli vidět.</p>
+<p>Každý večer se probudil, natáhl křídla, protáhl zobák a vyletěl.<br>Ne za potravou.<br>Za atmosférou.<br>Za tím, co se děje jenom ve chvílích, kdy svět zapomene na pravidla.</p>
+<p>Letěl nad městem, kde se světla třpytila jako sliby.<br>A všechno bylo možné.<br>Všechno bylo krásné.<br>Všechno bylo trochu nepravdivé — ale o dost pravdivější.</p>
+<p>A pak přišlo ráno.<br>A všechno se nehodilo.<br>Tváře, co v noci zářily, byly najednou unavené.<br>Slova, co zněla jako poezie, se změnila v trapné poznámky.<br>Doteky, co vibrovaly, se změnily v rozpaky.</p>
+<p>A netopýr se schoval.<br>Do stropu.<br>Do tmy.<br>Do snu.</p>
+<p>„V noci krása, co ráno už se nehodí," šeptal si.<br>A nebyl v tom sám.<br>Všichni, kdo v noci žili, to znali.<br>Básníci. Barmani. Ztracenci. Zamilovaní.<br>A ti, co si ráno říkají:<br>„Tohle jsem neřekl. Tohle jsem necítil. Tohle jsem nebyl."</p>
+<p>Ale netopýr věděl, že byl.<br>Že noc není lež.<br>Je to jiný jazyk.<br>Jiný smysl.<br>Jiný druh pravdy, která se nehodí do denního světla.</p>
+<p>A tak se začalo říkat, že netopýr je tvor, který nosí krásu, co se nehodí.<br>A že jeho pohádky jsou jako kocovina.<br>Bolí.<br>Ale připomínají, že jsme žili.</p></div></div>
+</section>
+
+<section class="sekce" id="otazky">
+  <p class="sekce-label">Tři otázky · odpovězte rychle, bez opravování</p>
+  <h2>Vaše odpovědi.</h2>
+  <div class="otazky">
+    <div class="otazka"><p class="q-label">Q1 — Vstup</p><p class="q-text">Co je podle vás hlavní pointa nebo sdělení tohoto příběhu?</p><textarea id="q1" placeholder="První věc, která vás napadne..."></textarea></div>
+    <div class="otazka"><p class="q-label">Q2 — Zaujetí</p><p class="q-text">Která konkrétní věta, obraz nebo moment vás nejvíc zaujal — a proč?</p><textarea id="q2" placeholder="Konkrétní věta nebo moment..."></textarea></div>
+    <div class="otazka"><p class="q-label">Q3 — Aplikace</p><p class="q-text">Kdyby tento příběh byl zadáním pro vaši tvorbu, co by vám radil dělat (nebo nedělat)?</p><textarea id="q3" placeholder="Rada pohádky pro vaši tvorbu..."></textarea></div>
+  </div>
+  <button class="btn-diag" onclick="diagnostika()">Zjistit moje slepé místo →</button>
+  <div class="diag-vysledek" id="diag-out">
+    <h3>Váš dominantní úhel</h3>
+    <p class="dominant" id="diag-dominant"></p>
+    <p style="font-size:.8rem;color:var(--dim);margin-bottom:14px;">Zkuste protilehlý mini-projekt:</p>
+    <div id="diag-navrhy"></div>
+  </div>
+</section>
+
+<section class="sekce" id="uhly">
+  <p class="sekce-label">12 úhlů · každý se třemi otázkami a intervencí</p>
+  <h2>Vyberte nebo nechte<br><em>vybrat tabulku.</em></h2>
+  <div class="uhly" id="uhly-list"></div>
+</section>
+
+<section class="sekce">
+  <p class="sekce-label">Diagnostická matice</p>
+  <h2>Co o vás prozrazuje<br><em>váš oblíbený úhel.</em></h2>
+  <div class="tbl-outer">
+    <table>
+      <thead><tr><th>Dominantní úhel</th><th>Váš kreativní styl</th><th>Co vám hrozí</th><th>Co potřebujete</th></tr></thead>
+      <tbody id="matice-body"></tbody>
+    </table>
+  </div>
+</section>
+
+<section class="sekce">
+  <p class="sekce-label">Tabulka protilehlých</p>
+  <h2>Když dominuje jeden úhel —<br><em>zkuste protilehlý.</em></h2>
+  <div class="tbl-outer">
+    <table>
+      <thead><tr><th>Když dominuje...</th><th>Zkuste</th></tr></thead>
+      <tbody id="protilehle-body"></tbody>
+    </table>
+  </div>
+</section>
+
+<footer class="page-footer">
+  <p>Karta Netopýr · Chceš myš? — kreativní miniatury · © 2026 Michaela Nováková</p>
+  <p><a href="miniatury_landing.html">← Zpět</a> · <a href="mailto:chcesmys@gmail.com">chcesmys@gmail.com</a></p>
+</footer>
+
+</div>
+<script>
+const data=[{"nazev":"Estetika noci","princip":"Existuje krása, která vzkvétá jen ve tmě. Tvorba, která nepotřebuje publikum.","q":["Zaujal vás popis noci — 'v noci bylo všechno správně, stíny měly tvar, zvuky měly smysl'?","Tvoříte někdy věci, které nikdo neuvidí? Které existují jen pro vás, jen pro tu chvíli?","Radila by vám pohádka tvořit víc pro noc — ne pro to, aby to bylo vidět, ale pro to, jaké to je, když to vzniká?"],"intervence":"Vytvoř něco, co nikdo neuvidí. Třeba báseň, kterou napíšeš a spálíš. Obrázek, který namaluješ a pak přemaluješ. Zvuk, který nahraješ a smažeš. Důležité je, aby to nebylo pro nikoho — jen pro tebe a pro tu chvíli.","protilehly":9,"styl":"Tvoříš pro sebe, pro tmu, pro chvíli — ne pro publikum","hrozba":"Můžeš být neviditelný, když chceš být viděn","potrebuje":"10. Světla jako sliby — občas ukázat, co děláš","klic":["noc","tma","tmu","jen pro sebe","nikomu","tajné","skryté","noční"]},{"nazev":"Trapnost rána","princip":"To, co v noci bylo poezií, je ráno trapné. Ale trapnost je důkaz, že jsi žil.","q":["Zaujala vás ta proměna — 'slova, co zněla jako poezie, se změnila v trapné poznámky'?","Stalo se vám, že jste ráno litovali něčeho, co jste vytvořili nebo řekli v noci?","Radila by vám pohádka nebát se té trapnosti — a možná ji dokonce záměrně hledat?"],"intervence":"Vytvoř něco, co je záměrně trapné. Třeba báseň, která se rýmuje moc jednoduše. Obrázek, který vypadá jako z dětství. Zvuk, který je kýčovitý. Dovol si být trapný — a sleduj, co se děje.","protilehly":2,"styl":"Nebojíš se být trapný, riskuješ, žiješ naplno","hrozba":"Můžeš být nepochopený","potrebuje":"3. Jiný jazyk — najít způsob, jak to přeložit","klic":["trapný","trapnost","stud","litovat","ráno","rozpaky","kýč"]},{"nazev":"Jiný jazyk","princip":"Noc není lež. Je to jiný jazyk. Jiný druh pravdy, která se nehodí do denního světla.","q":["Oslovila vás věta, že 'noc není lež, je to jiný jazyk'?","Používáte ve své tvorbě někdy jazyk, který není 'denní' — metaforický, snový, asociativní?","Radila by vám pohádka rozvíjet ten 'noční jazyk' a nestydět se za něj?"],"intervence":"Vytvoř něco v 'nočním jazyce'. Třeba báseň, která nedává logický smysl. Obrázek, který je jako sen. Zvuk, který je spíš nálada než melodie. Nepřekládej to do denní řeči — nech to být, jak to je.","protilehly":1,"styl":"Mluvíš metaforami, sny, obrazy","hrozba":"Můžeš být nesrozumitelný","potrebuje":"2. Trapnost rána — nebát se, že to někdo nepochopí","klic":["jazyk","metafora","sen","snový","asociace","obraz","noční jazyk"]},{"nazev":"Schování do stropu","princip":"Někdy se musíš schovat, aby tvá podstata přežila. Úkryt není rezignace.","q":["Zaujal vás ten obraz — 'netopýr se schoval. Do stropu. Do tmy. Do snu'?","Schováváte někdy svou tvorbu? Máte věci, které tvoříte, ale nikomu je neukazujete?","Radila by vám pohádka, že schování je v pořádku — že někdy je to jediný způsob, jak tvořit dál?"],"intervence":"Vytvoř něco, co schováš. Třeba báseň do šuplíku. Obrázek, který dáš do krabice. Zvuk, který uložíš do složky, kterou nikdo neotevře. Důležité je vědět, že to tam je — a že nemusí ven.","protilehly":4,"styl":"Chráníš svou tvorbu, máš tajné projekty","hrozba":"Můžeš být příliš uzavřený","potrebuje":"5. Společenství noci — najít ty, kteří rozumějí","klic":["schovat","úkryt","tajné","schovaný","šuplík","nikdo nevidí","zavřít"]},{"nazev":"Společenství noci","princip":"Nejsi sám. Všichni, kdo v noci žili, to znají — básníci, barmani, ztracenci, zamilovaní.","q":["Zaujal vás ten výčet — 'básníci, barmani, ztracenci, zamilovaní'?","Cítíte se někdy jako součást 'nočního společenství' — lidí, kteří rozumějí věcem, co se přes den nehodí?","Radila by vám pohádka hledat tyto lidi a tvořit s nimi — nebo pro ně?"],"intervence":"Vytvoř něco pro někoho, kdo patří do 'noci'. Třeba báseň pro barmana, kterého neznáš. Obrázek pro ztracence. Zvuk pro zamilované. Důležité je, aby to bylo pro ty, kteří rozumějí — i když je nikdy nepotkáš.","protilehly":3,"styl":"Tvoříš pro ty, kteří rozumějí — pro úzký kruh","hrozba":"Můžeš být elitářský","potrebuje":"4. Schování do stropu — chránit si své soukromí","klic":["komunita","básník","barman","ztracenec","zamilovaný","spřízněný","společenství"]},{"nazev":"Trochu nepravdivé — ale pravdivější","princip":"Paradox noční pravdy: není faktická, ale existenciální. Není reálná, ale pravdivější.","q":["Zaujal vás ten paradox — 'všechno bylo trochu nepravdivé — ale o dost pravdivější'?","Stalo se vám, že něco, co nebylo 'pravda', vyjádřilo víc pravdy než fakta?","Radila by vám pohádka hledat ve své tvorbě tenhle druh pravdy — ne faktickou, ale hlubší?"],"intervence":"Vytvoř něco, co je 'nepravdivé, ale pravdivější'. Třeba báseň o něčem, co se nestalo, ale cítíš to. Obrázek něčeho, co neexistuje, ale mělo by. Zvuk něčeho, co nikdy nezaznělo, ale rezonuje to.","protilehly":6,"styl":"Tvá tvorba míří k hlubší pravdě skrz zdánlivou nepravdu","hrozba":"Můžeš být nepochopený","potrebuje":"7. Atmosféra jako cíl — užít si proces","klic":["pravda","nepravdivé","hlubší","existenciální","realita","pod povrchem","pravdivější"]},{"nazev":"Atmosféra jako cíl","princip":"Nelétáš za potravou, létáš za atmosférou. Tvorba není o výsledku, ale o zážitku.","q":["Oslovila vás věta — 'ne za potravou, za atmosférou'?","Tvoříte někdy jen pro ten pocit, pro tu atmosféru, ne pro výsledek?","Radila by vám pohádka víc tvořit pro atmosféru — a míň pro 'potravu'?"],"intervence":"Vytvoř něco, co nemá žádný účel. Třeba báseň, kterou nikam nepošleš. Obrázek, který nevystavíš. Zvuk, který nepustíš nikomu jinému. Jen pro ten pocit, pro tu atmosféru, která vzniká při tvoření.","protilehly":5,"styl":"Tvoříš pro pocit, pro zážitek — výsledek je vedlejší","hrozba":"Můžeš být neproduktivní","potrebuje":"6. Trochu nepravdivé — hledat v tom hlubší pravdu","klic":["atmosféra","pocit","zážitek","nálada","pro sebe","bez účelu","bez výsledku"]},{"nazev":"Popírání sebe","princip":"'Tohle jsem neřekl. Tohle jsem necítil. Tohle jsem nebyl.' Popření jako rána, kterou si dáváme sami.","q":["Zasáhla vás ta věta — 'tohle jsem neřekl. Tohle jsem necítil. Tohle jsem nebyl'?","Popírali jste někdy svou vlastní tvorbu, své vlastní pocity, protože se 'nehodily'?","Radila by vám pohádka přestat se popírat — a přijmout i tu část sebe, která tvoří věci, co se nehodí?"],"intervence":"Vytvoř něco, co bys normálně popřel. Třeba báseň o něčem, o čem nechceš mluvit. Obrázek něčeho, co schováváš. Zvuk něčeho, co si nepřiznáváš. Důležité je, aby to bylo venku — a aby sis to přiznal.","protilehly":8,"styl":"Tvá tvorba je upřímná, ale pak ji popíráš","hrozba":"Můžeš se ztratit","potrebuje":"9. Kocovina jako důkaz — přijmout, že to bolelo, ale bylo to","klic":["popřít","popírání","nehodí se","stud","schovat","nepřiznat","odmítat"]},{"nazev":"Kocovina jako důkaz života","princip":"Pohádky bolí jako kocovina. Ale připomínají, že jsme žili. Bolest je důkaz.","q":["Zaujala vás ta poslední věta — 'bolí. Ale připomínají, že jsme žili'?","Zažili jste po intenzivní tvorbě pocit 'kocoviny' — vyčerpání, trapnosti, ale zároveň naplnění?","Radila by vám pohádka přijmout tu 'kocovinu' jako součást tvorby — a nestydět se za ni?"],"intervence":"Vytvoř něco, co tě bude bolet. Třeba báseň o něčem, co jsi ztratil. Obrázek něčeho, co tě trápí. Zvuk, který je smutný. Důležité je, aby to nebylo o bolesti — ale z bolesti.","protilehly":7,"styl":"Tvá tvorba je intenzivní, nechává stopy","hrozba":"Můžeš vyhořet","potrebuje":"8. Popírání sebe — dovolit si občas odpočinout","klic":["bolest","kocovina","ztráta","intenzivní","vyčerpání","živý","žít naplno"]},{"nazev":"Světla jako sliby","princip":"I v noci je klam — světla se třpytí jako sliby. Ale sliby nejsou vždycky pravda.","q":["Zaujal vás ten obraz — 'světla se třpytila jako sliby'?","Cítili jste někdy, že vaše tvorba je jako slib — něco, co slibujete, ale možná nemůžete splnit?","Radila by vám pohádka tvořit i věci, které nic neslibují — které jsou jen tím, čím jsou?"],"intervence":"Vytvoř něco, co nic neslibuje. Třeba báseň, která nemá pointu. Obrázek, který nic nevyjadřuje. Zvuk, který není hezký ani ošklivý. Prostě je. Důležité je, aby to nebylo 'jako slib' — aby to bylo jenom to.","protilehly":0,"styl":"Tvá tvorba slibuje, láká, svítí","hrozba":"Můžeš být jen povrchní","potrebuje":"1. Estetika noci — najít hloubku ve tmě","klic":["slib","svítit","lákat","povrchní","výstavní","pro druhé","očekávání"]},{"nazev":"Časový rozvrh bytí","princip":"Různé části dne vyžadují různé druhy myšlení. Noc není horší než den, je jiná.","q":["Zaujala vás myšlenka, že netopýr má 'jiný časový rozvrh'?","Tvoříte v různou dobu různě? Je vaše noční tvorba jiná než denní?","Radila by vám pohádka respektovat tyhle rytmy — a netlačit noční tvorbu do denních šablon?"],"intervence":"Vytvoř něco v noci (nebo v čase, který je pro tebe 'noční'). Třeba vstaň uprostřed noci a piš. Nebo zhasni světlo a tvoř ve tmě. Nebo si nastav budík na 3:00 a tvoř hodinu. Sleduj, co se děje, když tě nikdo nevidí.","protilehly":11,"styl":"Respektuješ své rytmy, tvoříš, když je ti dobře","hrozba":"Můžeš být neflexibilní","potrebuje":"12. Neviditelnost — dovolit si tvořit i beze světla","klic":["rytmus","čas","ráno","večer","noc","rozvrh","kdy tvořit","denní doba"]},{"nazev":"Neviditelnost","princip":"Lidé byli krásní, protože nebyli vidět. Teprve když nejsi pozorován, můžeš být autentický.","q":["Oslovila vás ta věta — 'lidé byli krásní, protože nebyli vidět'?","Cítíte se při tvorbě svobodnější, když víte, že vás nikdo nevidí, nehodnotí?","Radila by vám pohádka tvořit v neviditelnosti — a nestarat se o to, jak to bude vypadat, až to někdo uvidí?"],"intervence":"Vytvoř něco v naprosté neviditelnosti. Třeba zhasni, zavři oči a tvoř poslepu. Nebo se schovej do skříně a piš. Nebo tvoř v místnosti, kde nemáš internet, mobil, žádné spojení se světem. Důležité je, aby tě nikdo neviděl — a ty jsi mohl být, kdo jsi.","protilehly":10,"styl":"Tvoříš svobodně, když tě nikdo nevidí","hrozba":"Můžeš být neviditelný, i když chceš být viděn","potrebuje":"11. Časový rozvrh bytí — najít svůj rytmus","klic":["neviditelný","nikdo nevidí","svobodný","hodnocení","poslepu","bez kontroly","anonymní"]}];
+const list=document.getElementById('uhly-list');
+data.forEach((u,i)=>{
+  const d=document.createElement('div');
+  d.className='uhel';d.id='u-'+i;
+  d.innerHTML=`<div class="uhel-header" onclick="toggle(${i})"><span class="u-num">${String(i+1).padStart(2,'0')}</span><div><div class="uhel-nazev">${u.nazev}</div><div class="uhel-princip">${u.princip}</div></div><span class="u-toggle" id="t-${i}">+</span></div><div class="uhel-body" id="b-${i}"><div class="otazky-inline">${u.q.map((q,j)=>`<div class="oi"><div class="oi-label">Q${j+1}</div><div class="oi-text">${q}</div></div>`).join('')}</div><div class="intervence"><div class="intervence-label">Kreativní intervence · 20 minut</div><p>${u.intervence}</p></div><p class="protilehly">Protilehlý úhel: <a onclick="jump(${u.protilehly})">${u.protilehly+1}. ${data[u.protilehly].nazev}</a></p></div>`;
+  list.appendChild(d);
+});
+const matice=document.getElementById('matice-body');
+data.forEach((u,i)=>{const tr=document.createElement('tr');tr.innerHTML=`<td>${i+1}. ${u.nazev}</td><td>${u.styl}</td><td>${u.hrozba}</td><td>${u.potrebuje}</td>`;matice.appendChild(tr);});
+const prot=document.getElementById('protilehle-body');
+data.forEach((u,i)=>{const tr=document.createElement('tr');tr.innerHTML=`<td>${i+1}. ${u.nazev}</td><td>${u.protilehly+1}. ${data[u.protilehly].nazev}</td>`;prot.appendChild(tr);});
+function toggle(i){const b=document.getElementById('b-'+i);const t=document.getElementById('t-'+i);const o=b.classList.toggle('open');t.textContent=o?'−':'+';}
+function jump(i){if(!document.getElementById('b-'+i).classList.contains('open'))toggle(i);document.getElementById('u-'+i).scrollIntoView({behavior:'smooth',block:'start'});}
+const varText={A:"Zavřete oči, ťukněte prstem na obrazovku a udělejte ten úhel, který vybere prst.",B:"Přečtěte si všech 12 úhlů a vyberte ten, který vás právě teď nejvíc oslovuje.",C:"Odpovězte na 3 otázky níže, zjistěte svůj dominantní úhel a pak zkuste protilehlý."};
+function setVar(v,btn){document.querySelectorAll('.var-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');document.getElementById('var-popis').textContent=varText[v];if(v==='A'){const r=Math.floor(Math.random()*12);setTimeout(()=>{toggle(r);document.getElementById('u-'+r).scrollIntoView({behavior:'smooth',block:'center'});},300);}if(v==='C')document.getElementById('otazky').scrollIntoView({behavior:'smooth'});}
+function diagnostika(){const txt=['q1','q2','q3'].map(id=>document.getElementById(id).value).join(' ').toLowerCase();if(!txt.trim()){alert('Vyplňte alespoň jednu odpověď.');return;}const skore=data.map(u=>u.klic.reduce((s,k)=>s+(txt.includes(k)?1:0),0));let max=skore.indexOf(Math.max(...skore));if(skore[max]===0)max=Math.floor(Math.random()*12);const pI=data[max].protilehly;document.getElementById('diag-dominant').textContent=`Vaše odpovědi ukazují nejsilněji na: ${max+1}. ${data[max].nazev}`;document.getElementById('diag-navrhy').innerHTML=`<button class="navrh-btn" onclick="jump(${pI})">→ Protilehlý: ${pI+1}. ${data[pI].nazev}</button><button class="navrh-btn" onclick="jump(${max})">→ Prohloubit dominantní: ${max+1}. ${data[max].nazev}</button>`;const out=document.getElementById('diag-out');out.style.display='block';out.scrollIntoView({behavior:'smooth',block:'nearest'});}
+</script>
+</body>
+</html>
