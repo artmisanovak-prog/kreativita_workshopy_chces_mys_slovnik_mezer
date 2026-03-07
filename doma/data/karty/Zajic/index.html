@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Zaječice — kreativní miniatury</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--bg:#0f0f0f;--surface:#161616;--cream:#e8e0d0;--dim:rgba(232,224,208,.42);--accent:#a89880;--border:rgba(168,152,128,.15);--serif:'Cormorant Garamond',Georgia,serif;--mono:'DM Mono',monospace}
+    html{scroll-behavior:smooth}
+    body{background:var(--bg);color:var(--cream);font-family:var(--mono);font-size:14px;line-height:1.8;-webkit-font-smoothing:antialiased}
+    a{color:inherit;text-decoration:none}
+    p{margin-bottom:12px}p:last-child{margin-bottom:0}
+    .wrap{max-width:760px;margin:0 auto;padding:0 28px}
+    nav{position:sticky;top:0;z-index:100;border-bottom:1px solid var(--border);background:rgba(15,15,15,.92);backdrop-filter:blur(12px);padding:14px 28px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+    .nav-back{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);transition:color .2s}
+    .nav-back:hover{color:var(--cream)}
+    .nav-title{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--accent)}
+    .hero{padding:72px 0 56px;border-bottom:1px solid var(--border)}
+    .hero-label{font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:var(--accent);margin-bottom:20px}
+    .hero h1{font-family:var(--serif);font-size:clamp(3rem,7vw,5.5rem);font-weight:300;line-height:1.0;color:var(--cream);margin-bottom:8px}
+    .hero h1 em{font-style:italic;color:var(--accent)}
+    .hero-veta{font-family:var(--serif);font-size:clamp(.95rem,2vw,1.25rem);font-style:italic;color:var(--dim);border-left:1px solid var(--accent);padding-left:20px;max-width:500px;margin:20px 0 36px;line-height:1.9}
+    .var-bar{display:flex;gap:1px;background:var(--border);border:1px solid var(--border)}
+    .var-btn{flex:1;padding:13px 12px;background:var(--surface);border:none;cursor:pointer;font-family:var(--mono);font-size:.78rem;letter-spacing:.08em;text-transform:uppercase;color:var(--dim);transition:background .12s,color .12s;text-align:center}
+    .var-btn:hover{background:#1e1e1e;color:var(--cream)}
+    .var-btn.active{background:var(--accent);color:var(--bg)}
+    .var-popis{padding:12px 16px;font-size:.8rem;color:var(--dim);border:1px solid var(--border);border-top:none;background:var(--surface)}
+    .sekce{padding:56px 0;border-bottom:1px solid var(--border)}
+    .sekce-label{font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);margin-bottom:16px}
+    h2{font-family:var(--serif);font-size:clamp(1.5rem,3.5vw,2.2rem);font-weight:300;color:var(--cream);margin-bottom:18px}
+    h2 em{font-style:italic;color:var(--accent)}
+    .pohadka-outer{border:1px solid var(--border);background:var(--surface);max-height:360px;overflow-y:auto;padding:0 28px}
+    .pohadka{font-family:var(--serif);font-style:italic;font-size:.97rem}
+    .pohadka p{padding:.45em 0;color:rgba(232,224,208,.8)}
+    .pohadka-outer::-webkit-scrollbar{width:2px}
+    .pohadka-outer::-webkit-scrollbar-thumb{background:var(--accent)}
+    .otazky{border-top:1px solid var(--border)}
+    .otazka{padding:22px 0;border-bottom:1px solid var(--border)}
+    .q-label{font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:8px}
+    .q-text{font-size:.95rem;margin-bottom:6px;color:var(--cream)}
+    textarea{width:100%;margin-top:10px;background:var(--surface);border:1px solid var(--border);color:var(--cream);padding:12px;font-family:var(--mono);font-size:.85rem;line-height:1.7;resize:vertical;min-height:68px}
+    textarea:focus{outline:1px solid var(--accent)}
+    textarea::placeholder{color:rgba(232,224,208,.25)}
+    .btn-diag{margin-top:20px;padding:12px 28px;font-size:11px;letter-spacing:.12em;text-transform:uppercase;background:var(--accent);color:var(--bg);border:none;cursor:pointer;font-family:var(--mono);transition:background .15s}
+    .btn-diag:hover{background:#c0aa90}
+    .diag-vysledek{display:none;border:1px solid var(--accent);padding:24px;margin-top:20px;background:var(--surface)}
+    .diag-vysledek h3{font-family:var(--serif);font-size:1.1rem;font-weight:400;color:var(--cream);margin-bottom:10px}
+    .dominant{font-size:.82rem;color:var(--dim);margin-bottom:16px}
+    .navrh-btn{display:block;width:100%;padding:11px 16px;margin-bottom:6px;background:transparent;border:1px solid var(--border);color:var(--cream);font-family:var(--mono);font-size:.82rem;text-align:left;cursor:pointer;transition:background .12s,border-color .12s}
+    .navrh-btn:hover{background:var(--accent);border-color:var(--accent);color:var(--bg)}
+    .navrh-btn:last-child{margin-bottom:0}
+    .uhly{display:flex;flex-direction:column}
+    .uhel{border-bottom:1px solid var(--border)}
+    .uhel-header{display:grid;grid-template-columns:52px 1fr auto;padding:18px 0;cursor:pointer;align-items:center}
+    .uhel-header:hover .uhel-nazev{color:var(--accent)}
+    .u-num{font-family:var(--serif);font-size:1.7rem;font-weight:300;color:rgba(168,152,128,.2);line-height:1}
+    .uhel-nazev{font-size:.88rem;font-weight:400;color:var(--cream)}
+    .uhel-princip{font-size:.74rem;color:var(--dim);margin-top:3px;font-style:italic;font-family:var(--serif)}
+    .u-toggle{font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);padding-right:2px}
+    .uhel-body{display:none;padding:0 0 28px 52px}
+    .uhel-body.open{display:block}
+    .otazky-inline{margin-bottom:20px}
+    .oi{padding:10px 0;border-bottom:1px solid rgba(168,152,128,.08)}
+    .oi:last-child{border-bottom:none}
+    .oi-label{font-size:.68rem;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);margin-bottom:4px}
+    .oi-text{font-size:.85rem;color:rgba(232,224,208,.7)}
+    .intervence{background:rgba(168,152,128,.08);border-left:2px solid var(--accent);padding:18px 20px;margin:16px 0}
+    .intervence-label{font-size:.68rem;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);margin-bottom:10px}
+    .intervence p{font-size:.86rem;color:rgba(232,224,208,.75);margin-bottom:8px}
+    .intervence p:last-child{margin-bottom:0}
+    .protilehly{font-size:.76rem;color:var(--dim);font-style:italic}
+    .protilehly a{color:var(--accent);text-decoration:underline;text-underline-offset:2px;cursor:pointer}
+    .tbl-outer{border:1px solid var(--border);overflow-x:auto;margin-top:20px}
+    table{width:100%;border-collapse:collapse;font-size:.78rem}
+    thead tr{border-bottom:1px solid var(--border)}
+    thead th{padding:12px 16px;text-align:left;font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);font-weight:400;font-family:var(--mono)}
+    thead th:first-child{color:var(--dim)}
+    tbody tr{border-bottom:1px solid rgba(168,152,128,.07)}
+    tbody tr:last-child{border-bottom:none}
+    tbody td{padding:12px 16px;color:rgba(232,224,208,.6);vertical-align:top}
+    tbody td:first-child{color:var(--accent);font-size:.72rem;letter-spacing:.08em;white-space:nowrap}
+    tbody td:nth-child(3){color:rgba(232,224,208,.45);font-style:italic}
+    tbody td:nth-child(4){color:rgba(168,152,128,.7)}
+    .page-footer{padding:36px 0;border-top:1px solid var(--border);display:flex;justify-content:space-between;flex-wrap:wrap;gap:14px}
+    .page-footer p{font-size:.76rem;color:var(--dim)}
+    .page-footer a{color:var(--accent)}
+    .page-footer a:hover{text-decoration:underline}
+  </style>
+</head>
+<body>
+<nav>
+  <a class="nav-back" href="../../../index.html">← Všechna zvířata</a>
+  <span class="nav-title">🐇 Zaječice</span>
+</nav>
+<div class="wrap">
+
+<section class="hero">
+  <p class="hero-label">Kreativní miniatura · Karta Zaječice</p>
+  <h1>🐇 Zaječice</h1>
+  <p class="hero-veta">„Neboj se strachu. Strach tě může hodit tam, kam by tě nikdy nenapadlo jít."</p>
+  <div class="var-bar">
+    <button class="var-btn active" onclick="setVar('A',this)">🎲 Náhodně</button>
+    <button class="var-btn" onclick="setVar('B',this)">🧭 Podle nálady</button>
+    <button class="var-btn" onclick="setVar('C',this)">🔍 Diagnosticky</button>
+  </div>
+  <div class="var-popis" id="var-popis">Zavřete oči, ťukněte prstem na obrazovku a udělejte ten úhel, který vybere prst.</div>
+</section>
+
+<section class="sekce">
+  <p class="sekce-label">Pohádka · přečtěte pomalu</p>
+  <h2>O zaječici, <em>aneb zajícem nezatopíš.</em></h2>
+  <p style="font-size:.82rem;color:var(--dim);margin-bottom:16px;">Sledujte kde vás zastaví — kde cítíte odpor nebo poznání.</p>
+  <div class="pohadka-outer"><div class="pohadka"><p>Bylo jedno pole, takové obyčejné, plné trávy, obilí a prachu. V létě, slunce stálo vysoko, dokázalo se to pole vznítit jedinou jiskrou. A tak se i stalo: zapraskalo suché stéblo, rozfoukal se vítr, a oheň se rozběhl přes lány rychleji než lidský krok. Všechna zvířata věděla, co mají dělat. Utíkat. Utíkal bažant, myši, i celé hejno koroptví. A také zajíci.</p>
+<p>Jenže jedna zaječice byla jiná. Nebyla statečnější než ostatní, nebyla chytřejší, dokonce ani nebyla rychlejší. Jen se lekla tak moc, že zapomněla na všechny instinkty. A zatímco ostatní běželi kupředu před ohněm, ona udělala pravý opak: skočila přímo do plamenů.</p>
+<p>Teď byste čekali, že se promění v popel. Ale kdepak. Ona dopadla do místa, které už bylo shořelé. Tam, kde oheň už dávno sežral všechen svůj pokrm a nechal jen černou zemi. A tak zaječice prošla plameny, aniž by jí ublížily.</p>
+<p>A tohle se stalo legendou. Protože všechno, co přežije proti logice, se stane pohádkou.</p>
+<p>Zajíci si pak začali vyprávět, že ona je ohnivzdorná. Jiní říkali, že to byla náhoda. Ale pohádky o náhodě nebývají uvěřitelné, proto si přidávali vlastní verze.</p>
+<p>Jedni tvrdili, že zaječice byla vyvolená — že měla v srsti zakódované znamení, čitelné plamenům. Jiní, že ji chránila pradávná smlouva mezi ohněm a zajíci. A další vykládali, že to byla zkouška — že kdo se vzdá vlastního pudu sebezáchovy, ten se stává nesmrtelným.</p>
+<p>A tak zaječice, která jen zakopla o vlastní strach, byla prohlášena za hrdinku.</p>
+<p>Ale ona sama se nikdy necítila hrdinkou. Když seděla večer na okraji pole a čistila si spálené vousky, říkala si: „Já jsem se jen lekla. Jen jsem skočila blbě." A přitom se kolem ní scházeli ostatní a šeptali: „Podívej, to je ta, co neshoří."</p>
+<p>Časem začala chápat, že nezáleží na tom, co se opravdu stalo. Realita byla jen podklad, jako spáleniště pod jejími tlapkami. To, co rostlo nad ní, byla řeč, příběh, legenda. A tak se naučila nosit svůj omyl jako korunu. Když se jí někdo ptal, jak to udělala, neodpovídala. Jen se tajemně usmála a trochu si načechrala srst.</p>
+<p>Od té doby se traduje, že zajíce nemůžeš zapálit. Že není palivo, že není dřevo na hranici. Oheň ho možná spálí, ale nikdy nepohltí. Protože kdo jednou skočil do plamenů a vyšel ven živý, toho si už žádný oheň netroufne znovu.</p>
+<p>A děti v lese se učí od matek tuto pohádku: „Neboj se strachu. Strach tě může hodit tam, kam by tě nikdy nenapadlo jít. A možná právě tam je cesta k přežití."</p>
+<p>A její příběh? Ten pořád doutná, i když pole dávno vychladlo.</p></div></div>
+</section>
+
+<section class="sekce" id="otazky">
+  <p class="sekce-label">Tři otázky · odpovězte rychle, bez opravování</p>
+  <h2>Vaše odpovědi.</h2>
+  <div class="otazky">
+    <div class="otazka"><p class="q-label">Q1 — Vstup</p><p class="q-text">Co je podle vás hlavní pointa nebo sdělení tohoto příběhu?</p><textarea id="q1" placeholder="První věc, která vás napadne..."></textarea></div>
+    <div class="otazka"><p class="q-label">Q2 — Zaujetí</p><p class="q-text">Která konkrétní věta, obraz nebo moment vás nejvíc zaujal — a proč?</p><textarea id="q2" placeholder="Konkrétní věta nebo moment..."></textarea></div>
+    <div class="otazka"><p class="q-label">Q3 — Aplikace</p><p class="q-text">Kdyby tento příběh byl zadáním pro vaši tvorbu, co by vám radil dělat (nebo nedělat)?</p><textarea id="q3" placeholder="Rada pohádky pro vaši tvorbu..."></textarea></div>
+  </div>
+  <button class="btn-diag" onclick="diagnostika()">Zjistit moje slepé místo →</button>
+  <div class="diag-vysledek" id="diag-out">
+    <h3>Váš dominantní úhel</h3>
+    <p class="dominant" id="diag-dominant"></p>
+    <p style="font-size:.8rem;color:var(--dim);margin-bottom:14px;">Zkuste protilehlý mini-projekt:</p>
+    <div id="diag-navrhy"></div>
+  </div>
+</section>
+
+<section class="sekce" id="uhly">
+  <p class="sekce-label">12 úhlů · každý se třemi otázkami a intervencí</p>
+  <h2>Vyberte nebo nechte<br><em>vybrat tabulku.</em></h2>
+  <div class="uhly" id="uhly-list"></div>
+</section>
+
+<section class="sekce">
+  <p class="sekce-label">Diagnostická matice</p>
+  <h2>Co o vás prozrazuje<br><em>váš oblíbený úhel.</em></h2>
+  <div class="tbl-outer">
+    <table>
+      <thead><tr><th>Dominantní úhel</th><th>Váš kreativní styl</th><th>Co vám hrozí</th><th>Co potřebujete</th></tr></thead>
+      <tbody id="matice-body"></tbody>
+    </table>
+  </div>
+</section>
+
+<section class="sekce">
+  <p class="sekce-label">Tabulka protilehlých</p>
+  <h2>Když dominuje jeden úhel —<br><em>zkuste protilehlý.</em></h2>
+  <div class="tbl-outer">
+    <table>
+      <thead><tr><th>Když dominuje...</th><th>Zkuste</th></tr></thead>
+      <tbody id="protilehle-body"></tbody>
+    </table>
+  </div>
+</section>
+
+<footer class="page-footer">
+  <p>Karta Zaječice · Chceš myš? — kreativní miniatury · © 2026 Michaela Nováková</p>
+  <p><a href="../../../index.html">← Zpět</a> · <a href="mailto:chcesmys@gmail.com">chcesmys@gmail.com</a></p>
+</footer>
+
+</div>
+<script>
+const data=[{"nazev":"Skok do ohně","princip":"Někdy to, co vypadá jako největší chyba, je jediná cesta k přežití. Tvorba může vzniknout z paniky, nejen z rozvahy.","q":["Zaujal vás zlomový moment — že zaječice skočila do ohně ne z odvahy, ale protože se lekla?","Stalo se vám při tvorbě, že jste udělali něco zdánlivě šíleného, co se nakonec ukázalo jako správné?","Radila by vám pohádka důvěřovat i svým panickým, neuváženým skokům — a nejen promyšleným krokům?"],"intervence":"Vytvoř něco, co vznikne z 'panického skoku'. Dej si časovač na 3 minuty a během nich piš, kresli, tvoř, co tě napadne — bez přemýšlení, bez plánu. Nehodnoť, co vzniklo. Prostě jsi skočil/a.","protilehly":2,"styl":"Tvoříš impulzivně, riskuješ, skáčeš po hlavě","hrozba":"Můžeš být neuvážený/á","potrebuje":"3. Legenda — naučit se svůj skok vyprávět","klic":["panika","impulz","skok","riskovat","bez přemýšlení","neuvážený","chyba"]},{"nazev":"Spáleniště jako bezpečí","princip":"Bezpečí nebylo v odvaze, ale v načasování. Někdy je bezpečí tam, kde už oheň prošel.","q":["Zaujala vás ta jemná nuance — že neskočila do ohně, ale na místo, které už bylo shořelé?","Hledáte ve své tvorbě místa, která už jsou 'shořelá' — kde už se nic nemůže stát, kde je klid?","Radila by vám pohádka, že bezpečí nemusí být v útěku, ale v tom, nechat oheň projít a pak vstoupit do popela?"],"intervence":"Vytvoř něco, co vznikne na 'spáleništi'. Vezmi starý text, který považuješ za neúspěšný, a pracuj s ním dál — ne ho opravovat, ale použít jako materiál, jako černou zem, na které může vyrůst něco nového.","protilehly":3,"styl":"Hledáš klidná místa, kde už oheň prošel","hrozba":"Můžeš být pasivní","potrebuje":"4. Strach jako průvodce — nechat se jím hodit","klic":["spáleniště","bezpečí","klid","popel","místo po ohni","načasování","čekat"]},{"nazev":"Legenda","princip":"Všechno, co přežije proti logice, se stane pohádkou. I tvůj omyl se může stát legendou — ne tím, že budeš lhát, ale tím, že ho necháš vyrůst.","q":["Zaujala vás věta, že 'všechno, co přežije proti logice, se stane pohádkou'?","Máte ve své tvorbě něco, co vzniklo 'proti logice' — a stalo se z toho něco, co žije dál?","Radila by vám pohádka nebát se toho, že tvoje dílo bude přerůstat v legendu — i když ty víš, jak to doopravdy bylo?"],"intervence":"Vezmi si nějaký svůj starší, třeba neúspěšný pokus, a převyprávěj ho jako legendu. Třeba jako pohádku, mýtus, hrdinský epos. Nech to být velké, přehnané, krásné. Uvidíš, co se stane.","protilehly":0,"styl":"Umíš ze svých činů udělat příběh","hrozba":"Můžeš ztratit kontakt s realitou","potrebuje":"1. Skok do ohně — nezapomenout, jak to začalo","klic":["legenda","mýtus","pohádka","příběh","přeháněj","heroický","přerůstat"]},{"nazev":"Strach jako průvodce","princip":"Neboj se strachu. Strach tě může hodit tam, kam by tě nikdy nenapadlo jít.","q":["Zaujala vás ta poslední věta — 'neboj se strachu, strach tě může hodit tam, kam by tě nikdy nenapadlo jít'?","Jak pracujete se strachem ve své tvorbě? Bojíte se, že něco nevyjde — a brání vám to, nebo vás to naopak žene?","Radila by vám pohádka vzít strach jako průvodce — a nechat se jím hodit na místa, kam by ses jinak neodvážil/a?"],"intervence":"Vytvoř něco, co tě děsí. Třeba téma, kterému ses vyhýbal/a. Formu, kterou neovládáš. Odvahu ukázat něco osobního. Dovol strachu, aby tě tam hodil — a uvidíš, co najdeš.","protilehly":1,"styl":"Nebojíš se bát, necháš se strachem vést","hrozba":"Můžeš být paralyzován/a","potrebuje":"2. Spáleniště jako bezpečí — najít místo, kde se zklidnit","klic":["strach","děsí","bojím se","odvaha","vyhýbat","paralýza","průvodce"]},{"nazev":"Spálené vousky","princip":"Zaječice si večer čistila spálené vousky. Nejsou to jizvy — jsou to stopy, že něco prožila. Tvorba může nést stopy ohně.","q":["Zaujal vás ten obraz — zaječice, která si večer čistí spálené vousky?","Jaké 'spálené vousky' nosíte vy ze své tvorby? Která místa jsou ožehnutá, poznamenaná, ale pořád tady?","Radila by vám pohádka nestydět se za tyhle stopy — ale naopak je s hrdostí ukazovat?"],"intervence":"Vytvoř něco, co nese stopy 'spálení'. Třeba text, který je na okrajích spálený (doslova — práce s ohněm na papíře). Obrázek, který je částečně zuhelnatělý. Píseň, která má v sobě praskliny. Důležité je, aby ty stopy nebyly skryté, ale viditelné.","protilehly":5,"styl":"Neseš stopy svých bitev s hrdostí","hrozba":"Můžeš uvíznout v minulosti","potrebuje":"6. Nosení omylu jako koruny — proměnit jizvy v ozdobu","klic":["jizvy","stopy","rány","ožehnutý","spálený","minulost","nesou stopy"]},{"nazev":"Nosení omylu jako koruny","princip":"Zaječice se naučila nosit svůj omyl jako korunu. Ne proto, že by lhala, ale protože pochopila, že realita je jen podklad — důležitý je příběh.","q":["Zaujala vás proměna — že se naučila 'nosit svůj omyl jako korunu'?","Máte ve své tvorbě něco, co začalo jako omyl, a nakonec se stalo tím nejcennějším?","Radila by vám pohádka, že omyl není ostuda, ale možná koruna — když se ho naučíš nosit?"],"intervence":"Vezmi si něco, co považuješ za svůj největší tvůrčí omyl. A udělej z něj korunu. Doslova — nakresli, vystřihni, vytvoř objekt, který ten omyl zvěční jako něco vzácného. Pak si ho nasaď (nebo pověs na zeď) a chvíli v něm buď.","protilehly":4,"styl":"Umíš ze svých chyb udělat přednost","hrozba":"Můžeš být arogantní","potrebuje":"5. Spálené vousky — nezapomenout, že to bolelo","klic":["omyl","chyba","koruna","přijmout","hrdost","přednost","naučit se"]},{"nazev":"Tajemný úsměv","princip":"Když se jí ptali, neodpovídala. Jen se tajemně usmála. Někdy je nejlepší odpovědí mlčení a záhada.","q":["Zaujal vás ten tajemný úsměv — že neodpovídala, jen se usmála?","Máte ve své tvorbě místa, která necháváte záměrně nevyřčená, tajemná?","Radila by vám pohádka, že není nutné všechno vysvětlovat — že tajemství může být silnější než odpověď?"],"intervence":"Vytvoř něco, co zůstane tajemné. Třeba báseň, která nedává smysl. Obrázek, který něco naznačuje, ale neukazuje. Píseň, kde slova nejsou srozumitelná. A když se tě někdo zeptá 'co to je?', jen se tajemně usměj.","protilehly":7,"styl":"Víš, kdy mlčet, umíš zachovat tajemství","hrozba":"Můžeš být nečitelný/á","potrebuje":"8. Příběh, který doutná — nechat tajemství žít","klic":["tajemství","mlčení","záhada","nevyřčené","naznačit","skrýt","úsměv"]},{"nazev":"Příběh, který doutná","princip":"A její příběh? Ten pořád doutná, i když pole dávno vychladlo. Některé příběhy nikdy úplně nevyhasnou.","q":["Zaujala vás ta věta — že příběh pořád doutná, i když pole vychladlo?","Máte ve své tvorbě něco, co stále 'doutná' — co vás pronásleduje, vrací se, nenechá vás spát?","Radila by vám pohádka, že doutnající příběhy není třeba hasit — jen je sledovat a nechat je, ať si žijí?"],"intervence":"Vytvoř něco, co 'doutná'. Třeba text, který je rozostřený, nejasný, jako by byl z dálky. Obrázek, který je jako vzpomínka na něco, co už není. Zvuk, který je jen ozvěna. Důležité je, aby to nebylo hotové — aby to stále doutnalo.","protilehly":6,"styl":"Tvé dílo žije dál, vrací se, dýchá","hrozba":"Můžeš být neukončený/á","potrebuje":"7. Tajemný úsměv — dovolit mu být tajemné","klic":["doutná","přetrvává","vrací se","nedokončené","žije dál","ozvěna","pronásleduje"]},{"nazev":"Výklady","princip":"Zajíci si přidávali vlastní verze — znamení v srsti, pradávná smlouva, zkouška. Každý si příběh vykládá po svém.","q":["Zaujaly vás ty různé výklady — co se vlastně stalo?","Jak moc necháváte svou tvorbu otevřenou různým výkladům? Nebo naopak chcete, aby byla jasná?","Radila by vám pohádka, že výklad není chyba, ale součást díla — a že každý divák si přidá svou verzi?"],"intervence":"Vytvoř něco, co lze vykládat mnoha způsoby. Třeba abstraktní obrázek, který může být cokoli. Báseň, která je tak otevřená, že si každý najde své. A pak se zeptej tří lidí, co v tom vidí — a zapisuj si odpovědi.","protilehly":9,"styl":"Necháváš svá díla otevřená, miluješ mnohoznačnost","hrozba":"Můžeš být neurčitý/á","potrebuje":"10. Reality jako podkladu — ukotvit se v něčem","klic":["výklad","interpretace","otevřený","mnohoznačný","různé verze","každý vidí jinak","abstraktní"]},{"nazev":"Realita jako podklad","princip":"Realita byla jen podklad, jako spáleniště pod jejími tlapkami. To, co se stalo, je jen východisko. Důležitý je příběh, který na něm vyroste.","q":["Zaujala vás ta věta — že realita je jen podklad, jako spáleniště?","Jak moc lpíte na tom, 'jak to doopravdy bylo'? Nebo víte, že důležitější je, co z toho vyroste?","Radila by vám pohádka vnímat realitu jako materiál — ne jako pravdu, kterou je třeba přesně dodržet?"],"intervence":"Vezmi si nějakou svou vzpomínku a přepiš ji jako pohádku. Změň detaily, přidej kouzla, udělej z ní legendu. Sleduj, co se stane s tou vzpomínkou, když ji necháš vyrůst z reality jako z podkladu.","protilehly":8,"styl":"Víš, že skutečnost je jen východisko","hrozba":"Můžeš ztratit kontakt s realitou","potrebuje":"9. Výklady — nechat realitu vyrůst v příběh","klic":["realita","fakta","jak to bylo","skutečnost","podklad","přepsat","materiál"]},{"nazev":"Hrdinka proti své vůli","princip":"Zaječice se nikdy necítila jako hrdinka. Byla jí prohlášena. Tvorba může být hrdinská, i když se tak necítíš.","q":["Zaujala vás ta ironie — že byla prohlášena za hrdinku, i když se tak necítila?","Stalo se vám, že někdo ocenil něco, co vy považujete za samozřejmost nebo dokonce omyl?","Radila by vám pohádka, že není nutné cítit se jako hrdina — stačí, že tvoje dílo nese hrdinství dál?"],"intervence":"Vytvoř něco, co považuješ za 'jen omyl' — a pošli to do světa (třeba na sociální sítě, do šuplíku, kamarádovi). Sleduj, jestli to někdo neuvidí jako hrdinství. Nech to být — neřiď to.","protilehly":3,"styl":"Tvá tvorba je hrdinská, i když se tak necítíš","hrozba":"Můžeš být skromný/á až neviditelný/á","potrebuje":"4. Strach jako průvodce — dovolit si být vidět","klic":["hrdinka","ocenění","skromnost","neviditelný","nedocenění","prohlášena","překvapení"]},{"nazev":"Zajícem nezatopíš","princip":"Zajíce nemůžeš zapálit. Není palivo, není dřevo na hranici. Některé věci a lidé jsou prostě nespálitelní.","q":["Zaujala vás ta pointa — 'zajícem nezatopíš'?","Co je ve vás nespálitelné? Co přežije všechny kritiky, neúspěchy, pochyby?","Radila by vám pohádka hledat a chránit to nespálitelné — a nestarat se o to, že nejsi 'palivo' pro oheň druhých?"],"intervence":"Vytvoř něco, co je 'nespálitelné'. Třeba text, který můžeš spálit, ale jeho význam zůstane. Obrázek, který můžeš zničit, ale vzpomínka na něj přežije. Důležité je, aby to nebylo o materiálu, ale o tom, co to nese — a co přežije.","protilehly":2,"styl":"Jsi nespálitelný/á, tvoje podstata přežije","hrozba":"Můžeš být nepřístupný/á","potrebuje":"3. Legenda — nechat svou nespálitelnost vyprávět","klic":["nespálitelný","přežít","odolný","jádro","podstata","kritika","nezničitelný"]}];
+const list=document.getElementById('uhly-list');
+data.forEach((u,i)=>{
+  const d=document.createElement('div');
+  d.className='uhel';d.id='u-'+i;
+  d.innerHTML=`<div class="uhel-header" onclick="toggle(${i})"><span class="u-num">${String(i+1).padStart(2,'0')}</span><div><div class="uhel-nazev">${u.nazev}</div><div class="uhel-princip">${u.princip}</div></div><span class="u-toggle" id="t-${i}">+</span></div><div class="uhel-body" id="b-${i}"><div class="otazky-inline">${u.q.map((q,j)=>`<div class="oi"><div class="oi-label">Q${j+1}</div><div class="oi-text">${q}</div></div>`).join('')}</div><div class="intervence"><div class="intervence-label">Kreativní intervence · 20 minut</div><p>${u.intervence}</p></div><p class="protilehly">Protilehlý úhel: <a onclick="jump(${u.protilehly})">${u.protilehly+1}. ${data[u.protilehly].nazev}</a></p></div>`;
+  list.appendChild(d);
+});
+const matice=document.getElementById('matice-body');
+data.forEach((u,i)=>{const tr=document.createElement('tr');tr.innerHTML=`<td>${i+1}. ${u.nazev}</td><td>${u.styl}</td><td>${u.hrozba}</td><td>${u.potrebuje}</td>`;matice.appendChild(tr);});
+const prot=document.getElementById('protilehle-body');
+data.forEach((u,i)=>{const tr=document.createElement('tr');tr.innerHTML=`<td>${i+1}. ${u.nazev}</td><td>${u.protilehly+1}. ${data[u.protilehly].nazev}</td>`;prot.appendChild(tr);});
+function toggle(i){const b=document.getElementById('b-'+i);const t=document.getElementById('t-'+i);const o=b.classList.toggle('open');t.textContent=o?'−':'+';}
+function jump(i){if(!document.getElementById('b-'+i).classList.contains('open'))toggle(i);document.getElementById('u-'+i).scrollIntoView({behavior:'smooth',block:'start'});}
+const varText={A:"Zavřete oči, ťukněte prstem na obrazovku a udělejte ten úhel, který vybere prst.",B:"Přečtěte si všech 12 úhlů a vyberte ten, který vás právě teď nejvíc oslovuje.",C:"Odpovězte na 3 otázky níže, zjistěte svůj dominantní úhel a pak zkuste protilehlý."};
+function setVar(v,btn){document.querySelectorAll('.var-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');document.getElementById('var-popis').textContent=varText[v];if(v==='A'){const r=Math.floor(Math.random()*12);setTimeout(()=>{toggle(r);document.getElementById('u-'+r).scrollIntoView({behavior:'smooth',block:'center'});},300);}if(v==='C')document.getElementById('otazky').scrollIntoView({behavior:'smooth'});}
+function diagnostika(){const txt=['q1','q2','q3'].map(id=>document.getElementById(id).value).join(' ').toLowerCase();if(!txt.trim()){alert('Vyplňte alespoň jednu odpověď.');return;}const skore=data.map(u=>u.klic.reduce((s,k)=>s+(txt.includes(k)?1:0),0));let max=skore.indexOf(Math.max(...skore));if(skore[max]===0)max=Math.floor(Math.random()*12);const pI=data[max].protilehly;document.getElementById('diag-dominant').textContent=`Vaše odpovědi ukazují nejsilněji na: ${max+1}. ${data[max].nazev}`;document.getElementById('diag-navrhy').innerHTML=`<button class="navrh-btn" onclick="jump(${pI})">→ Protilehlý: ${pI+1}. ${data[pI].nazev}</button><button class="navrh-btn" onclick="jump(${max})">→ Prohloubit dominantní: ${max+1}. ${data[max].nazev}</button>`;const out=document.getElementById('diag-out');out.style.display='block';out.scrollIntoView({behavior:'smooth',block:'nearest'});}
+</script>
+</body>
+</html>
